@@ -1,27 +1,37 @@
 <!DOCTYPE html>
 <html>
-
-  <head>
-    <meta name="description" content="GMA-1D: 1D Generalized Modes" />
-    <script type="text/JavaScript" src="javaScript/main.js"></script>
-
-    <style type="text/css">
-      #canvas1
-      {
-        width: 500 px;
-        Border: 1 px solid #aaa;
-      }
-    </style>
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>GMA-1D</title>
-  </head>
-
-  <body>
-
-    Under Construction
-    <div id="canvas1"> </div>
-
-  </body>
+	<head>
+		<meta name="description" content="GMA-1D: 1D Generalized Modes" />
+		<script src="javascripts/flot/jquery.js"></script>
+		<script src="javascripts/flot/jquery.flot.js"></script>
+		<script src="javascripts/main.js"></script>
+		<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+		<title>GMA-1D</title>
+	</head>
+	
+	<body>
+		<div id="canvas1" style="width:600px;height:600px;Border:1px solid #aaa;"> </div>
+		<script type="text/javascript">
+			
+			// Simple undamped oscillator
+			function DuffingEqn(eps, c)
+			{
+				var Duffing = function(t,v)
+				{
+					var v2 = [];
+					v2[0] =  v[1];
+					v2[1] = -2*c*v[1]-v[0]-eps*Math.pow(v[0],3);
+					return v2;
+				}
+				 return Duffing;
+			}
+			
+			var f = DuffingEqn(0.1, 0.2);
+			var x = [0.0,3.0];
+			var v = solve_ode(f, 0.05, 1.0, x, 300);
+			//alert(v.pt);
+			
+			var plot = jQuery.plot($("#canvas1"), [{data:v.pt}]);
+		</script>
+	</body>
 </html>
