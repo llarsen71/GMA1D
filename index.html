@@ -10,7 +10,13 @@
 	</head>
 	
 	<body>
+		Duffing Equation
 		<div id="canvas1" style="width:600px;height:600px;Border:1px solid #aaa;"> </div>
+		
+		Van Der Pol Oscillator
+		
+		<div id="canvas2" style="width:600px;height:600px;Border:1px solid #aaa;"> </div>
+		
 		<script type="text/javascript">
 			
 			// Simple undamped oscillator
@@ -61,6 +67,61 @@
 			//var v = solve_ode(f, 0.05, 1.0, x, 300);
 			//alert(v.pt);
 			//var plot = jQuery.plot($("#canvas1"), [{data:v.pt}]);
+			
+			function VanDerPol(c)
+			{
+				var oscillator = function(t,v)
+				{
+					pt = [v[1], c*(1-v[0]*v[0])*v[1] - v[0]];
+					return pt;
+				}
+				return oscillator;
+			}
+			
+			// First get the limit cycle.
+			var vdp = VanDerPol(1,0);
+			var x = [-1.53766,-2.0407];
+			var v = solve_ode(vdp, 0.0673, 1.0, x, 120);
+			
+			v.scale = function(sf)
+			{
+				var pts = [];
+				for (var i=0; i<this.pt.length; i++)
+				{
+					pts[i] = SxV(sf,this.pt[i]);
+				}
+				return pts;
+			}
+			
+			var pts = v.scale(1.01);
+			//var plot = jQuery.plot($("#canvas2"), [{data:v.pt}]);
+			
+			var gma2 = GMA_Mode(vdp);
+			steps = 70;
+			gma2.solve(-0.05, 1.0, pts, steps);
+			
+			rings = 6;
+			dn = Math.floor(steps/rings);
+			var plots2 = []
+			for (var i=0; i<rings; i++)
+			{
+				plots2[i] = {data:gma2.getRing(i*dn)}
+			}
+			
+			var circle = Ellipse(0.05,1.0,0.0);
+			var cirpts = linspace(0.0,2*Math.PI,60,circle)
+			
+			steps = 250;
+			gma2.solve(0.05, 1.0, cirpts, steps);
+			dn = Math.floor(steps/rings);
+			for (var i=0; i<rings; i++)
+			{
+				plots2.push({data:gma2.getRing(i*dn)});
+			}
+			
+			var plot = jQuery.plot($("#canvas2"), plots2);
+			
+			
 		</script>
 	</body>
 </html>

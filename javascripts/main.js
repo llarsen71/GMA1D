@@ -9,6 +9,17 @@ function SxV(s,v)
 	return v2
 }
 
+// Scalar plus Vector function
+function SpV(s,v)
+{
+	var v2 = [];
+	for (var i=0; i < v.length; i++)
+	{
+		v2[i] = s + v[i];
+	}
+	return v2
+}
+
 // Vector plut Vector function
 function VpV(v1,v2)
 {
@@ -66,6 +77,7 @@ function GMA_Mode(f)
 		solve: function(dt, t, pts, steps)
 		{
 			this.steps = steps;
+			this.solutions = [];
 			
 			for (var i=0; i < pts.length; i++)
 			{
