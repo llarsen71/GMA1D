@@ -26,12 +26,32 @@
 				 return Duffing;
 			}
 			
-			var f = DuffingEqn(0.1, 0.2);
-			var x = [0.0,3.0];
-			var v = solve_ode(f, 0.05, 1.0, x, 300);
-			//alert(v.pt);
+			function Ellipse(a,excentricity,angle)
+			{
+				var ellips = function(t)
+				{
+					var pt  = [a*Math.cos(t),a*excentricity*Math.sin(t)];
+					var c = Math.cos(angle);
+					var s = Math.sin(angle);
+					var pt2 = [pt[0]*c+pt[1]*s,-pt[0]*s+pt[1]*c];
+					return pt2;
+				}
+				return ellips;
+			}
 			
-			var plot = jQuery.plot($("#canvas1"), [{data:v.pt}]);
+			var g = Ellipse(0.5, 1.1, -Math.PI/3.9);
+			var pts = linspace(0.0,2*Math.PI,60,g)
+			
+			var f = DuffingEqn(0.1, 0.2);
+			gma = GMA_Mode(f);
+			gma.solve(0.05, 1.0, pts, 200);
+			
+			var plot = jQuery.plot($("#canvas1"), [{data:gma.getRing(10)}]);
+			
+			//var x = [0.0,3.0];
+			//var v = solve_ode(f, 0.05, 1.0, x, 300);
+			//alert(v.pt);
+			//var plot = jQuery.plot($("#canvas1"), [{data:v.pt}]);
 		</script>
 	</body>
 </html>

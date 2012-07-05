@@ -76,9 +76,9 @@ function GMA_Mode(f)
 		getRing: function(stepn)
 		{
 			var pts = [];
-			for (var i=0; j<this.solution.length; j++)
+			for (var i=0; i<this.solutions.length; i++)
 			{
-				pts[i] = this.solution[j].pt[stepn];
+				pts[i] = this.solutions[i].pt[stepn];
 			}
 			
 			return pts;
@@ -86,4 +86,18 @@ function GMA_Mode(f)
 	}
 	
 	return gma
+}
+
+function linspace(xmin,xmax,points,callback)
+{
+	var hasCallback = (arguments.length > 3);
+	var result = [];
+	var dx = (xmax-xmin)/(points-1);
+	for (var i=0; i<points; i++)
+	{
+		var x = xmin + i*dx;
+		if (hasCallback) { result[i] = callback(x); }
+		else { result[i] = x; }
+	}
+	return result;
 }
