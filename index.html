@@ -39,14 +39,23 @@
 				return ellips;
 			}
 			
-			var g = Ellipse(0.5, 1.1, -Math.PI/3.9);
+			var g = Ellipse(0.5, 1.2, -Math.PI/4.5);
 			var pts = linspace(0.0,2*Math.PI,60,g)
 			
-			var f = DuffingEqn(0.1, 0.2);
+			var f = DuffingEqn(0.05, 0.2);
 			gma = GMA_Mode(f);
-			gma.solve(0.05, 1.0, pts, 200);
+			var steps = 500;
+			gma.solve(-0.05, 1.0, pts, steps);
 			
-			var plot = jQuery.plot($("#canvas1"), [{data:gma.getRing(10)}]);
+			var rings = 20;
+			var dn = Math.floor(steps/rings);
+			var plots = []
+			for (var i=0; i<rings; i++)
+			{
+				plots[i] = {data:gma.getRing(i*dn)}
+			}
+			var plot = jQuery.plot($("#canvas1"), plots);
+			
 			
 			//var x = [0.0,3.0];
 			//var v = solve_ode(f, 0.05, 1.0, x, 300);
