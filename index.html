@@ -4,7 +4,8 @@
 		<meta name="description" content="GMA-1D: 1D Generalized Modes" />
 		<script src="javascripts/flot/jquery.js"></script>
 		<script src="javascripts/flot/jquery.flot.js"></script>
-		<script src="javascripts/main.js"></script>
+		<script src="javascripts/vector.js"></script>
+		<script src="javascripts/ODE_Mode.js"></script>
 		<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 		<title>GMA-1D</title>
 	</head>
@@ -13,17 +14,30 @@
 		<a href="https://github.com/llarsen71/GMA1D"> Git Repository </a>
 		<table>
 		<tr><td><table>
-		<tr><td>Duffing Equation</td></tr>
+		<tr><td>Duffing Equation</td>
+		<form>
+			<select name="model">
+				<option value="VanDerPol"> Van Der Pol Oscillator </option>
+				<option value="Duffing">   Duffing Oscillator     </option>
+			</select>
+		</form>
+		</tr>
 		<tr><td><div id="canvas1" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>
 		</table></td>
 		<td><table>
-		<tr><td>Van Der Pol Oscillator</td></tr>
+		<tr><td>Van Der Pol Oscillator</td>
+		<form>
+			<select name="model">
+				<option value="VanDerPol"> Van Der Pol Oscillator </option>
+				<option value="Duffing">   Duffing Oscillator     </option>
+			</select>
+		</form>
+		</tr>
 		<tr><td><div id="canvas2" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>
 		</table></td></tr>
 		</table>
 		
 		<script type="text/javascript">
-			
 			// Simple undamped oscillator
 			function DuffingEqn(eps, c)
 			{
@@ -56,7 +70,7 @@
 			var f = DuffingEqn(0.05, 0.2);
 			gma = GMA_Mode(f);
 			var steps = 500;
-			gma.solve(-0.05, 1.0, pts, steps);
+			gma.solve(steps, -0.05, 1.0, pts);
 			
 			var rings = 20;
 			var dn = Math.floor(steps/rings);
@@ -66,12 +80,6 @@
 				plots[i] = {data:gma.getRing(i*dn)}
 			}
 			var plot = jQuery.plot($("#canvas1"), plots);
-			
-			
-			//var x = [0.0,3.0];
-			//var v = solve_ode(f, 0.05, 1.0, x, 300);
-			//alert(v.pt);
-			//var plot = jQuery.plot($("#canvas1"), [{data:v.pt}]);
 			
 			function VanDerPol(c)
 			{
@@ -84,16 +92,16 @@
 			}
 			
 			// First get the limit cycle.
-			var vdp = VanDerPol(1,0);
+			var vdp = VanDerPol(1);
 			var x = [-1.53766,-2.0407];
-			var v = solve_ode(vdp, 0.0673, 1.0, x, 120);
+			var v = ODE(vdp).solve(120, 0.0673, 1.0, x);
 			
 			v.scale = function(sf)
 			{
 				var pts = [];
-				for (var i=0; i<this.pt.length; i++)
+				for (var i=0; i<this.pts.length; i++)
 				{
-					pts[i] = SxV(sf,this.pt[i]);
+					pts[i] = SxV(sf,this.pts[i]);
 				}
 				return pts;
 			}
@@ -103,7 +111,7 @@
 			
 			var gma2 = GMA_Mode(vdp);
 			steps = 70;
-			gma2.solve(-0.05, 1.0, pts, steps);
+			gma2.solve(steps, -0.05, 1.0, pts);
 			
 			rings = 6;
 			dn = Math.floor(steps/rings);
@@ -117,16 +125,16 @@
 			var cirpts = linspace(0.0,2*Math.PI,60,circle)
 			
 			steps = 250;
-			gma2.solve(0.05, 1.0, cirpts, steps);
+			gma2.solve(steps, 0.05, 1.0, cirpts);
 			dn = Math.floor(steps/rings);
 			for (var i=0; i<rings; i++)
 			{
 				plots2.push({data:gma2.getRing(i*dn)});
 			}
 			
+			plots2.push({data:v.pts,lines:{lineWidth: 3.0}});
+			
 			var plot = jQuery.plot($("#canvas2"), plots2);
-			
-			
 		</script>
 	</body>
 </html>
