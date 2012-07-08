@@ -6,6 +6,7 @@
 		<script src="javascripts/flot/jquery.flot.js"></script>
 		<script src="javascripts/vector.js"></script>
 		<script src="javascripts/ODE_Mode.js"></script>
+		<script src="javascripts/examples.js"></script>
 		<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 		<title>GMA-1D</title>
 	</head>
@@ -38,106 +39,8 @@
 		</table>
 		
 		<script type="text/javascript">
-			// Simple undamped oscillator
-			function DuffingEqn(eps, c)
-			{
-				var Duffing = function(t,v)
-				{
-					var v2 = [];
-					v2[0] =  v[1];
-					v2[1] = -2*c*v[1]-v[0]-eps*Math.pow(v[0],3);
-					return v2;
-				}
-				 return Duffing;
-			}
-			
-			function Ellipse(a,excentricity,angle)
-			{
-				var ellips = function(t)
-				{
-					var pt  = [a*Math.cos(t),a*excentricity*Math.sin(t)];
-					var c = Math.cos(angle);
-					var s = Math.sin(angle);
-					var pt2 = [pt[0]*c+pt[1]*s,-pt[0]*s+pt[1]*c];
-					return pt2;
-				}
-				return ellips;
-			}
-			
-			var g = Ellipse(0.5, 1.2, -Math.PI/4.5);
-			var pts = linspace(0.0,2*Math.PI,60,g)
-			
-			var f = DuffingEqn(0.05, 0.2);
-			gma = GMA_Mode(f);
-			var steps = 500;
-			gma.solve(steps, -0.05, 1.0, pts);
-			
-			var rings = 20;
-			var dn = Math.floor(steps/rings);
-			var plots = []
-			for (var i=0; i<rings; i++)
-			{
-				plots[i] = {data:gma.getRing(i*dn)}
-			}
-			var plot = jQuery.plot($("#canvas1"), plots);
-			
-			function VanDerPol(c)
-			{
-				var oscillator = function(t,v)
-				{
-					pt = [v[1], c*(1-v[0]*v[0])*v[1] - v[0]];
-					return pt;
-				}
-				return oscillator;
-			}
-			
-			// First get the limit cycle.
-			var vdp = VanDerPol(0.2);
-			var x = [2.0113107,0.0509031224];
-			var v = ODE(vdp).solve(113, 0.0673, 1.0, x);
-			var plots2 = [];
-			
-			v.scale = function(sf)
-			{
-				var pts = [];
-				for (var i=0; i<this.pts.length; i++)
-				{
-					pts[i] = SxV(sf,this.pts[i]);
-				}
-				return pts;
-			}
-			
-			var pts = v.scale(1.01);
-			//var plot = jQuery.plot($("#canvas2"), [{data:v.pt}]);
-			
-			var gma2 = GMA_Mode(vdp);
-			steps = 350;
-			gma2.solve(steps, -0.05, 1.0, pts);
-			
-			rings = 3;
-			dn = Math.floor(steps/rings);
-			for (var i=0; i<rings; i++)
-			{
-				plots2[i] = {data:gma2.getRing(i*dn)}
-			}
-			
-			var initialring = Ellipse(0.1, 1.2, Math.PI/4.5);
-			//Ellipse(0.05,1.0,0.0);
-			var cirpts = linspace(0.0,2*Math.PI,60,initialring);
-			
-			steps = 1000;
-			rings = 6;
-			gma2.solve(steps, 0.05, 1.0, cirpts);
-			dn = Math.floor(steps/rings);
-			for (var i=0; i<rings; i++)
-			{
-				plots2.push({data:gma2.getRing(i*dn)});
-			}
-			
-			// Include the limit cycle
-			plots2.push({data:v.pts,lines:{lineWidth: 3.0}});
-			
-			var plot = jQuery.plot($("#canvas2"), plots2);
+			DuffingPlot("#canvas1");
+			VanDerPolPlot("#canvas2");
 		</script>
 	</body>
 </html>

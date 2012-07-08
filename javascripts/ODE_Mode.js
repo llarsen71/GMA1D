@@ -22,17 +22,27 @@ function ODE(f)
 			// v = pt + (k1+2.0*(k2+k3)+k4)/6.0
 			var v = VpV(pt, SxV(1.0/6.0, VpV(k1,SxV(2,VpV(k2,k3)),k4)));
 
+			for (n in v) { if (isNaN(n)) {return false;}}
+			if ("limit" in this)
+			{
+				if (typeof this.limit === "function")
+				{
+					if (!this.limit(v)) { return false;} 
+				}
+			}
+
 			// Increment the index
 			this.n += 1;
 			// Add a new time value and the new ODE solution point.
 			this.t[this.n]   = t+dt;
 			this.pts[this.n] = v;
+			return true;
 		},
 
 		solve: function(steps, dt, t, pt)
 		{
 			// Do initialization
-			this.dt = dt
+			this.dt = dt;
 			// Set initial conditions if they are passed in.
 			if (arguments.length > 2)
 			{
@@ -46,17 +56,25 @@ function ODE(f)
 			}
 
 			// Solve the ODE
-			for (var i=0; i < steps; i++) { this.step(dt); }
+			for (var i=0; i < steps; i++)
+			{
+				if (!this.step(dt)) { break; }
+			}
 
 			return {t: this.t, pts: this.pts}
 		},
 
 		pushPt: function(stepn, vector)
 		{
-			vector.push(this.pts[stepn]);
+			if (this.pts.length > stepn) vector.push(this.pts[stepn]);
+		},
+
+		setLimit: function(limit_func)
+		{
+			this.limit = limit_func;
 		}
 	}
-	
+
 	return ode_rk4;
 }
 
@@ -67,13 +85,14 @@ function GMA_Mode(f)
 		odes:  [], // Set of ode solvers
 		steps:  0, // Solution steps
 
-		solve: function(steps, dt, t, pts)
+		solve: function(steps, dt, t, pts, limit)
 		{
 			if (arguments < 3) 
 			{
 				// If we are continuing the solution, increment steps
 				this.steps += steps;
-				for (var i=0; i<pts.length; i++) { this.odes[i].solve(steps,dt); }
+				odes = this.odes;
+				for (var i=0; i < odes.length; i++) { odes[i].solve(steps,dt); }
 			}
 			else 
 			{
@@ -83,6 +102,7 @@ function GMA_Mode(f)
 				for (var i=0; i<pts.length; i++) 
 				{
 					this.odes[i] = ODE(f);
+					if (arguments.length > 4) { this.odes[i].setLimit(limit); }
 					this.odes[i].solve(steps, dt, t, pts[i]);
 				}
 			}
@@ -96,6 +116,14 @@ function GMA_Mode(f)
 				this.odes[i].pushPt(stepn,pts);
 			}
 			return pts;
+		}, 
+
+		setLimit: function(limit_func)
+		{
+			for (ode in this.odes)
+			{
+				ode.setLimit(limit_func);
+			}
 		}
 	}
 
