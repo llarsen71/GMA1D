@@ -80,7 +80,7 @@ function VanDerPolPlot(canvas)
 	//var plot = $.plot($(canvas), [{data:v.pts}]);
 
 	var gma2  = GMA_Mode(vdp);
-	var steps = 600;
+	var steps = 400;
 	var limit = function(v)
 	{
 		for (var i=0; i<v.length; i++)
@@ -91,11 +91,12 @@ function VanDerPolPlot(canvas)
 	}
 	gma2.solve(steps, -0.05, 1.0, pts, limit);
 
+	var offset = 80;
 	var rings = 10;
-	var dn = Math.floor(steps/rings);
+	var dn = Math.floor((steps-offset)/rings);
 	for (var i=0; i<rings; i++)
 	{
-		plots2[i] = {data:gma2.getRing(i*dn)}
+		plots2[i] = {data:gma2.getRing(i*dn+offset)}
 	}
 
 	var initialring = Ellipse(0.1, 1.2, Math.PI/4.5);
