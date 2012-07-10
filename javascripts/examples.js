@@ -45,13 +45,9 @@ function DuffingPlot(canvas)
 	var steps = 500;
 	gma.solve(steps, -0.05, 1.0, pts);
 
-	var rings = 20;
-	var dn = Math.floor(steps/rings);
-	var plots = []
-	for (var i=0; i<rings; i++)
-	{
-		plots[i] = {data:gma.getRing(i*dn)}
-	}
+	var plots = [];
+	var contours = 20;
+	gma.getContours(plots,contours);
 	var plot = $.plot($(canvas), plots);
 }
 
@@ -92,24 +88,16 @@ function VanDerPolPlot(canvas)
 	gma2.solve(steps, -0.05, 1.0, pts, limit);
 
 	var offset = 80;
-	var rings = 10;
-	var dn = Math.floor((steps-offset)/rings);
-	for (var i=0; i<rings; i++)
-	{
-		plots2[i] = {data:gma2.getRing(i*dn+offset)}
-	}
+	var contours = 10;
+	gma2.getContours(plots2,contours,offset);
 
 	var initialring = Ellipse(0.1, 1.2, Math.PI/4.5);
 	var cirpts = linspace(0.0,2*Math.PI,60,initialring);
 
 	steps = 1000;
-	rings = 6;
 	gma2.solve(steps, 0.05, 1.0, cirpts);
-	dn = Math.floor(steps/rings);
-	for (var i=0; i<rings; i++)
-	{
-		plots2.push({data:gma2.getRing(i*dn)});
-	}
+	contours = 6;
+	gma2.getContours(plots2, contours);
 
 	// Include the limit cycle
 	plots2.push({data:v.pts,lines:{lineWidth: 3.0}});

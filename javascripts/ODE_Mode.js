@@ -108,7 +108,7 @@ function GMA_Mode(f)
 			}
 		},
 
-		getRing: function(stepn)
+		getContour: function(stepn)
 		{
 			var pts = [];
 			for (var i=0; i<this.odes.length; i++)
@@ -116,7 +116,35 @@ function GMA_Mode(f)
 				this.odes[i].pushPt(stepn,pts);
 			}
 			return pts;
-		}, 
+		},
+
+		getContours: function(arry, num, offset)
+		{
+			if (arguments.length < 3) offset = 0;
+			var step = (this.steps-offset)/num;
+			if (step < 1) return;
+			for (var i=0; i<num; i++)
+			{
+				arry.push({data:this.getContour(offset+i*step)})
+			}
+			arry.last_step = offset + num*step;
+		},
+
+		getSolution: function(idx)
+		{
+			return this.odes[i].pts;
+		},
+
+		getSolutions: function(arry, nslns, offset)
+		{
+			if (arguments.length < 3) offset=0;
+			var step = (self.odes.length-offset)/nslns;
+			if (step < 1) return;
+			for (var i=0; i<nslns; i++)
+			{
+				array.push({data:this.getSolution(offset+i*step)});
+			}
+		},
 
 		setLimit: function(limit_func)
 		{
