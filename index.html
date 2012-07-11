@@ -16,24 +16,24 @@
 		<table>
 		<tr><td><table>
 		<tr><td>
-		<form>
-			<select name="model">
+		<form name="#canvas1">
+			<select name="model" onchange="updatePlot(this.form)">
 				<option value="VanDerPol"> Van Der Pol Oscillator    </option>
 				<option value="Duffing" SELECTED> Duffing Oscillator </option>
 			</select>
-			<input type="checkbox" onchange="updatePlot('#canvas1',this)">Show ODE Solutions</input>
+			<input type="checkbox" name="showSoln" onchange="updatePlot(this.form)">Show ODE Solutions</input>
 		</form>
 		</td></tr>
 		<tr><td><div id="canvas1" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>
 		</table></td>
 		<td><table>
 		<tr><td>
-		<form>
-			<select name="model">
+		<form name="#canvas2">
+			<select name="model" onchange="updatePlot(this.form)">
 				<option value="VanDerPol"> Van Der Pol Oscillator </option>
 				<option value="Duffing">   Duffing Oscillator     </option>
 			</select>
-			<input type="checkbox" onchange="updatePlot('#canvas2',this)">Show ODE Solutions</input>
+			<input type="checkbox" name="showSoln" nchange="updatePlot(this.form)">Show ODE Solutions</input>
 		</form>
 		</td></tr>
 		<tr><td><div id="canvas2" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>

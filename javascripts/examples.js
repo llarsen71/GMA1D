@@ -108,12 +108,15 @@ function VanDerPolPlot(canvas, showSolns)
 	var plot = jQuery.plot($(canvas), plots2);
 }
 
-function updatePlot(canvas, showSolns)
+function updatePlot(form)
 {
-	for (var i=0; i<showSolns.form.length; i++)
+	var type, showSoln;
+	for (var i=0; i<form.length; i++)
 	{
-		if (showSolns.form.elements[i].name) type = showSolns.form.elements[i].value;
+		field = form.elements[i];
+		if (field.name === "model") type = field.value;
+		if (field.name === "showSoln") showSoln = field.checked;
 	}
-	if (type === "VanDerPol") VanDerPolPlot(canvas, showSolns.checked);
-	if (type === "Duffing") DuffingPlot(canvas, showSolns.checked);
+	if (type === "VanDerPol") VanDerPolPlot(form.name, showSoln);
+	if (type === "Duffing") DuffingPlot(form.name, showSoln);
 }
