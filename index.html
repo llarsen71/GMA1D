@@ -7,6 +7,11 @@
 		<script src="javascripts/vector.js"></script>
 		<script src="javascripts/ODE_Mode.js"></script>
 		<script src="javascripts/examples.js"></script>
+		<script type="text/javascript">
+			var Duffing = DuffingSolver(500);
+			var VanDerPol = VanDerPolSolver(1000,400);
+			var gmas = {Duffing: Duffing, VanDerPol: VanDerPol};
+		</script>
 		<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 		<title>GMA-1D</title>
 	</head>
@@ -17,11 +22,11 @@
 		<tr><td><table>
 		<tr><td>
 		<form name="#canvas1">
-			<select name="model" onchange="updatePlot(this.form)">
+			<select name="model" onchange="updatePlot(gmas, this.form)">
 				<option value="VanDerPol"> Van Der Pol Oscillator    </option>
 				<option value="Duffing" SELECTED> Duffing Oscillator </option>
 			</select>
-			<input type="checkbox" name="showSoln" onchange="updatePlot(this.form)">Show ODE Solutions</input>
+			<input type="checkbox" name="showSoln" onchange="updatePlot(gmas, this.form)">Show ODE Solutions</input>
 		</form>
 		</td></tr>
 		<tr><td><div id="canvas1" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>
@@ -29,11 +34,11 @@
 		<td><table>
 		<tr><td>
 		<form name="#canvas2">
-			<select name="model" onchange="updatePlot(this.form)">
+			<select name="model" onchange="updatePlot(gmas, this.form)">
 				<option value="VanDerPol"> Van Der Pol Oscillator </option>
 				<option value="Duffing">   Duffing Oscillator     </option>
 			</select>
-			<input type="checkbox" name="showSoln" nchange="updatePlot(this.form)">Show ODE Solutions</input>
+			<input type="checkbox" name="showSoln" onchange="updatePlot(gmas, this.form)">Show ODE Solutions</input>
 		</form>
 		</td></tr>
 		<tr><td><div id="canvas2" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>
@@ -41,8 +46,8 @@
 		</table>
 
 		<script type="text/javascript">
-			DuffingPlot("#canvas1", false);
-			VanDerPolPlot("#canvas2", false);
+			Duffing.plot("#canvas1", false);
+			VanDerPol.plot("#canvas2", false);
 		</script>
 	</body>
 </html>

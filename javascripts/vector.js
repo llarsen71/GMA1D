@@ -16,11 +16,9 @@
 //
 // return s*v
 
-function SxV(s,v)
-{
+function SxV(s,v) {
 	var v2 = [];
-	for (var i=0; i < v.length; i++)
-	{
+	for (var i=0; i < v.length; i++) {
 		v2[i] = s*v[i];
 	}
 	return v2
@@ -33,11 +31,9 @@ function SxV(s,v)
 //
 // return v+s
 
-function SpV(s,v)
-{
+function SpV(s,v) {
 	var v2 = [];
-	for (var i=0; i < v.length; i++)
-	{
+	for (var i=0; i < v.length; i++) {
 		v2[i] = s + v[i];
 	}
 	return v2
@@ -53,8 +49,7 @@ function SpV(s,v)
 function VpV(v1,v2)
 {
 	var v3 = [];
-	for (var i=0; i < v1.length && i < v2.length; i++)
-	{
+	for (var i=0; i < v1.length && i < v2.length; i++) {
 		v3[i] = v1[i]+v2[i];
 	}
 	return v3;
@@ -74,13 +69,11 @@ function VpV(v1,v2)
 //
 // return the generated vector (i.e. array)
 
-function linspace(xmin,xmax,length,callback)
-{
+function linspace(xmin,xmax,length,callback) {
 	var hasCallback = (arguments.length > 3);
 	var result = [];
 	var dx = (xmax-xmin)/(length-1);
-	for (var i=0; i<length; i++)
-	{
+	for (var i=0; i<length; i++) {
 		var x = xmin + i*dx;
 		if (hasCallback) { result[i] = callback(x); }
 		else { result[i] = x; }
