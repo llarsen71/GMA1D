@@ -35,7 +35,7 @@ function Ellipse(a,excentricity,angle)
 	return ellips;
 }
 
-function DuffingPlot(canvas)
+function DuffingPlot(canvas, showSolns)
 {
 	var g = Ellipse(0.5, 1.2, -Math.PI/4.5);
 	var pts = linspace(0.0,2*Math.PI,60,g)
@@ -48,10 +48,12 @@ function DuffingPlot(canvas)
 	var plots = [];
 	var contours = 20;
 	gma.getContours(plots,contours);
+	if (showSolns) gma.getSolutions(plots,2);
+
 	var plot = $.plot($(canvas), plots);
 }
 
-function VanDerPolPlot(canvas)
+function VanDerPolPlot(canvas, showSolns)
 {
 	// First get the limit cycle.
 	var vdp = VanDerPolEqn(0.2);
@@ -90,6 +92,7 @@ function VanDerPolPlot(canvas)
 	var offset = 80;
 	var contours = 10;
 	gma2.getContours(plots2,contours,offset);
+	if (showSolns) gma2.getSolutions(plots2,6);
 
 	var initialring = Ellipse(0.1, 1.2, Math.PI/4.5);
 	var cirpts = linspace(0.0,2*Math.PI,60,initialring);
@@ -98,8 +101,19 @@ function VanDerPolPlot(canvas)
 	gma2.solve(steps, 0.05, 1.0, cirpts);
 	contours = 6;
 	gma2.getContours(plots2, contours);
+	if (showSolns) gma2.getSolutions(plots2,2);
 
 	// Include the limit cycle
 	plots2.push({data:v.pts,lines:{lineWidth: 3.0}});
 	var plot = jQuery.plot($(canvas), plots2);
+}
+
+function updatePlot(canvas, showSolns)
+{
+	for (var i=0; i<showSolns.form.length; i++)
+	{
+		if (showSolns.form.elements[i].name) type = showSolns.form.elements[i].value;
+	}
+	if (type === "VanDerPol") VanDerPolPlot(canvas, showSolns.checked);
+	if (type === "Duffing") DuffingPlot(canvas, showSolns.checked);
 }

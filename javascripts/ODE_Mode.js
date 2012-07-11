@@ -132,17 +132,17 @@ function GMA_Mode(f)
 
 		getSolution: function(idx)
 		{
-			return this.odes[i].pts;
+			return this.odes[idx].pts;
 		},
 
 		getSolutions: function(arry, nslns, offset)
 		{
 			if (arguments.length < 3) offset=0;
-			var step = (self.odes.length-offset)/nslns;
+			var step = (this.odes.length-offset)/nslns;
 			if (step < 1) return;
 			for (var i=0; i<nslns; i++)
 			{
-				array.push({data:this.getSolution(offset+i*step)});
+				arry.push({data:this.getSolution(offset+i*step)});
 			}
 		},
 

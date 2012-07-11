@@ -10,38 +10,39 @@
 		<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 		<title>GMA-1D</title>
 	</head>
-	
+
 	<body>
 		<a href="https://github.com/llarsen71/GMA1D"> Git Repository </a>
 		<table>
 		<tr><td><table>
-		<tr><td>Duffing Equation</td>
+		<tr><td>
 		<form>
 			<select name="model">
 				<option value="VanDerPol"> Van Der Pol Oscillator    </option>
 				<option value="Duffing" SELECTED> Duffing Oscillator </option>
 			</select>
-			<input type="checkbox">Show ODE Solutions</input>
+			<input type="checkbox" onchange="updatePlot('#canvas1',this)">Show ODE Solutions</input>
 		</form>
-		</tr>
+		</td></tr>
 		<tr><td><div id="canvas1" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>
 		</table></td>
 		<td><table>
-		<tr><td>Van Der Pol Oscillator</td>
+		<tr><td>
 		<form>
 			<select name="model">
 				<option value="VanDerPol"> Van Der Pol Oscillator </option>
 				<option value="Duffing">   Duffing Oscillator     </option>
 			</select>
+			<input type="checkbox" onchange="updatePlot('#canvas2',this)">Show ODE Solutions</input>
 		</form>
-		</tr>
+		</td></tr>
 		<tr><td><div id="canvas2" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>
 		</table></td></tr>
 		</table>
-		
+
 		<script type="text/javascript">
-			DuffingPlot("#canvas1");
-			VanDerPolPlot("#canvas2");
+			DuffingPlot("#canvas1", false);
+			VanDerPolPlot("#canvas2", false);
 		</script>
 	</body>
 </html>
