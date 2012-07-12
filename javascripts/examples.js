@@ -32,7 +32,7 @@ function Ellipse(a,excentricity,angle) {
 function DuffingSolver(steps) {
 	var g = Ellipse(0.5, 1.2, -Math.PI/4.5);
 	var pts = linspace(0.0,2*Math.PI,60,g)
-	
+
 	var f = DuffingEqn(0.05, 0.2);
 	gma = new GMAMode(f);
 	var steps = 500;
@@ -42,10 +42,10 @@ function DuffingSolver(steps) {
 	return gma;
 }
 
-function DuffingPlot(canvas, showSolns) {
+function DuffingPlot(canvas, showMode, showSolns) {
 	var plots = [];
 	var contours = 20;
-	this.getContours(plots,contours);
+	if (showMode) this.getContours(plots,contours);
 	if (showSolns) this.getSolutions(plots,2);
 
 	var plot = $.plot($(canvas), plots);
@@ -102,38 +102,38 @@ function VanDerPolSolver(isteps, osteps) {
 	return gma;
 }
 
-function VanDerPolPlot(canvas, showSolns) {
+function VanDerPolPlot(canvas, showMode, showSolns) {
 	// Structure to store the plots.
 	var plots = [];
 
 	// Rings inside the limit cycle
 	var contours = 6;
-	this.inner.getContours(plots, contours);
+	if (showMode) this.inner.getContours(plots, contours);
 	if (showSolns) this.inner.getSolutions(plots,2);
 
 	// Rings outside the limit cycle
 	var offset = 80;
 	contours = 10;
-	this.outer.getContours(plots,contours,offset);
+	if (showMode) this.outer.getContours(plots,contours,offset);
 	if (showSolns) this.outer.getSolutions(plots,6);
 
 	// Include the limit cycle
-	plots.push({data:this.limitcycle,lines:{lineWidth: 3.0}});
+	if (showMode) plots.push({data:this.limitcycle,lines:{lineWidth: 3.0}});
 
 	// Plot the results
 	var plot = $.plot($(canvas), plots);
 }
 
 function updatePlot(gmas, form) {
-	var type, showSoln;
+	var type, showSoln, showMode;
 	// Get the plot inputs
-	for (var i=0; i<form.length; i++)
-	{
+	for (var i=0; i<form.length; i++) {
 		field = form.elements[i];
 		if (field.name === "model") type = field.value;
-		if (field.name === "showSoln") showSoln = field.checked;
+		else if (field.name === "showSoln") showSoln = field.checked;
+		else if (field.name === "showMode") showMode = field.checked;
 	}
 	// Select the specific GMAMode from gmas and plot results.
 	// The form.name should match the name of the canvas to update.
-	gmas[type].plot(form.name, showSoln);
+	gmas[type].plot(form.name, showMode, showSoln);
 }

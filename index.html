@@ -27,6 +27,7 @@
 				<option value="Duffing" SELECTED> Duffing Oscillator </option>
 			</select>
 			<input type="checkbox" name="showSoln" onchange="updatePlot(gmas, this.form)">Show ODE Solutions</input>
+			<input type="checkbox" name="showMode" onchange="updatePlot(gmas, this.form)" checked="checked">Show Modal Contours</input>
 		</form>
 		</td></tr>
 		<tr><td><div id="canvas1" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>
@@ -39,6 +40,7 @@
 				<option value="Duffing">   Duffing Oscillator     </option>
 			</select>
 			<input type="checkbox" name="showSoln" onchange="updatePlot(gmas, this.form)">Show ODE Solutions</input>
+			<input type="checkbox" name="showMode" onchange="updatePlot(gmas, this.form)" checked="checked">Show Modal Contours</input>
 		</form>
 		</td></tr>
 		<tr><td><div id="canvas2" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>
@@ -46,8 +48,8 @@
 		</table>
 
 		<script type="text/javascript">
-			Duffing.plot("#canvas1", false);
-			VanDerPol.plot("#canvas2", false);
+			Duffing.plot("#canvas1", true, false);
+			VanDerPol.plot("#canvas2", true, false);
 		</script>
 	</body>
 </html>

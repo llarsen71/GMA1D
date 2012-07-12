@@ -41,8 +41,7 @@ ODE.prototype.step = function(dt) {
 	return true;
 }
 
-ODE.prototype.solve = function(steps, dt, t, pt)
-{
+ODE.prototype.solve = function(steps, dt, t, pt) {
 	// Do initialization
 	this.dt = dt;
 	// Set initial conditions if they are passed in.
@@ -75,29 +74,23 @@ ODE.prototype.setLimit = function(limit_func) {
 // GMAMode Class
 //-----------------------------------------------------
 
-function GMAMode (V)
-{
+function GMAMode (V) {
 	this.ode   = [];
 	this.steps = 0;
 	this.V     = V;
 }
 
-this.GMAMode.prototype.solve = function(steps, dt, t, pts, limit)
-{
-	if (arguments < 3) 
-	{
+this.GMAMode.prototype.solve = function(steps, dt, t, pts, limit) {
+	if (arguments < 3) {
 		// If we are continuing the solution, increment steps
 		this.steps += steps;
 		odes = this.odes;
 		for (var i=0; i < odes.length; i++) { odes[i].solve(steps,dt); }
-	}
-	else 
-	{
+	} else {
 		// If we are starting a solution, initialize the ODEs and solve.
 		this.steps = steps;
 		this.odes = [];
-		for (var i=0; i<pts.length; i++) 
-		{
+		for (var i=0; i<pts.length; i++) {
 			this.odes[i] = new ODE(this.V);
 			if (arguments.length > 4) { this.odes[i].setLimit(limit); }
 			this.odes[i].solve(steps, dt, t, pts[i]);
@@ -105,48 +98,39 @@ this.GMAMode.prototype.solve = function(steps, dt, t, pts, limit)
 	}
 }
 
-this.GMAMode.prototype.getContour = function(stepn)
-{
+this.GMAMode.prototype.getContour = function(stepn) {
 	var pts = [];
-	for (var i=0; i<this.odes.length; i++)
-	{
+	for (var i=0; i<this.odes.length; i++) {
 		this.odes[i].pushPt(stepn,pts);
 	}
 	return pts;
 }
 
-this.GMAMode.prototype.getContours = function(arry, num, offset)
-{
+this.GMAMode.prototype.getContours = function(arry, num, offset) {
 	if (arguments.length < 3) offset = 0;
 	var step = (this.steps-offset)/num;
 	if (step < 1) return;
-	for (var i=0; i<num; i++)
-	{
+	for (var i=0; i<num; i++) {
 		arry.push({data:this.getContour(offset+i*step)})
 	}
 	arry.last_step = offset + num*step;
 }
 
-this.GMAMode.prototype.getSolution = function(idx)
-{
+this.GMAMode.prototype.getSolution = function(idx) {
 	return this.odes[idx].pts;
 }
 
-this.GMAMode.prototype.getSolutions = function(arry, nslns, offset)
-{
+this.GMAMode.prototype.getSolutions = function(arry, nslns, offset) {
 	if (arguments.length < 3) offset=0;
 	var step = (this.odes.length-offset)/nslns;
 	if (step < 1) return;
-	for (var i=0; i<nslns; i++)
-	{
+	for (var i=0; i<nslns; i++) {
 		arry.push({data:this.getSolution(offset+i*step)});
 	}
 }
 
-this.GMAMode.prototype.setLimit = function(limit_func)
-{
-	for (ode in this.odes)
-	{
+this.GMAMode.prototype.setLimit = function(limit_func) {
+	for (ode in this.odes) {
 		ode.setLimit(limit_func);
 	}
 }
