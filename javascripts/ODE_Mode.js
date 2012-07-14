@@ -78,17 +78,21 @@ function GMAMode (V) {
 	this.ode   = [];
 	this.steps = 0;
 	this.V     = V;
+	this.first_index = 0;
+	this.last_index  = 0;
 }
 
 this.GMAMode.prototype.solve = function(steps, dt, t, pts, limit) {
 	if (arguments < 3) {
 		// If we are continuing the solution, increment steps
 		this.steps += steps;
+		this.last_index = this.steps+1;
 		odes = this.odes;
 		for (var i=0; i < odes.length; i++) { odes[i].solve(steps,dt); }
 	} else {
 		// If we are starting a solution, initialize the ODEs and solve.
 		this.steps = steps;
+		this.last_index = this.steps+1;
 		this.odes = [];
 		for (var i=0; i<pts.length; i++) {
 			this.odes[i] = new ODE(this.V);
@@ -106,26 +110,40 @@ this.GMAMode.prototype.getContour = function(stepn) {
 	return pts;
 }
 
-this.GMAMode.prototype.getContours = function(arry, num, offset) {
-	if (arguments.length < 3) offset = 0;
-	var step = (this.steps-offset)/num;
+this.GMAMode.prototype.getContours = function(arry, opts) {
+	opts = opts || {};
+	var num = opts.number;
+	var offset = opts.offset || 0;
+	var step = Math.floor((this.steps-offset)/num);
 	if (step < 1) return;
+	colors = ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
 	for (var i=0; i<num; i++) {
-		arry.push({data:this.getContour(offset+i*step)})
+		arry.push({data:this.getContour(offset+i*step),color:colors[i%colors.length]});
 	}
-	arry.last_step = offset + num*step;
+	arry.offset = offset;
+	arry.last_step = offset + (num-1)*step;
+	this.first_index = offset;
+	this.ncontours = num;
+	this.last_index = arry.last_step+1;
 }
 
 this.GMAMode.prototype.getSolution = function(idx) {
-	return this.odes[idx].pts;
+	return this.odes[idx].pts.slice(this.first_index, this.last_index);
 }
 
-this.GMAMode.prototype.getSolutions = function(arry, nslns, offset) {
-	if (arguments.length < 3) offset=0;
-	var step = (this.odes.length-offset)/nslns;
+this.GMAMode.prototype.getSolutions = function(arry, opts) {
+	opts = opts || {};
+	var nslns  = opts.number || 2;
+	var offset = opts.offset || 0;
+	var colorType = (opts.useGrey) ? "grey" : "range";
+	var step = Math.floor((this.odes.length-offset)/nslns);
 	if (step < 1) return;
+
+	colorOpts = {range:[ "#9440ed", "#4da74d", "#cb4b4b", "#afd8f8", "#edc240"],
+	              grey:["#bbbbbb"]};
+	colors = colorOpts[colorType];
 	for (var i=0; i<nslns; i++) {
-		arry.push({data:this.getSolution(offset+i*step)});
+		arry.push({data:this.getSolution(offset+i*step), color:colors[i%colors.length]});
 	}
 }
 
