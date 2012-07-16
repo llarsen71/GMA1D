@@ -73,36 +73,48 @@ ODE.prototype.setLimit = function(limit_func) {
 //-----------------------------------------------------
 // GMAMode Class
 //-----------------------------------------------------
-
-function GMAMode (V) {
-	this.ode   = [];
-	this.steps = 0;
-	this.V     = V;
-	this.first_index = 0;
-	this.last_index  = 0;
+function GMAMode (V, steps, dt, t, pts, limit) {
+	this.V = V;
+	this.odes  = [];
+	this.steps = steps;
+	this.solve(steps, dt, t, pts, limit);
 }
 
-this.GMAMode.prototype.solve = function(steps, dt, t, pts, limit) {
-	if (arguments < 3) {
-		// If we are continuing the solution, increment steps
-		this.steps += steps;
-		this.last_index = this.steps+1;
-		odes = this.odes;
-		for (var i=0; i < odes.length; i++) { odes[i].solve(steps,dt); }
-	} else {
+GMAMode.prototype.solve = function(steps, dt, t, pts, limit) {
+	if (arguments.length >= 4) {
 		// If we are starting a solution, initialize the ODEs and solve.
-		this.steps = steps;
-		this.last_index = this.steps+1;
-		this.odes = [];
+		this.last_index = this.steps + 1;
+		// Create a new old for each initial point in pts.
 		for (var i=0; i<pts.length; i++) {
 			this.odes[i] = new ODE(this.V);
-			if (arguments.length > 4) { this.odes[i].setLimit(limit); }
+			if (limit) { this.odes[i].setLimit(limit); }
 			this.odes[i].solve(steps, dt, t, pts[i]);
 		}
 	}
+	else {
+		// If we are continuing the solution, add append the new number of steps.
+		this.steps += steps;
+		this.last_index = this.steps + 1;
+		odes = this.odes;
+		for (var i=0; i < odes.length; i++) { odes[i].solve(steps,dt); }
+	}
 }
 
-this.GMAMode.prototype.getContour = function(stepn) {
+GMAMode.prototype.getContourIterator = function (opts) {
+	opts = opts || {};
+	opts.nCurves = opts.nCurves || 6;
+	opts.offset = opts.offset || 0;
+	opts.totalSteps = opts.totalSteps || this.steps;
+	opts.stepsz = Math.floor((opts.totalSteps-opts.offset)/opts.nCurves);
+	opts.iter = function(callback) {
+		for (var i = 0; i<opts.nCurves; i++) {
+			callback(i, opts.offset + i*opts.stepsz, opts);
+		}
+	}
+	return opts.iter;
+}
+
+GMAMode.prototype.getContour = function(stepn) {
 	var pts = [];
 	for (var i=0; i<this.odes.length; i++) {
 		this.odes[i].pushPt(stepn,pts);
@@ -110,44 +122,42 @@ this.GMAMode.prototype.getContour = function(stepn) {
 	return pts;
 }
 
-this.GMAMode.prototype.getContours = function(arry, opts) {
-	opts = opts || {};
-	var num = opts.number;
-	var offset = opts.offset || 0;
-	var step = Math.floor((this.steps-offset)/num);
-	if (step < 1) return;
+GMAMode.prototype.getContours = function(arry, opts) {
 	colors = ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
-	for (var i=0; i<num; i++) {
-		arry.push({data:this.getContour(offset+i*step),color:colors[i%colors.length]});
+	var this_ = this;
+	var addplot = function (i, idx, opts) {
+		arry.push({data:this_.getContour(idx),color:colors[i%colors.length]});
+		opts.idx = idx;
 	}
-	arry.offset = offset;
-	arry.last_step = offset + (num-1)*step;
-	this.first_index = offset;
-	this.ncontours = num;
-	this.last_index = arry.last_step+1;
+	var iter = this.getContourIterator(opts);
+	iter(addplot);
+	this.first_index = opts.offset;
+	this.nCurves = opts.nContours;
+	this.last_index = opts.idx;
 }
 
-this.GMAMode.prototype.getSolution = function(idx) {
+GMAMode.prototype.getSolution = function(idx) {
 	return this.odes[idx].pts.slice(this.first_index, this.last_index);
 }
 
-this.GMAMode.prototype.getSolutions = function(arry, opts) {
+GMAMode.prototype.getSolutions = function(arry, opts) {
 	opts = opts || {};
-	var nslns  = opts.number || 2;
-	var offset = opts.offset || 0;
+	opts.totalSteps = this.odes.length;
 	var colorType = (opts.useGrey) ? "grey" : "range";
-	var step = Math.floor((this.odes.length-offset)/nslns);
-	if (step < 1) return;
-
 	colorOpts = {range:[ "#9440ed", "#4da74d", "#cb4b4b", "#afd8f8", "#edc240"],
 	              grey:["#bbbbbb"]};
 	colors = colorOpts[colorType];
-	for (var i=0; i<nslns; i++) {
-		arry.push({data:this.getSolution(offset+i*step), color:colors[i%colors.length]});
+	var this_ = this;
+	var addplot = function(i,idx,opts) {
+		arry.push({data:this_.getSolution(idx), color:colors[i%colors.length]});
 	}
+	var iter = this.getContourIterator(opts);
+	iter(addplot);
+	// Remove total steps, so that it doesn't affect other plot calls.
+	delete opts["totalSteps"];
 }
 
-this.GMAMode.prototype.setLimit = function(limit_func) {
+GMAMode.prototype.setLimit = function(limit_func) {
 	for (ode in this.odes) {
 		ode.setLimit(limit_func);
 	}

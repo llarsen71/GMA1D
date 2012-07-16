@@ -34,9 +34,8 @@ function DuffingSolver(steps) {
 	var pts = linspace(0.0,2*Math.PI,60,g)
 
 	var f = DuffingEqn(0.05, 0.2);
-	gma = new GMAMode(f);
 	var steps = 500;
-	gma.solve(steps, -0.05, 1.0, pts);
+	gma = new GMAMode(f, steps, -0.05, 1.0, pts);
 
 	gma.plot = DuffingPlot;
 	return gma;
@@ -45,8 +44,8 @@ function DuffingSolver(steps) {
 function DuffingPlot(canvas, showMode, showSolns) {
 	var plots = [];
 	var contours = 14;
-	if (showMode) this.getContours(plots,{number:contours});
-	if (showSolns) this.getSolutions(plots,{number:2,useGrey:showMode});
+	if (showMode) this.getContours(plots,{nCurves:contours});
+	if (showSolns) this.getSolutions(plots,{nCurves:2,useGrey:showMode});
 
 	var plot = $.plot($(canvas), plots);
 }
@@ -60,8 +59,7 @@ function VanDerPolSolver(isteps, osteps) {
 	var initialring = Ellipse(0.1, 1.2, Math.PI/4.5);
 	var cirpts = linspace(0.0,2*Math.PI,60,initialring);
 
-	var gmainner = new GMAMode(vdp);
-	gmainner.solve(isteps, 0.05, 1.0, cirpts);
+	var gmainner = new GMAMode(vdp, isteps, 0.05, 1.0, cirpts);
 
 	// ---- Outer Solution ----
 	// Use a ring just wider than the limit cycle for the outer 
@@ -82,7 +80,6 @@ function VanDerPolSolver(isteps, osteps) {
 	}
 	var pts = v.scale(1.01);
 
-	var gmaouter = new GMAMode(vdp);
 	var steps = 400;
 	// Don't let the solution points exceed a bound of 50.
 	var limit = function(v) {
@@ -91,7 +88,7 @@ function VanDerPolSolver(isteps, osteps) {
 		}
 		return true;
 	}
-	gmaouter.solve(steps, -0.05, 1.0, pts, limit);
+	var gmaouter = new GMAMode(vdp, steps, -0.05, 1.0, pts, limit);
 
 	var gma = 
 	{ inner: gmainner,
@@ -108,14 +105,14 @@ function VanDerPolPlot(canvas, showMode, showSolns) {
 
 	// Rings inside the limit cycle
 	var contours = 6;
-	if (showMode) this.inner.getContours(plots, {number:contours});
-	if (showSolns) this.inner.getSolutions(plots, {number:2,useGrey:showMode});
+	if (showMode) this.inner.getContours(plots, {nCurves:contours});
+	if (showSolns) this.inner.getSolutions(plots, {nCurves:2,useGrey:showMode});
 
 	// Rings outside the limit cycle
 	var offset = 80;
 	contours = 10;
-	if (showMode) this.outer.getContours(plots,{number:contours,offset:offset});
-	if (showSolns) this.outer.getSolutions(plots,{number:6,useGrey:showMode});
+	if (showMode) this.outer.getContours(plots,{nCurves:contours,offset:offset});
+	if (showSolns) this.outer.getSolutions(plots,{nCurves:6,useGrey:showMode});
 
 	// Include the limit cycle
 	if (showMode) plots.push({data:this.limitcycle,lines:{lineWidth: 3.0}});
