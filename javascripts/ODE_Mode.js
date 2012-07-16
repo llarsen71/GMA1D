@@ -100,18 +100,21 @@ GMAMode.prototype.solve = function(steps, dt, t, pts, limit) {
 	}
 }
 
-GMAMode.prototype.getContourIterator = function (opts) {
+GMAMode.prototype.getStepIterator = function (opts) {
 	opts = opts || {};
 	opts.nCurves = opts.nCurves || 6;
 	opts.offset = opts.offset || 0;
 	opts.totalSteps = opts.totalSteps || this.steps;
 	opts.stepsz = Math.floor((opts.totalSteps-opts.offset)/opts.nCurves);
-	opts.iter = function(callback) {
-		for (var i = 0; i<opts.nCurves; i++) {
-			callback(i, opts.offset + i*opts.stepsz, opts);
+	var nCurves = opts.nCurves;
+	var offset = opts.offset;
+	var stepsz = opts.stepsz;
+	var iter = function(callback) {
+		for (var i = 0; i<nCurves; i++) {
+			callback(i, offset + i*stepsz, opts);
 		}
 	}
-	return opts.iter;
+	return iter;
 }
 
 GMAMode.prototype.getContour = function(stepn) {
@@ -129,7 +132,7 @@ GMAMode.prototype.getContours = function(arry, opts) {
 		arry.push({data:this_.getContour(idx),color:colors[i%colors.length]});
 		opts.idx = idx;
 	}
-	var iter = this.getContourIterator(opts);
+	var iter = this.getStepIterator(opts);
 	iter(addplot);
 	this.first_index = opts.offset;
 	this.nCurves = opts.nContours;
@@ -151,7 +154,7 @@ GMAMode.prototype.getSolutions = function(arry, opts) {
 	var addplot = function(i,idx,opts) {
 		arry.push({data:this_.getSolution(idx), color:colors[i%colors.length]});
 	}
-	var iter = this.getContourIterator(opts);
+	var iter = this.getStepIterator(opts);
 	iter(addplot);
 	// Remove total steps, so that it doesn't affect other plot calls.
 	delete opts["totalSteps"];
