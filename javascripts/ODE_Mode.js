@@ -141,7 +141,7 @@ GMAMode.prototype.getContours = function(arry, opts) {
 }
 
 GMAMode.prototype.getSolution = function(idx) {
-	return this.odes[idx].pts.slice(this.first_index, this.last_index);
+	return this.odes[idx].pts.slice(this.first_index, this.last_index+1);
 }
 
 GMAMode.prototype.getSolutions = function(arry, opts) {
