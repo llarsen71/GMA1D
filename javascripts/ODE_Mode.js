@@ -77,6 +77,7 @@ function GMAMode (V, steps, dt, t, pts, limit) {
 	this.V = V;
 	this.odes  = [];
 	this.steps = steps;
+	this.first_index = 0;
 	this.solve(steps, dt, t, pts, limit);
 }
 
