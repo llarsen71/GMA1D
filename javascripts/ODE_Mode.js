@@ -1,5 +1,66 @@
+/*
+ * ODE and 1D Mode solving subroutines.
+ *
+ * Copyright 2012, Lance Larsen
+ * Licensed under the MIT license
+ */
+
 //-----------------------------------------------------
-// ODE Class
+//-----------------------------------------------------
+// ODE Class 
+//
+// The ode class is used to solve a system of ordinary
+// differential equations. The ODE is expected to be
+// provided to the constuctor in vector field form.
+// Take the following ODE for example:
+//     x''' - x'' + 2*x' - 3*x = sin(t)         (1)
+// This can be written in first order form, by
+// assigning a new variable for all but the highest
+// order derivative: 
+//     x' = y                                   (2)
+//     y' = z  (i.e. x'' = z)
+// Note that the higest order derivative can then be
+// replaced with a first order derivative (z' = x''').
+// If we substitute (2) and z' into (1) and solve for
+// z' (i.e. x''') we get:
+//     z' = z - 2*y + 3*x + sin(t)              (3)
+//
+// If we combine the equations from (2) and (3) we
+// now have a system of equations in first order
+// form.
+//     x' = y
+//     y' = z
+//     z' = z - 2*y + 3*x + sin(t)
+//     
+// This can be represented as a vector or an array:
+//     [x',y',z'] = [y, z, z-2*y+3*x+sin(t)]    (4)
+//
+// To use the ODE class, a javascript function needs
+// to be created that replicates a first order vector
+// field such as equation (4) above. The javascript
+// function takes the independent derivative
+// variable as a first value (if we assume x' = dx/dt
+// then t is our independent variable), and the
+// array of dependent variables (in this case [x,y,z])
+// as the second term. Here is an example function:
+//
+// var V = function(t, pt) {
+//    var x = pt[0], y= pt[1], z = pt[2];
+//    return [y, z, z - 2*y + 3*x + sin(t)];
+// }
+//
+// var ode_ = ODE(V);
+//-----------------------------------------------------
+//-----------------------------------------------------
+
+//-----------------------------------------------------
+// ODE constructor
+//
+// Inputs:
+//   V - The ODE vector field V(t,pt) where t is the
+//       derivative variable, and pt is a current
+//       initial or solution point. V should return
+//       the ODE vector feild value at the point.
 //-----------------------------------------------------
 
 function ODE(V) {
@@ -9,7 +70,13 @@ function ODE(V) {
 	this.V   = V;
 }
 
-// Take one step in the ODE. Add to t and pts.
+//-----------------------------------------------------
+// ODE: step
+//
+// The ODE step function adds one step to the ODE
+// solution based on the given dt. 
+//-----------------------------------------------------
+
 ODE.prototype.step = function(dt) {
 	var t  = this.t[this.n];
 	var pt = this.pts[this.n];
@@ -138,6 +205,7 @@ GMAMode.prototype.getContours = function(arry, opts) {
 	this.first_index = opts.offset;
 	this.nCurves = opts.nContours;
 	this.last_index = opts.idx;
+	this.contourOpts = opts;
 }
 
 GMAMode.prototype.getSolution = function(idx) {
