@@ -31,11 +31,14 @@ function Ellipse(a,excentricity,angle) {
 
 function DuffingSolver(steps) {
 	var g = Ellipse(0.5, 1.2, -Math.PI/4.5);
-	var pts = linspace(0.0,2*Math.PI,60,g)
+	var pts = linspace(0.0,2*Math.PI,60,g);
+	var colors = ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
+	var ctrFactory = AnimatedGMAContourFactory(colors);
+	var solnFactory = AnimatedGMAContourFactory(colors);
 
 	var f = DuffingEqn(0.05, 0.2);
 	var steps = 500;
-	gma = new GMAMode(f, steps, -0.05, 1.0, pts);
+	gma = new GMAMode({V:f, steps:steps, dt:-0.05, t:1.0, pts:pts, contourFactory:ctrFactory, solutionFactory:solnFactory});
 
 	gma.plot = DuffingPlot;
 	return gma;
@@ -53,13 +56,16 @@ function DuffingPlot(canvas, showMode, showSolns) {
 function VanDerPolSolver(isteps, osteps) {
 	// The VanDerPol ODE vector equation
 	var vdp = VanDerPolEqn(0.2);
+	var colors = ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
+	var ctrFactory = AnimatedGMAContourFactory(colors);
+	var solnFactory = AnimatedGMAContourFactory(colors);
 
 	// ---- Inner Solution ----
 	// Start with an inner ellipse as the set of initial points
 	var initialring = Ellipse(0.1, 1.2, Math.PI/4.5);
 	var cirpts = linspace(0.0,2*Math.PI,60,initialring);
 
-	var gmainner = new GMAMode(vdp, isteps, 0.05, 1.0, cirpts);
+	var gmainner = new GMAMode({V:vdp, steps:isteps, dt:0.05, t:1.0, pts:cirpts, contourFactory:ctrFactory, solutionFactory:solnFactory});
 
 	// ---- Outer Solution ----
 	// Use a ring just wider than the limit cycle for the outer 
@@ -88,7 +94,9 @@ function VanDerPolSolver(isteps, osteps) {
 		}
 		return true;
 	}
-	var gmaouter = new GMAMode(vdp, steps, -0.05, 1.0, pts, limit);
+	ctrFactory = AnimatedGMAContourFactory(colors);
+	solnFactory = AnimatedGMAContourFactory(colors);
+	var gmaouter = new GMAMode({V:vdp, steps:steps, dt:-0.05, t:1.0, pts:pts, limit:limit, contourFactory:ctrFactory, solutionFactory:solnFactory});
 
 	var gma = 
 	{ inner: gmainner,
@@ -101,7 +109,7 @@ function VanDerPolSolver(isteps, osteps) {
 
 function VanDerPolPlot(canvas, showMode, showSolns) {
 	// Structure to store the plots.
-	var plots = [];
+	var plots = new Animator($(canvas));
 
 	// Rings inside the limit cycle
 	var contours = 6;
@@ -115,10 +123,11 @@ function VanDerPolPlot(canvas, showMode, showSolns) {
 	if (showSolns) this.outer.getSolutions(plots,{nCurves:6,useGrey:showMode});
 
 	// Include the limit cycle
-	if (showMode) plots.push({data:this.limitcycle,lines:{lineWidth: 3.0}});
+	if (showMode) plots.push({data: this.limitcycle, lines: {lineWidth: 3.0}});
 
 	// Plot the results
-	var plot = $.plot($(canvas), plots);
+	//var plot = $.plot($(canvas), plots);
+	plots.animate(this.outer.tmin, this.outer.tmax, 10);
 }
 
 function updatePlot(gmas, form) {
@@ -133,4 +142,16 @@ function updatePlot(gmas, form) {
 	// Select the specific GMAMode from gmas and plot results.
 	// The form.name should match the name of the canvas to update.
 	gmas[type].plot(form.name, showMode, showSoln);
+}
+
+function solutionAnimateFactory() {
+	var colors = ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
+	var clrFactory = AnimatedGMAContourFactory(["#9440ed", "#4da74d", "#cb4b4b", "#afd8f8", "#edc240"]);
+	var greyFactory = AnimatedGMAContourFactory(["#bbbbbb"]);
+
+	function factory() {
+	}
+	
+	function setFactoryType(typ) {
+	}
 }
