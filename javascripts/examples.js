@@ -1,3 +1,9 @@
+/*
+ * Duffing and Van Der Pol oscillator examples.
+ *
+ * Uses GMAmode.js, Animate.js, flot/jquery.js, and flot/jquery.flot.js
+ */
+
 var colorSets = new ColorSwitcher({gray: ["#bbbbbb"], colors: ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"]},'colors');
 
 function Ellipse(a,excentricity,angle) {
@@ -31,7 +37,7 @@ function DuffingSolver(steps) {
 
 	var f = DuffingEqn(0.05, 0.2);
 	var steps = 500;
-	gma = new GMAMode({V:f, steps:steps, dt:-0.05, t:1.0, pts:pts, contourFactory:ctrFactory, solutionFactory:solnFactory});
+	gma = new GMAmode({V:f, steps:steps, dt:-0.05, t:1.0, pts:pts, contourFactory:ctrFactory, solutionFactory:solnFactory});
 
 	gma.plot = DuffingPlot;
 	return gma;
@@ -63,14 +69,14 @@ function VanDerPolSolver(isteps, osteps) {
 	var vdp = VanDerPolEqn(0.2);
 	var colors = ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
 	var ctrFactory = AnimatedGMAPlotFactory(colors);
-	var solnFactory = AnimatedGMAPlotFactory(colors);
+	var solnFactory = AnimatedGMAPlotFactory(colorSets);
 
 	// ---- Inner Solution ----
 	// Start with an inner ellipse as the set of initial points
 	var initialring = Ellipse(0.1, 1.2, Math.PI/4.5);
 	var cirpts = linspace(0.0,2*Math.PI,60,initialring);
 
-	var gmainner = new GMAMode({V:vdp, steps:isteps, dt:0.05, t:1.0, pts:cirpts, contourFactory:ctrFactory, solutionFactory:solnFactory});
+	var gmainner = new GMAmode({V:vdp, steps:isteps, dt:0.05, t:1.0, pts:cirpts, contourFactory:ctrFactory, solutionFactory:solnFactory});
 
 	// ---- Outer Solution ----
 	// Use a ring just wider than the limit cycle for the outer 
@@ -100,8 +106,8 @@ function VanDerPolSolver(isteps, osteps) {
 		return true;
 	}
 	ctrFactory = AnimatedGMAPlotFactory(colors);
-	solnFactory = AnimatedGMAPlotFactory(colors);
-	var gmaouter = new GMAMode({V:vdp, steps:steps, dt:-0.05, t:1.0, pts:pts, limit:limit, contourFactory:ctrFactory, solutionFactory:solnFactory});
+	solnFactory = AnimatedGMAPlotFactory(colorSets);
+	var gmaouter = new GMAmode({V:vdp, steps:steps, dt:-0.05, t:1.0, pts:pts, limit:limit, contourFactory:ctrFactory, solutionFactory:solnFactory});
 
 	var gma = 
 	{ inner: gmainner,
@@ -150,7 +156,7 @@ function updatePlot(gmas, form) {
 		else if (field.name === "showSoln") showSoln = field.checked;
 		else if (field.name === "showMode") showMode = field.checked;
 	}
-	// Select the specific GMAMode from gmas and plot results.
+	// Select the specific GMAmode from gmas and plot results.
 	// The form.name should match the name of the canvas to update.
 	gmas[type].plot(form.name, showMode, showSoln);
 }

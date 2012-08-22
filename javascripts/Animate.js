@@ -1,5 +1,7 @@
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
+// Animator class
+//
 // Stores a list of animated objects and animates them together.
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
@@ -41,6 +43,7 @@ Animator.prototype.animate = function(from, to, time) {
 
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
+// Animated class
 //----------------------------------------------------------------------------
 //----------------------------------------------------------------------------
 function Animated(plotinfo) {
@@ -77,61 +80,4 @@ function typeOf(value) {
 		} else { s = 'null'; }
 	}
 	return s;
-}
-
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-function wrapColorsArray(colors) {
-	if (typeOf(colors) == 'array') {
-		var i = -1;
-		function next() { 
-			i = (i+1)%this.length;
-			return colors[i];
-		}
-		return next;
-	}
-	return colors;
-}
-
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-function ColorSwitcher(colorSets, initialSet) {
-	this.colorSets = colorSets;
-	this.colors = this.colorSets[initialSet];
-	this.idx = -1;
-}
-
-ColorSwitcher.prototype.setColorSet = function(type) {
-	this.colors = this.colorSets[type];
-	this.resetIndex();
-}
-
-ColorSwitcher.prototype.resetIndex = function(idx) {
-	if (!idx) idx = -1;
-	this.idx = idx;
-}
-
-// next is the function that should be passed in to AnimatedGMAPlotFactory.
-// This is called to interate through the colors in the current colorSet.
-ColorSwitcher.prototype.next = function() {
-	this.idx = (this.idx+1)%this.colors.length;
-	return this.colors[this.idx];
-}
-
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-function AnimatedGMAPlotFactory(colors) {
-	var i = -1;
-	var nextClr = wrapColorsArray(colors);
-	function factory(gmaobj, stepn, contour) {
-		var contourPlot = new Animated({param: contour.t, data: contour.pts, color: nextClr()});
-		return contourPlot;
-	}
-	return factory;
 }
