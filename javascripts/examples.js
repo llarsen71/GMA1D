@@ -9,6 +9,7 @@
 
 var colors = ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
 var colorSets = new ColorSwitcher({gray: ["#bbbbbb"], colors: colors},'colors');
+var canvases = {};
 
 function Ellipse(a,excentricity,angle) {
 	var ellips = function(t) {
@@ -46,10 +47,10 @@ function DuffingSolver(steps) {
 	return gma;
 }
 
-var duff_plots = undefined;
 function DuffingPlot(canvas, showMode, showSolns) {
-	if (duff_plots) duff_plots.kill();
-	duff_plots = new Animator($(canvas));
+	if (canvas in canvases) canvases[canvas].kill();
+	canvases[canvas] = new Animator($(canvas));
+	var duff_plots = canvases[canvas];
 
 	var contours = 14;
 	if (showSolns) {
@@ -123,11 +124,12 @@ function VanDerPolSolver(isteps, osteps) {
 	return gma;
 }
 
-var vdp_plots = undefined;
 function VanDerPolPlot(canvas, showMode, showSolns) {
 	// Structure to store the plots.
-	if (vdp_plots) vdp_plots.kill();
-	vdp_plots = new Animator($(canvas));
+	if (canvas in canvases) canvases[canvas].kill();
+	canvases[canvas] = new Animator($(canvas));
+	canvases[canvas] = new Animator($(canvas));
+	var vdp_plots = canvases[canvas];
 
 	// Rings inside the limit cycle
 	var contours = 6;
