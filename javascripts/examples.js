@@ -49,7 +49,7 @@ function DuffingPlot(canvas, showMode, showSolns) {
 	if (showMode) this.getContours(plots,{nCurves:contours});
 	if (showSolns) {
 		colorSets.setColorSet((showMode) ? 'gray':'colors');
-		this.getSolutions(plots,{nCurves:2});
+		this.getSolutions(plots,{nCurves:4});
 	}
 
 	var plot = $.plot($(canvas), plots);
@@ -136,7 +136,7 @@ function VanDerPolPlot(canvas, showMode, showSolns) {
 	if (showMode) this.outer.getContours(plots,{nCurves:contours,offset:offset});
 	if (showSolns) {
 		colorSets.setColorSet((showMode) ? 'gray' : 'colors');
-		this.outer.getSolutions(plots,{nCurves:6,useGrey:showMode});
+		this.outer.getSolutions(plots,{nCurves:8,useGrey:showMode});
 	}
 
 	// Include the limit cycle
