@@ -51,7 +51,7 @@ function DuffingPlot(canvas, showMode, showSolns) {
 	var contours = 14;
 	if (showSolns) {
 		colorSets.setColorSet((showMode) ? 'gray':'colors');
-		this.getSolutions(duff_plots,{nCurves:2});
+		this.getSolutions(duff_plots,{nCurves:4});
 	}
 	if (showMode) this.getContours(duff_plots,{nCurves:contours});
 	//var plot = $.plot($(canvas), duff_plots);
@@ -142,7 +142,7 @@ function VanDerPolPlot(canvas, showMode, showSolns) {
 	contours = 10;
 	if (showSolns) {
 		colorSets.setColorSet((showMode) ? 'gray' : 'colors');
-		this.outer.getSolutions(vdp_plots,{nCurves:6});
+		this.outer.getSolutions(vdp_plots,{nCurves:8});
 	}
 	if (showMode) this.outer.getContours(vdp_plots,{nCurves:contours,offset:offset});
 
