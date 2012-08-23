@@ -37,22 +37,25 @@ function DuffingSolver(steps) {
 
 	var f = DuffingEqn(0.05, 0.2);
 	var steps = 500;
-	gma = new GMAmode({V:f, steps:steps, dt:-0.05, t:1.0, pts:pts, contourFactory:ctrFactory, solutionFactory:solnFactory});
+	gma = new GMAmode({V:f, steps:steps, dt:-0.05, t:0.0, pts:pts, contourFactory:ctrFactory, solutionFactory:solnFactory});
 
 	gma.plot = DuffingPlot;
 	return gma;
 }
 
+var duff_plots = undefined;
 function DuffingPlot(canvas, showMode, showSolns) {
-	var plots = [];
+	if (duff_plots) duff_plots.kill();
+	duff_plots = new Animator($(canvas));
+
 	var contours = 14;
-	if (showMode) this.getContours(plots,{nCurves:contours});
 	if (showSolns) {
 		colorSets.setColorSet((showMode) ? 'gray':'colors');
-		this.getSolutions(plots,{nCurves:2});
+		this.getSolutions(duff_plots,{nCurves:2});
 	}
-
-	var plot = $.plot($(canvas), plots);
+	if (showMode) this.getContours(duff_plots,{nCurves:contours});
+	//var plot = $.plot($(canvas), duff_plots);
+	duff_plots.animate(this.tmin, this.tmax, 8);
 }
 
 // Van Der Pol oscillator
@@ -76,7 +79,7 @@ function VanDerPolSolver(isteps, osteps) {
 	var initialring = Ellipse(0.1, 1.2, Math.PI/4.5);
 	var cirpts = linspace(0.0,2*Math.PI,60,initialring);
 
-	var gmainner = new GMAmode({V:vdp, steps:isteps, dt:0.05, t:1.0, pts:cirpts, contourFactory:ctrFactory, solutionFactory:solnFactory});
+	var gmainner = new GMAmode({V:vdp, steps:isteps, dt:0.05, t:0.0, pts:cirpts, contourFactory:ctrFactory, solutionFactory:solnFactory});
 
 	// ---- Outer Solution ----
 	// Use a ring just wider than the limit cycle for the outer 
@@ -107,7 +110,7 @@ function VanDerPolSolver(isteps, osteps) {
 	}
 	ctrFactory = AnimatedGMAPlotFactory(colors);
 	solnFactory = AnimatedGMAPlotFactory(colorSets);
-	var gmaouter = new GMAmode({V:vdp, steps:steps, dt:-0.05, t:1.0, pts:pts, limit:limit, contourFactory:ctrFactory, solutionFactory:solnFactory});
+	var gmaouter = new GMAmode({V:vdp, steps:steps, dt:-0.05, t:0.0, pts:pts, limit:limit, contourFactory:ctrFactory, solutionFactory:solnFactory});
 
 	var gma = 
 	{ inner: gmainner,
@@ -118,33 +121,37 @@ function VanDerPolSolver(isteps, osteps) {
 	return gma;
 }
 
+var vdp_plots = undefined;
 function VanDerPolPlot(canvas, showMode, showSolns) {
 	// Structure to store the plots.
-	var plots = new Animator($(canvas));
+	if (vdp_plots) vdp_plots.kill();
+	vdp_plots = new Animator($(canvas));
 
 	// Rings inside the limit cycle
 	var contours = 6;
-	if (showMode) this.inner.getContours(plots, {nCurves:contours});
+	/*
+	if (showMode) this.inner.getContours(vdp_plots, {nCurves:contours});
 	if (showSolns) {
 		colorSets.setColorSet((showMode) ? 'gray' : 'colors');
-		this.inner.getSolutions(plots, {nCurves:2,useGrey:showMode});
+		this.inner.getSolutions(vdp_plots, {nCurves:2});
 	}
+	*/
 
 	// Rings outside the limit cycle
-	var offset = 80;
+	var offset = 35;
 	contours = 10;
-	if (showMode) this.outer.getContours(plots,{nCurves:contours,offset:offset});
 	if (showSolns) {
 		colorSets.setColorSet((showMode) ? 'gray' : 'colors');
-		this.outer.getSolutions(plots,{nCurves:6,useGrey:showMode});
+		this.outer.getSolutions(vdp_plots,{nCurves:6});
 	}
+	if (showMode) this.outer.getContours(vdp_plots,{nCurves:contours,offset:offset});
 
 	// Include the limit cycle
-	if (showMode) plots.push({data: this.limitcycle, lines: {lineWidth: 3.0}});
+	vdp_plots.push({data: this.limitcycle, lines: {lineWidth: 3.0}});
 
 	// Plot the results
-	//var plot = $.plot($(canvas), plots);
-	plots.animate(this.outer.tmin, this.outer.tmax, 10);
+	//var plot = $.plot($(canvas), vdp_plots);
+	vdp_plots.animate(this.outer.tmin, this.outer.tmax, 8);
 }
 
 function updatePlot(gmas, form) {

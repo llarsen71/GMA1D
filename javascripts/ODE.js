@@ -61,7 +61,6 @@
 function ODE(V) {
 	this.t   = [];
 	this.pts = [];
-	this.n   = -1;
 	this.V   = V;
 }
 
@@ -79,8 +78,8 @@ function ODE(V) {
 //-----------------------------------------------------------------------------
 
 ODE.prototype.step = function(dt) {
-	var t  = this.t[this.n];
-	var pt = this.pts[this.n];
+	var t  = (dt<0) ? this.t[0] : this.t[this.t.length-1];
+	var pt = (dt<0) ? this.pts[0] : this.pts[this.pts.length-1];
 	var V  = this.V;
 
 	//k1 = dt*V(t,pt)
@@ -104,8 +103,13 @@ ODE.prototype.step = function(dt) {
 	// Increment the index
 	this.n += 1;
 	// Add a new time value and the new ODE solution point.
-	this.t[this.n]   = t+dt;
-	this.pts[this.n] = pt;
+	if (dt < 0) {
+		this.t.unshift(t+dt);
+		this.pts.unshift(pt);
+	} else {
+		this.t.push(t+dt);
+		this.pts.push(pt);
+	}
 	return true;
 }
 
@@ -135,7 +139,7 @@ ODE.prototype.solve = function(steps, dt, t, pt) {
 		this.pts = [pt];
 		this.n   = 0;
 	}
-	else if (this.n === -1) {
+	else if (this.t.length == 0) {
 		alert("initial conditions are needed for first call to 'solve'");
 	}
 

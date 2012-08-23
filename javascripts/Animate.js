@@ -8,6 +8,8 @@
 function Animator(canvas) {
 	this.animations = new Array();
 	this.canvas = canvas;
+	this.timer_id = undefined;
+	this.kill_animation = false;
 }
 
 // Add an animated object
@@ -24,6 +26,10 @@ Animator.prototype.push = function(value) {
 	}
 }
 
+Animator.prototype.kill = function() {
+	this.kill_animation = true;
+}
+
 // Run the animation
 Animator.prototype.animate = function(from, to, time) {
 	var id;
@@ -32,7 +38,12 @@ Animator.prototype.animate = function(from, to, time) {
 	var curr = from-dp;
 	var animations = this.animations;
 	var canvas = this.canvas;
+	var this_ = this;
 	var f = function() {
+		if (this_.kill_animation) {
+			clearInterval(id);
+			return;
+		}
 		curr = curr + dp;
 		for (i=0; i<animations.length; i++) animations[i].setData(curr);
 		$.plot(canvas, animations);

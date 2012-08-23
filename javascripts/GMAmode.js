@@ -34,6 +34,7 @@ function GMAmode (opt) {
 
 	this.odes  = [];
 	this.first_index = 0;
+	this.offset_avg = 0;
 
 	this.solve(this.steps, opt.dt, opt.t, opt.pts, opt.limit);
 	// this.tmin and this.tmax set later
@@ -64,20 +65,27 @@ function defaultFactory(gmaobj, stepn, contour) {
 //           within the bounds, or false if it is not.
 //-----------------------------------------------------------------------------
 GMAmode.prototype.solve = function(steps, dt, t, pts, limit) {
+	var avg_offset = 0;
+
 	if (arguments.length >= 3) {
 		// If we are starting a solution, initialize the ODEs and solve.
 		this.last_index = this.steps + 1;
 		this.tmin = this.tmax = t;
+		
 		// Create a new old for each initial point in pts.
 		for (var i=0; i<pts.length; i++) {
 			this.odes[i] = new ODE(this.V);
 			if (limit) { this.odes[i].setLimit(limit); }
 			var soln = this.odes[i].solve(steps, dt, t, pts[i]);
+			// time offset.
+			var offset = (dt > 0) ? 0 : steps + 1 - soln.t.length;
+			avg_offset += offset*offset;
+			this.odes[i].offset = offset;
 
 			// Set tmin or tmax based on the solutions last t value.
-			var tend = soln.t[soln.t.length - 1];
-			if (dt > 0) { if (tend > this.tmax) { this.tmax = tend; } } 
-			else { if (tend < this.tmin) { this.tmin = tend; } }
+			if (this.tmin > soln.t[0]) this.tmin = soln.t[0];
+			var mx = soln.t.length - 1;
+			if (this.tmax < soln.t[mx]) this.tmax = soln.t[mx];
 		}
 	} else {
 		// If we are continuing the solution, add append the new number of steps.
@@ -86,13 +94,16 @@ GMAmode.prototype.solve = function(steps, dt, t, pts, limit) {
 		odes = this.odes;
 		for (var i=0; i < odes.length; i++) {
 			var soln = odes[i].solve(steps,dt);
-
+			var offset = (dt > 0) ? 0 : steps + 1 - soln.t.length;
+			avg_offset += offset*offset;
+			this.odes[i].offset = offset;
 			// Set tmin or tmax based on the solutions last t value.
-			var tend = soln.t[soln.t.length - 1];
-			if (dt > 0) { if (tend > this.tmax) { this.tmax = tend; } } 
-			else { if (tend < this.tmin) { this.tmin = tend; } }
+			if (this.tmin > soln.t[0]) this.tmin = soln.t[0];
+			var mx = soln.t.length - 1;
+			if (this.tmax < soln.t[mx]) this.tmax = soln.t[mx];
 		}
 	}
+	this.offset_avg = Math.floor(Math.sqrt(avg_offset/this.last_index));
 }
 
 //-----------------------------------------------------------------------------
@@ -121,8 +132,12 @@ GMAmode.prototype.getStepIterator = function (opts) {
 GMAmode.prototype.getContour = function(stepn) {
 	var t = [];
 	var pts = [];
+	var told = undefined;
 	for (var i=0; i<this.odes.length; i++) {
-		this.odes[i].pushPt(stepn,t,pts);
+		var stepn1 = stepn - this.odes[i].offset;
+		if (stepn1 >=0) {
+			this.odes[i].pushPt(stepn1,t,pts);
+		}
 	}
 	return this.ctrFactory(this, stepn, {t: t, pts: pts});
 }
@@ -149,8 +164,12 @@ GMAmode.prototype.getContours = function(arry, opts) {
 //-----------------------------------------------------------------------------
 GMAmode.prototype.getSolution = function(idx) {
 	var t = [], pts = [];
-	t   = this.odes[idx].t.slice(this.first_index, this.last_index+1);
-	pts = this.odes[idx].pts.slice(this.first_index, this.last_index+1);
+	var index1 = Math.max(0, this.first_index - this.odes[idx].offset);
+	var index2 = Math.max(0, this.last_index+1 - this.odes[idx].offset);
+	if (index2 < 1) return;
+
+	t = this.odes[idx].t.slice(index1, this.last_index+1);
+	pts = this.odes[idx].pts.slice(index1, this.last_index+1);
 	return this.solnFactory(this, idx, {t: t, pts: pts});
 }
 
@@ -161,8 +180,9 @@ GMAmode.prototype.getSolutions = function(arry, opts) {
 	opts = opts || {};
 	opts.totalSteps = this.odes.length;
 	var this_ = this;
-	var addplot = function(i,idx,opts) {
-		arry.push(this_.getSolution(idx));
+	var addplot = function(i, idx, opts) {
+		var soln = this_.getSolution(idx); 
+		if (soln) arry.push(soln);
 	}
 	var iter = this.getStepIterator(opts);
 	iter(addplot);
