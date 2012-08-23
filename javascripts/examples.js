@@ -1,10 +1,14 @@
 /*
  * Duffing and Van Der Pol oscillator examples.
  *
+ * Copyright 2012, Lance Larsen
+ * Licensed under the MIT license
+ *
  * Uses GMAmode.js, Animate.js, flot/jquery.js, and flot/jquery.flot.js
  */
 
-var colorSets = new ColorSwitcher({gray: ["#bbbbbb"], colors: ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"]},'colors');
+var colors = ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
+var colorSets = new ColorSwitcher({gray: ["#bbbbbb"], colors: colors},'colors');
 
 function Ellipse(a,excentricity,angle) {
 	var ellips = function(t) {
@@ -31,7 +35,6 @@ function DuffingEqn(eps, c) {
 function DuffingSolver(steps) {
 	var g = Ellipse(0.5, 1.2, -Math.PI/4.5);
 	var pts = linspace(0.0,2*Math.PI,60,g);
-	var colors = ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
 	var ctrFactory = AnimatedGMAPlotFactory(colors);
 	var solnFactory = AnimatedGMAPlotFactory(colorSets);
 
@@ -70,7 +73,6 @@ function VanDerPolEqn(c) {
 function VanDerPolSolver(isteps, osteps) {
 	// The VanDerPol ODE vector equation
 	var vdp = VanDerPolEqn(0.2);
-	var colors = ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
 	var ctrFactory = AnimatedGMAPlotFactory(colors);
 	var solnFactory = AnimatedGMAPlotFactory(colorSets);
 

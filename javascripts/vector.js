@@ -1,21 +1,27 @@
 /*
- * Vector operations
- *
- * Copyright 2012, Lance Larsen
- * Licensed under the MIT license
+ * TITLE: Vector Operations
  *
  * Javascript has arrays, but it does not support vector style mathematical 
  * operations such as array addition, scalar multiplication, etc.  This 
- * module includes some of these vector operations.
+ * module includes function to handle some of these vector operations.
+ *
+ * > Copyright 2012, Lance Larsen
+ * > Licensed under the MIT license
+ *
  */
+//-----------------------------------------------------------------------------
+/*
+ FUNCTION: SxV
+  Scalar times Vector function
 
-// SxV - Scalar times Vector function
-//
-//   s - A scalar value to multiply each element of the vector by
-//   v - The vector
-//
-// return s*v
+ PARAMETERS:
+  s - A scalar value to multiply each element of the vector by
+  v - The vector
 
+ RETURNS:
+  s*v
+*/
+//-----------------------------------------------------------------------------
 function SxV(s,v) {
 	var v2 = [];
 	for (var i=0; i < v.length; i++) {
@@ -24,13 +30,19 @@ function SxV(s,v) {
 	return v2
 }
 
-// SpV - Scalar plus Vector function
-//
-//   s - Scalar value to add to each element in the vector
-//   v - The vector
-//
-// return v+s
+//-----------------------------------------------------------------------------
+/*
+ FUNCTION: SpV
+  Scalar plus Vector function
 
+ PARAMETERS:
+  s - Scalar value to add to each element in the vector
+  v - The vector
+
+ RETURNS:
+  v+s
+*/
+//-----------------------------------------------------------------------------
 function SpV(s,v) {
 	var v2 = [];
 	for (var i=0; i < v.length; i++) {
@@ -39,13 +51,20 @@ function SpV(s,v) {
 	return v2
 }
 
-// VpV - Vector plus Vector function
-//
-//   v1 - the first vector to add
-//   v2 - the second vector to add
-//
-// return the v1 + v2
 
+//-----------------------------------------------------------------------------
+/*
+ FUNCTION: VpV
+  Vector plus Vector function
+
+ PARAMETERS:
+  v1 - the first vector to add
+  v2 - the second vector to add
+
+ RETURNS:
+  v1 + v2
+*/
+//-----------------------------------------------------------------------------
 function VpV(v1,v2)
 {
 	var v3 = [];
@@ -55,20 +74,26 @@ function VpV(v1,v2)
 	return v3;
 }
 
-// linspace creates a new vector with the indicated length. The values are
-// either a range of evenly spaced numbers from beginning with xmin and 
-// ending with xmax, or the results of calling a callback with each number
-// in the range xmin to xmax.
-//
-//   xmin     - The minimum value for the range
-//   xmax     - The maximum value for the range
-//   length   - The length of the vector to create
-//   callback - (Optional) A function of the form callback(xval) that takes
-//              values one at a time in the range xmin to xmax and return
-//              a value to include in the vector.
-//
-// return the generated vector (i.e. array)
+//-----------------------------------------------------------------------------
+/*
+ FUNCTION: linspace
+  linspace creates a new vector with the indicated length. The values are
+  either a range of evenly spaced numbers from beginning with xmin and 
+  ending with xmax, or the results of calling a callback with each number
+  in the range xmin to xmax.
 
+ PARAMETERS:
+  xmin     - The minimum value for the range
+  xmax     - The maximum value for the range
+  length   - The length of the vector to create
+  callback - (Optional) A function of the form callback(xval) that takes
+             values one at a time in the range xmin to xmax and return
+             a value to include in the vector.
+
+ RETURNS:
+  the generated vector (i.e. array)
+*/
+//-----------------------------------------------------------------------------
 function linspace(xmin,xmax,length,callback) {
 	var hasCallback = (arguments.length > 3);
 	var result = [];
