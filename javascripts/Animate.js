@@ -60,6 +60,25 @@ Animator.prototype.push = function(input) {
 
 //-----------------------------------------------------------------------------
 /*
+ FUNCTION: unshift
+  Add an <Animated> object or create and add an <Animated> object from the input. The
+  input should be a value compatible with the <Animated> constructor. The oject is added
+  at the front of the array.
+
+ PARAMETERS:
+  input - An <Animated> object, or Animated constructor parameter.
+*/
+//-----------------------------------------------------------------------------
+Animator.prototype.unshift = function(input) {
+	if (input.type == "Animated") {
+		this.animations.unshift(input);
+	} else {
+		this.animations.unshift(new Animated(input));
+	}
+}
+
+//-----------------------------------------------------------------------------
+/*
  FUNCTION: kill
   Signal to end the animation.
 */
@@ -80,7 +99,6 @@ Animator.prototype.kill = function() {
 */
 //-----------------------------------------------------------------------------
 Animator.prototype.animate = function(from, to, time) {
-	var id;
 	var delay = 50;
 	var dp = (to - from)*delay/(time*1000);
 	var curr = from-dp;
@@ -88,17 +106,14 @@ Animator.prototype.animate = function(from, to, time) {
 	// Animation callback
 	var doAnim = function() {
 		// Kill the animation of the kill signal is set
-		if (this_.kill_animation) {
-			clearInterval(id);
-			return;
-		}
+		if (this_.kill_animation) return;
 		curr = curr + dp;
 		this_.plot(curr);
 		// End the animation if the final value is reached
-		if (curr >= to) clearInterval(id);
+		if (curr < to) setTimeout(doAnim, delay);
 	}
 	// Start the animation
-	id = setInterval(doAnim, delay);
+	setTimeout(doAnim, delay);
 }
 
 //-----------------------------------------------------------------------------

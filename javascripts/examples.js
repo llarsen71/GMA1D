@@ -1,14 +1,28 @@
 /*
+ * TITLE: Examples
  * Duffing and Van Der Pol oscillator examples.
  *
- * Copyright 2012, Lance Larsen
- * Licensed under the MIT license
+ * > Copyright 2012, Lance Larsen
+ * > Licensed under the MIT license
  *
  * Uses GMAmode.js, Animate.js, flot/jquery.js, and flot/jquery.flot.js
  */
 
+/*
+PROPERTY: colors
+A set of colors used for plotting curves.
+*/
 var colors = ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
+/*
+PROPERTY: colorSets
+Different color sets. This is used to switch the solution plots between a set of colors (when no
+contours are plotted, and grey (when mode contours are plotted).
+*/
 var colorSets = new ColorSwitcher({gray: ["#bbbbbb"], colors: colors},'colors');
+/*
+PROPERTY: canvases
+This is an object that is used to hold the list of current plot canvases.
+*/
 var canvases = {};
 
 function Ellipse(a,excentricity,angle) {
@@ -53,11 +67,11 @@ function DuffingPlot(canvas, showMode, showSolns) {
 	var duff_plots = canvases[canvas];
 
 	var contours = 14;
+	if (showMode) this.getContours(duff_plots,{nCurves:contours});
 	if (showSolns) {
 		colorSets.setColorSet((showMode) ? 'gray':'colors');
 		this.getSolutions(duff_plots,{nCurves:4});
 	}
-	if (showMode) this.getContours(duff_plots,{nCurves:contours});
 	//var plot = $.plot($(canvas), duff_plots);
 	duff_plots.animate(this.tmin, this.tmax, 8);
 }
@@ -144,11 +158,11 @@ function VanDerPolPlot(canvas, showMode, showSolns) {
 	// Rings outside the limit cycle
 	var offset = 35;
 	contours = 10;
+	if (showMode) this.outer.getContours(vdp_plots,{nCurves:contours,offset:offset});
 	if (showSolns) {
 		colorSets.setColorSet((showMode) ? 'gray' : 'colors');
 		this.outer.getSolutions(vdp_plots,{nCurves:8});
 	}
-	if (showMode) this.outer.getContours(vdp_plots,{nCurves:contours,offset:offset});
 
 	// Include the limit cycle
 	vdp_plots.push({data: this.limitcycle, lines: {lineWidth: 3.0}});

@@ -238,7 +238,7 @@ GMAmode.prototype.getSolutions = function(arry, opts) {
 	var this_ = this;
 	var addplot = function(i, idx, opts) {
 		var soln = this_.getSolution(idx); 
-		if (soln) arry.push(soln);
+		if (soln) arry.unshift(soln);
 	}
 	var iter = this.getStepIterator(opts);
 	iter(addplot);
