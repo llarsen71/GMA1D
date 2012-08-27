@@ -10,21 +10,35 @@
 
 /*
 PROPERTY: colors
-A set of colors used for plotting curves.
+ A set of colors used for plotting curves.
 */
 var colors = ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
 /*
 PROPERTY: colorSets
-Different color sets. This is used to switch the solution plots between a set of colors (when no
-contours are plotted, and grey (when mode contours are plotted).
+ Different color sets. This is used to switch the solution plots between a set of colors (when no
+ contours are plotted, and grey (when mode contours are plotted).
 */
 var colorSets = new ColorSwitcher({gray: ["#bbbbbb"], colors: colors},'colors');
 /*
 PROPERTY: canvases
-This is an object that is used to hold the list of current plot canvases.
+ This is an object that is used to hold the list of current plot canvases.
 */
 var canvases = {};
 
+/*
+FUNCTION: Ellipse
+ Get a parameteric function that produces the points for an ellipse.  This is used to generate 
+ an initial modal curve in the region of an ODE is oscillatory and approximately linear.
+
+PARAMETERS:
+ a - the amplitude along the widest axis of the ellipse (the x axis).
+ excentricity - The ratio of the small axis amplitude to the large axis amplitude.
+ angle - The rotation angle of the ellipse from the x axis.
+ 
+RETURNS:
+ A parametric function for an ellipse of the form func(t) which returns an [x,y] pt. The parameter t 
+ should go from 0 to 2*pi.
+*/
 function Ellipse(a,excentricity,angle) {
 	var ellips = function(t) {
 		var pt  = [a*Math.cos(t),a*excentricity*Math.sin(t)];
@@ -36,17 +50,40 @@ function Ellipse(a,excentricity,angle) {
 	return ellips;
 }
 
-// Duffing oscillator
+/*
+FUNCTION: DuffingEqn
+ This generate a Duffing Equation ODE vector field function. The duffing equation has the
+ form x''+2*c*x'+x+eps*x^3=0.
+
+PARMAETERS:
+ eps - The cubic nonlinearity coefficient
+ c - The damping coefficient
+ 
+RETURNS:
+ An Duffing ODE function of the form 'V(t,pt)' that returns the ODE vector [x',x'']. 
+ 't' is the independent value, and 'pt' is [x,x'].
+*/
 function DuffingEqn(eps, c) {
-	var Duffing = function(t,v) {
+	var Duffing = function(t,pt) {
 		var v2 = [];
-		v2[0] =  v[1];
-		v2[1] = -2*c*v[1]-v[0]-eps*Math.pow(v[0],3);
+		v2[0] =  pt[1];
+		v2[1] = -2*c*pt[1]-pt[0]-eps*Math.pow(pt[0],3);
 		return v2;
 	}
 	return Duffing;
 }
 
+/*
+FUNCTION: DuffingSolver
+ Function to solve the Duffing equation.
+
+PARAMETERS:
+ steps - The number of ODE steps to take when solving the Duffing equation. Note that this
+ solves backwards from a solution near the equilibrium point with step sizes of -0.05.
+
+RETURNS:
+ A GMAmode object for the Duffing oscillator.
+*/
 function DuffingSolver(steps) {
 	var g = Ellipse(0.5, 1.2, -Math.PI/4.5);
 	var pts = linspace(0.0,2*Math.PI,60,g);
@@ -55,12 +92,22 @@ function DuffingSolver(steps) {
 
 	var f = DuffingEqn(0.05, 0.2);
 	var steps = 500;
-	gma = new GMAmode({V:f, steps:steps, dt:-0.05, t:0.0, pts:pts, contourFactory:ctrFactory, solutionFactory:solnFactory});
+	var gma = new GMAmode({V:f, steps:steps, dt:-0.05, t:0.0, pts:pts, contourFactory:ctrFactory, solutionFactory:solnFactory});
 
 	gma.plot = DuffingPlot;
 	return gma;
 }
 
+/*
+FUNCTION: DuffingPlot
+ Plot the Duffing generalized 1-D mode and/or some of the solution curves.
+ The plot is animated, showing the time progress of the solution.
+
+PARAMETERS:
+ canvas - The canvas the the solution is plotted onto.
+ showMode - Flag to indicate whether the modal contours should be plotted.
+ showSolns - Flag to indicate whether the ODE solutions should be plotted.
+*/
 function DuffingPlot(canvas, showMode, showSolns) {
 	if (canvas in canvases) canvases[canvas].kill();
 	canvases[canvas] = new Animator($(canvas));
@@ -76,7 +123,18 @@ function DuffingPlot(canvas, showMode, showSolns) {
 	duff_plots.animate(this.tmin, this.tmax, 8);
 }
 
-// Van Der Pol oscillator
+/*
+FUNCTION: VanDerPolEqn
+ This generate a VanDer Pol Equation ODE vector field function. The Van Der Pol equation has the
+ form x''-c*(1-x^2)*x'+x=0.
+
+PARMAETERS:
+ c - The (negative) damping coefficient
+ 
+RETURNS:
+ An Van Der Pol ODE function of the form 'V(t,pt)' that returns the ODE vector [x',x'']. 
+ 't' is the independent value, and 'pt' is [x,x'].
+*/
 function VanDerPolEqn(c) {
 	var VanDerPol = function(t,v) {
 		pt = [v[1], c*(1-v[0]*v[0])*v[1] - v[0]];
@@ -85,6 +143,20 @@ function VanDerPolEqn(c) {
 	return VanDerPol;
 }
 
+/*
+FUNCTION: VanDerPolSolver
+ Function to solve the Duffing equation.
+
+PARAMETERS:
+ isteps - The number of ODE steps to take solving the Van Der Pol equation from inside the limit cycle.
+   The initial curve is an Ellipse near the unstable equilibrium. This solution is disabled at present.
+ osteps - The number of ODE steps to take solveing the Van Der Pol equation from outside the limit cycle.
+  The initial curve is a slightly expanded limit cycle curve. The solution is solved backwards (away from
+  the limit cycle, with a step size of -0.05.
+
+RETURNS:
+ A GMAmode object for the Van Der Pol oscillator.
+*/
 function VanDerPolSolver(isteps, osteps) {
 	// The VanDerPol ODE vector equation
 	var vdp = VanDerPolEqn(0.2);
@@ -138,6 +210,16 @@ function VanDerPolSolver(isteps, osteps) {
 	return gma;
 }
 
+/*
+FUNCTION: VanDerPolPlot
+ Plot the VanDer Pol generalized 1-D mode and/or some of the solution curves.
+ The plot is animated, showing the time progress of the solution.
+
+PARAMETERS:
+ canvas - The canvas the the solution is plotted onto.
+ showMode - Flag to indicate whether the modal contours should be plotted.
+ showSolns - Flag to indicate whether the ODE solutions should be plotted.
+*/
 function VanDerPolPlot(canvas, showMode, showSolns) {
 	// Structure to store the plots.
 	if (canvas in canvases) canvases[canvas].kill();
