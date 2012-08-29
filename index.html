@@ -33,7 +33,12 @@
 			<input type="checkbox" name="showMode" onchange="updatePlot(gmas, this.form)" checked="checked">Show Modal Contours</input>
 		</form>
 		</td></tr>
-		<tr><td><div id="canvas1" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>
+		<tr><td>
+			<table class="nb">
+			<tr><td class="nb" id="rotate">Velocity</td>
+			<td class="nb"><div id="canvas1" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>
+			<tr><td class="nb"></td><td class="nb"><center>Position</center></td></tr></table>
+		</td></tr>
 		</table></td>
 <!--
 		<td><table>
