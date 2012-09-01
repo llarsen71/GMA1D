@@ -224,14 +224,14 @@ dl p {
   font-style: italic;
 }
 
-hr {
+hr.a {
   height: 1px;
   margin-bottom: 5px;
   border: none;
   background: url('../images/bg_hr.png') repeat-x center;
 }
 
-table {
+table.a {
   border: 1px solid #373737;
   margin-bottom: 20px;
   text-align: left;
@@ -243,12 +243,35 @@ table.nb {
 
 th {
   font-family: 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 140%;
   padding: 10px;
   background: #373737;
   color: #fff;
  }
 
-td {
+td.c1 {
+  background: #555555;
+  width:auto;
+}
+
+td.c2a {
+  background: #eeeeee;
+  width: 850px;
+  padding: 5px 5px 5px 5px;
+}
+
+td.c2 {
+  background: #f1f1f1;
+  width: 850px;
+  padding: 20px 20px 20px 20px;
+}
+
+td.c3 {
+  background: #555555;
+  width:auto;
+}
+ 
+td.a {
   padding: 10px;
   border: 1px solid #373737;
  }
@@ -264,6 +287,8 @@ td.nb {
   -moz-transform:rotate(-90deg);
   -webkit-transform:rotate(-90deg);
   -o-transform:rotate(-90deg);
+  position: relative;
+  left: -30px;
 }
 
 form {

@@ -14,6 +14,19 @@
 			var Duffing = DuffingSolver(500);
 			var VanDerPol = VanDerPolSolver(1000,400);
 			var gmas = {Duffing: Duffing, VanDerPol: VanDerPol};
+			function updatePlot(gmas, form) {
+				var type, showSoln, showMode;
+				// Get the plot inputs
+				for (var i=0; i<form.length; i++) {
+					field = form.elements[i];
+					if (field.name === "model") type = field.value;
+					else if (field.name === "showSoln") showSoln = field.checked;
+					else if (field.name === "showMode") showMode = field.checked;
+				}
+				// Select the specific GMAmode from gmas and plot results.
+				// The form.name should match the name of the canvas to update.
+				gmas[type].plot(form.name, showMode, showSoln);
+			}
 		</script>
 		<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 		<title>GMA-1D</title>
@@ -35,9 +48,9 @@
 		</td></tr>
 		<tr><td>
 			<table class="nb">
-			<tr><td class="nb" id="rotate">Velocity</td>
+			<tr><td class="nb" id="rotate">Velocity (v)</td>
 			<td class="nb"><div id="canvas1" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>
-			<tr><td class="nb"></td><td class="nb"><center>Position</center></td></tr></table>
+			<tr><td class="nb"></td><td class="nb"><center>Position (x)</center></td></tr></table>
 		</td></tr>
 		</table></td>
 <!--

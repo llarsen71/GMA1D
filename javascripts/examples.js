@@ -12,7 +12,7 @@
 PROPERTY: colors
  A set of colors used for plotting curves.
 */
-var colors = ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"];
+var colors = ["#9440ed", "#4da74d", "#cb4b4b", "#edc240", "#afd8f8"];
 /*
 PROPERTY: colorSets
  Different color sets. This is used to switch the solution plots between a set of colors (when no
@@ -84,14 +84,14 @@ PARAMETERS:
 RETURNS:
  A GMAmode object for the Duffing oscillator.
 */
-function DuffingSolver(steps) {
+function DuffingSolver() {
 	var g = Ellipse(0.5, 1.2, -Math.PI/4.5);
 	var pts = linspace(0.0,2*Math.PI,60,g);
 	var ctrFactory = AnimatedGMAPlotFactory(colors);
 	var solnFactory = AnimatedGMAPlotFactory(colorSets);
 
 	var f = DuffingEqn(0.05, 0.2);
-	var steps = 500;
+	var steps = 360;
 	var gma = new GMAmode({V:f, steps:steps, dt:-0.05, t:0.0, pts:pts, contourFactory:ctrFactory, solutionFactory:solnFactory});
 
 	gma.plot = DuffingPlot;
@@ -113,7 +113,7 @@ function DuffingPlot(canvas, showMode, showSolns) {
 	canvases[canvas] = new Animator($(canvas));
 	var duff_plots = canvases[canvas];
 
-	var contours = 14;
+	var contours = 12;
 	if (showMode) this.getContours(duff_plots,{nCurves:contours});
 	if (showSolns) {
 		colorSets.setColorSet((showMode) ? 'gray':'colors');
@@ -157,7 +157,7 @@ PARAMETERS:
 RETURNS:
  A GMAmode object for the Van Der Pol oscillator.
 */
-function VanDerPolSolver(isteps, osteps) {
+function VanDerPolSolver() {
 	// The VanDerPol ODE vector equation
 	var vdp = VanDerPolEqn(0.2);
 	var ctrFactory = AnimatedGMAPlotFactory(colors);
@@ -167,7 +167,7 @@ function VanDerPolSolver(isteps, osteps) {
 	// Start with an inner ellipse as the set of initial points
 	var initialring = Ellipse(0.1, 1.2, Math.PI/4.5);
 	var cirpts = linspace(0.0,2*Math.PI,60,initialring);
-
+	var isteps = 400;
 	var gmainner = new GMAmode({V:vdp, steps:isteps, dt:0.05, t:0.0, pts:cirpts, contourFactory:ctrFactory, solutionFactory:solnFactory});
 
 	// ---- Outer Solution ----
@@ -247,23 +247,9 @@ function VanDerPolPlot(canvas, showMode, showSolns) {
 	}
 
 	// Include the limit cycle
-	vdp_plots.push({data: this.limitcycle, lines: {lineWidth: 3.0}});
+	vdp_plots.push({data: this.limitcycle, lines: {lineWidth: 3.0}, color:"#000000"});
 
 	// Plot the results
 	//var plot = $.plot($(canvas), vdp_plots);
 	vdp_plots.animate(this.outer.tmin, this.outer.tmax, 8);
-}
-
-function updatePlot(gmas, form) {
-	var type, showSoln, showMode;
-	// Get the plot inputs
-	for (var i=0; i<form.length; i++) {
-		field = form.elements[i];
-		if (field.name === "model") type = field.value;
-		else if (field.name === "showSoln") showSoln = field.checked;
-		else if (field.name === "showMode") showMode = field.checked;
-	}
-	// Select the specific GMAmode from gmas and plot results.
-	// The form.name should match the name of the canvas to update.
-	gmas[type].plot(form.name, showMode, showSoln);
 }

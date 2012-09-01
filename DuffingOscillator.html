@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="description" content="GMA-1D: 1D Generalized Modes" />
+		<script src="javascripts/flot/jquery.js"></script>
+		<script src="javascripts/flot/jquery.flot.js"></script>
+		<script src="javascripts/vector.js"></script>
+		<script src="javascripts/ODE.js"></script>
+		<script src="javascripts/GMAmode.js"></script>
+		<script src="javascripts/Animate.js"></script>
+		<script src="javascripts/GMAanimate.js"></script>
+		<script src="javascripts/examples.js"></script>
+		<script src="javascripts/jqmath/jqmath-etc-0.2.0.min.js"></script>
+		<link rel="stylesheet" href="javascripts/jqmath/jqmath-0.2.0.css">
+		<script type="text/javascript">
+			var Duffing = DuffingSolver();
+
+			function updatePlot(form) {
+				var type, showSoln, showMode;
+				// Get the plot inputs
+				for (var i=0; i<form.length; i++) {
+					field = form.elements[i];
+					if (field.name === "showSoln") showSoln = field.checked;
+					else if (field.name === "showMode") showMode = field.checked;
+				}
+				// The form.name should match the name of the canvas to update.
+				Duffing.plot(form.name, showMode, showSoln);
+			}
+		</script>
+		<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+		<title>Duffing</title>
+	</head>
+
+	<body>
+		<table border="0" style="width:100%">
+		<tr><td class="c1"></td><td class="c2a"><a href="https://github.com/llarsen71/GMA1D"> Git Repository </a></td><td class="c3">&nbsp;</td></tr>
+		<tr><td class="c1">&nbsp;</td><th>The Duffing Oscillator</th><td class="c3"></td></tr>
+		<tr><td class="c1"></td><td class="c2">
+		The unforced Duffing oscillator is a simple spring mass model that includes a cubic spring nonlinearity. 
+		The differential equation for the Duffing oscillator is: <br><br>
+		
+		${d^2 x}/{dt^2} + 2 c {dx}/{dt} + x + &epsilon; x^3 = 0$ <br><br>
+		
+		This can be converted to first order form by defining a coordinate $v = {dx}/{dt}$. The system of 
+		ordinary differential equations (ODEs) is then represented as: <br><br>
+		
+		${dx}/{dt} = v$<br>
+		${dv}/{dt} = - (2 c &middot; v + x + &epsilon; x^3)$<br><br>
+		
+		The vector field form of the unforced Duffing oscillator is:<br><br>
+		
+		$V(x,y) = v {&part;}/{&part; x} - (2 c &middot; v + x + &epsilon; x^3) {&part;}/{&part; v}$ <br><br>
+		
+		The 1-D generalized modal equation $V(f) = v {&part; f}/{&part; x} - (2 c &middot; v + x + &epsilon; x^3) {&part; f}/{&part; v} = 1$
+		can be solved to find a modal solution. A modal solution of this equation, with parameters $c=0.2$ and $&epsilon;=0.05$, is shown
+		below. The generalized modal equation $f$ was solved by starting 
+		with an initial contour and calculating the ODE trajectory of each point on the contour. The ODE solutions drag the initial contour to 
+		a new contour of the function $f$ at each timestep. This is sometimes referred to as Lie dragging, and $V(f)$ is referred to as a Lie 
+		derivative, but is simply an expression of the chain rule of calculus. Contours were plotted at timesteps $t = i&middot;1.5$ where i 
+		assumes the integer values 0 through 11. An animation of the time evolution of $f$ can be seen below.
+		<br><br></td><td class="c3"></td></tr>
+		
+		<tr><td class="c1"></td><td class="c2" align="center">
+		<table class="a">
+		<tr class="a"><td class="a">
+		<form name="#canvas1">
+			<input type="checkbox" name="showSoln" onchange="updatePlot(this.form)">Show ODE Solutions</input>
+			<input type="checkbox" name="showMode" onchange="updatePlot(this.form)" checked="checked">Show Modal Contours</input>
+		</form>
+		</td></tr>
+		<tr class="a"><td class="a">
+			<table class="nb">
+			<tr><td class="nb"><font size=+3>v &nbsp;</font></td>
+			<td class="nb"><div id="canvas1" style="width:500px;height:500px;Border:1px solid #aaa;"></div></td></tr>
+			<tr><td class="nb"></td><td class="nb"><center><font size=+3>x</font></center></td></tr></table>
+		</td></tr>
+		</table>
+		</td><td class="c3"></td></tr></table>
+
+		<script type="text/javascript">
+			Duffing.plot("#canvas1", true, false);
+		</script>
+	</body>
+</html>
