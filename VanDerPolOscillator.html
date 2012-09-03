@@ -10,9 +10,11 @@
 		<script src="javascripts/Animate.js"></script>
 		<script src="javascripts/GMAanimate.js"></script>
 		<script src="javascripts/examples.js"></script>
+		<script src="javascripts/jqmath/jqmath-etc-0.2.0.min.js"></script>
+		<link rel="stylesheet" href="javascripts/jqmath/jqmath-0.2.0.css">
 		<script type="text/javascript">
 			var VanDerPol = VanDerPolSolver();
-			function updatePlot(form) {
+			function updatePlot(form, animate) {
 				var type, showSoln, showMode;
 				// Get the plot inputs
 				for (var i=0; i<form.length; i++) {
@@ -21,7 +23,10 @@
 					else if (field.name === "showMode") showMode = field.checked;
 				}
 				// The form.name should match the name of the canvas to update.
-				VanDerPol.plot(form.name, showMode, showSoln);
+				VanDerPol.plot(form.name, showMode, showSoln, animate);
+			}
+			function animate(form) {
+				updatePlot(form,true);
 			}
 		</script>
 		<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
@@ -32,12 +37,16 @@
 		<table border="0" style="width:100%">
 		<tr><td class="c1"></td><td class="c2a"><a href="https://github.com/llarsen71/GMA1D"> Git Repository </a></td><td class="c3">&nbsp;</td></tr>
 		<tr><td class="c1">&nbsp;</td><th>The Van Der Pol Oscillator</th><td class="c3"></td></tr>
+		<tr><td class="c1"></td><td class="c2">
+		
+		<br><br></td><td class="c3"></td></tr>
 		<tr><td class="c1"></td><td class="c2" align="center">
 		<table class="a">
 		<tr class="a"><td class="a">
 		<form name="#canvas1">
 			<input type="checkbox" name="showSoln" onchange="updatePlot(this.form)">Show ODE Solutions</input>
 			<input type="checkbox" name="showMode" onchange="updatePlot(this.form)" checked="checked">Show Modal Contours</input>
+			<input type="button" value="Show Time Evolution" onclick="animate(this.form)"></button>
 		</form>
 		</td></tr>
 		<tr class="a"><td class="a"><div id="canvas1" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>

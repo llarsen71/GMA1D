@@ -108,7 +108,7 @@ PARAMETERS:
  showMode - Flag to indicate whether the modal contours should be plotted.
  showSolns - Flag to indicate whether the ODE solutions should be plotted.
 */
-function DuffingPlot(canvas, showMode, showSolns) {
+function DuffingPlot(canvas, showMode, showSolns, animate) {
 	if (canvas in canvases) canvases[canvas].kill();
 	canvases[canvas] = new Animator($(canvas));
 	var duff_plots = canvases[canvas];
@@ -120,7 +120,8 @@ function DuffingPlot(canvas, showMode, showSolns) {
 		this.getSolutions(duff_plots,{nCurves:4});
 	}
 	//var plot = $.plot($(canvas), duff_plots);
-	duff_plots.animate(this.tmin, this.tmax, 8);
+	if (animate) duff_plots.animate(this.tmin, this.tmax, 8);
+	else duff_plots.plot(this.tmax);
 }
 
 /*
@@ -220,7 +221,7 @@ PARAMETERS:
  showMode - Flag to indicate whether the modal contours should be plotted.
  showSolns - Flag to indicate whether the ODE solutions should be plotted.
 */
-function VanDerPolPlot(canvas, showMode, showSolns) {
+function VanDerPolPlot(canvas, showMode, showSolns, animate) {
 	// Structure to store the plots.
 	if (canvas in canvases) canvases[canvas].kill();
 	canvases[canvas] = new Animator($(canvas));
@@ -251,5 +252,6 @@ function VanDerPolPlot(canvas, showMode, showSolns) {
 
 	// Plot the results
 	//var plot = $.plot($(canvas), vdp_plots);
-	vdp_plots.animate(this.outer.tmin, this.outer.tmax, 8);
+	if (animate) vdp_plots.animate(this.outer.tmin, this.outer.tmax, 8);
+	else vdp_plots.plot(this.outer.tmax);
 }

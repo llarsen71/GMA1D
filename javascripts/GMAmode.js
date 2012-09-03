@@ -78,20 +78,22 @@ GMAmode.prototype.solve = function(steps, dt, t, pts, limit) {
 	if (arguments.length >= 3) {
 		// If we are starting a solution, initialize the ODEs and solve.
 		this.last_index = this.steps + 1;
-		this.tmin = this.tmax = t;
+		//this.tmin = this.tmax = t;
+		this.tmax = t;
 		
-		// Create a new old for each initial point in pts.
+		// Create a new ODE object for each initial point in pts.
 		for (var i=0; i<pts.length; i++) {
 			this.odes[i] = new ODE(this.V);
 			if (limit) { this.odes[i].setLimit(limit); }
 			var soln = this.odes[i].solve(steps, dt, t, pts[i]);
-			// time offset.
+			// If we are calculating backwards in t, some solutions may become invalid, so
+			// we set an offset index to let us know how to match up ODE solutions.
 			var offset = (dt > 0) ? 0 : steps + 1 - soln.t.length;
 			avg_offset += offset*offset;
 			this.odes[i].offset = offset;
 
 			// Set tmin or tmax based on the solutions last t value.
-			if (this.tmin > soln.t[0]) this.tmin = soln.t[0];
+			//if (this.tmin > soln.t[0]) this.tmin = soln.t[0];
 			var mx = soln.t.length - 1;
 			if (this.tmax < soln.t[mx]) this.tmax = soln.t[mx];
 		}
@@ -106,7 +108,7 @@ GMAmode.prototype.solve = function(steps, dt, t, pts, limit) {
 			avg_offset += offset*offset;
 			this.odes[i].offset = offset;
 			// Set tmin or tmax based on the solutions last t value.
-			if (this.tmin > soln.t[0]) this.tmin = soln.t[0];
+			//if (this.tmin > soln.t[0]) this.tmin = soln.t[0];
 			var mx = soln.t.length - 1;
 			if (this.tmax < soln.t[mx]) this.tmax = soln.t[mx];
 		}
@@ -168,6 +170,9 @@ GMAmode.prototype.getContour = function(stepn) {
 		var stepn1 = stepn - this.odes[i].offset;
 		if (stepn1 >=0) {
 			this.odes[i].pushPt(stepn1,t,pts);
+			if (this.tmin == undefined || t[t.length-1] < this.tmin) {
+				this.tmin = t[t.length-1];
+			}
 		}
 	}
 	return this.ctrFactory(this, stepn, {t: t, pts: pts});
