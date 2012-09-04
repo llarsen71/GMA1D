@@ -1,78 +1,24 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta name="description" content="GMA-1D: 1D Generalized Modes" />
-		<script src="javascripts/flot/jquery.js"></script>
-		<script src="javascripts/flot/jquery.flot.js"></script>
-		<script src="javascripts/vector.js"></script>
-		<script src="javascripts/ODE.js"></script>
-		<script src="javascripts/GMAmode.js"></script>
-		<script src="javascripts/Animate.js"></script>
-		<script src="javascripts/GMAanimate.js"></script>
-		<script src="javascripts/examples.js"></script>
-		<script type="text/javascript">
-			var Duffing = DuffingSolver(500);
-			var VanDerPol = VanDerPolSolver(1000,400);
-			var gmas = {Duffing: Duffing, VanDerPol: VanDerPol};
-			function updatePlot(gmas, form) {
-				var type, showSoln, showMode;
-				// Get the plot inputs
-				for (var i=0; i<form.length; i++) {
-					field = form.elements[i];
-					if (field.name === "model") type = field.value;
-					else if (field.name === "showSoln") showSoln = field.checked;
-					else if (field.name === "showMode") showMode = field.checked;
-				}
-				// Select the specific GMAmode from gmas and plot results.
-				// The form.name should match the name of the canvas to update.
-				gmas[type].plot(form.name, showMode, showSoln);
-			}
-		</script>
 		<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 		<title>GMA-1D</title>
 	</head>
 
 	<body>
-		<a href="https://github.com/llarsen71/GMA1D"> Git Repository </a>
-		<table>
-		<tr><td><table>
-		<tr><td>
-		<form name="#canvas1">
-			<select name="model" onchange="updatePlot(gmas, this.form)">
-				<option value="VanDerPol"> Van Der Pol Oscillator    </option>
-				<option value="Duffing" SELECTED> Duffing Oscillator </option>
-			</select>
-			<input type="checkbox" name="showSoln" onchange="updatePlot(gmas, this.form)">Show ODE Solutions</input>
-			<input type="checkbox" name="showMode" onchange="updatePlot(gmas, this.form)" checked="checked">Show Modal Contours</input>
-		</form>
-		</td></tr>
-		<tr><td>
-			<table class="nb">
-			<tr><td class="nb" id="rotate">Velocity (v)</td>
-			<td class="nb"><div id="canvas1" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>
-			<tr><td class="nb"></td><td class="nb"><center>Position (x)</center></td></tr></table>
-		</td></tr>
-		</table></td>
-<!--
-		<td><table>
-		<tr><td>
-		<form name="#canvas2">
-			<select name="model" onchange="updatePlot(gmas, this.form)">
-				<option value="VanDerPol"> Van Der Pol Oscillator </option>
-				<option value="Duffing">   Duffing Oscillator     </option>
-			</select>
-			<input type="checkbox" name="showSoln" onchange="updatePlot(gmas, this.form)">Show ODE Solutions</input>
-			<input type="checkbox" name="showMode" onchange="updatePlot(gmas, this.form)" checked="checked">Show Modal Contours</input>
-		</form>
-		</td></tr>
-		<tr><td><div id="canvas2" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>
-		</table></td>
--->
-		</tr></table>
-
-		<script type="text/javascript">
-			Duffing.plot("#canvas1", true, false);
-			<!--VanDerPol.plot("#canvas2", true, false);-->
-		</script>
+			<table border="0" style="width:100%">
+		<tr><td class="c1"></td><td class="c2a"><a href="https://github.com/llarsen71/GMA1D"> Git Repository </a></td><td class="c3">&nbsp;</td></tr>
+		<tr><td class="c1">&nbsp;</td><th>Generalized Modal Analysis</th><td class="c3"></td></tr>
+		<tr><td class="c1"></td><td class="c2">
+		Modal analysis is a powerful tool for analysis of linear systems. The reason that modal analysis is so effective
+		for analyzing linear systems is that it is able to transform a system from a form where the systems variables are
+		coupled, and changes in one variable can impact other is complex ways, to a simple modal form where system variables
+		are independent. When the system is in modal form the solutions, the differential equations are decoupled and can 
+		be solved and analyzed independently. In essence, the equation of motion for each mode reduces to the form of a
+		simple mass-spring-damper system which is fairly easy to understand.<br><br>
+		
+		
+		<br><br></td><td class="c3"></td></tr>
+		</table>
 	</body>
 </html>
