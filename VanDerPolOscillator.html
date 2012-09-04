@@ -15,15 +15,17 @@
 		<script type="text/javascript">
 			var VanDerPol = VanDerPolSolver();
 			function updatePlot(form, animate) {
-				var type, showSoln, showMode;
+				var type, showInner, showOuter, showModeIn, showModeOut;
 				// Get the plot inputs
 				for (var i=0; i<form.length; i++) {
 					field = form.elements[i];
-					if (field.name === "showSoln") showSoln = field.checked;
-					else if (field.name === "showMode") showMode = field.checked;
+					if (field.name === "showOuter") showOuter = field.checked;
+					else if (field.name === "showInner") showInner = field.checked;
+					else if (field.name === "showModeIn") showModeIn = field.checked;
+					else if (field.name === "showModeOut") showModeOut = field.checked;
 				}
 				// The form.name should match the name of the canvas to update.
-				VanDerPol.plot(form.name, showMode, showSoln, animate);
+				VanDerPol.plot(form.name, showModeIn, showModeOut, showInner, showOuter, animate);
 			}
 			function animate(form) {
 				updatePlot(form,true);
@@ -36,25 +38,74 @@
 	<body>
 		<table border="0" style="width:100%">
 		<tr><td class="c1"></td><td class="c2a"><a href="https://github.com/llarsen71/GMA1D"> Git Repository </a></td><td class="c3">&nbsp;</td></tr>
-		<tr><td class="c1">&nbsp;</td><th>The Van Der Pol Oscillator</th><td class="c3"></td></tr>
+		<tr><td class="c1">&nbsp;</td><th>The van der Pol Oscillator</th><td class="c3"></td></tr>
 		<tr><td class="c1"></td><td class="c2">
+		In the 1920's dutch physicist Balthasar van der Pol experimented with electrical circuits containing vacuum tubes.
+		Despite there being no direct voltage forcing of the circuit, he noticed stable oscillations occurring. An equation
+		that models the behavior van der Pol circuit is:<br><br>
+		
+		${d^2 V}/{dt^2} - {1}/{C}(&alpha;-3&gamma;V^2){dV}/{dt} + {1}/{LC}V = 0$ <br><br>
+		
+		By scaling time and voltage, this can be reduced to the following cannonical form: <br><br>
+
+		${d^2V}/{dt^2}-&mu;(1-V^2){dV}/{dt}+V=0$<br><br>
+		
+		To convert this to first order form, a current variable $I={dV}/{dt}$ is defined. The system of ordinary differential
+		equations (ODEs) is then written as:<br><br>
+		
+		${dV}/{dt} = I$<br>
+		${dI}/{dt} = &mu;(1-V^2)&middot;I - V$<br><br>
+		
+		In vector field form this is represented as:<br><br>
+		
+		${W(V,I) = {dV}/{dt} {&part;}/{&part;V} + {dI}/{dt} {&part;}/{&part;I} = I {&part;}/{&part;V} + (&mu;(1-V^2)&middot;I - V) {&part;}/{&part;I}}$ <br><br>
+		
+		When the solution is plotted relative to axes V and I, the stable oscillations appear as a closed loop. This
+		solution is referred to as a <b>limit cycle</b> because solutions that start inside or outside the loop will approach 
+		the closed loop limit cycle solution as time goes to infinity.<br><br>
+		
+		For the van der Pol plot below, a &mu; value of 0.2 is used. Model contours are shown for a function that satisifes
+		the 1-D modal equation:<br><br>
+		
+		$W(f) = {dV}/{dt} {&part;f}/{&part;V} + {dI}/{dt} {&part;f}/{&part;I} = I {&part;f}/{&part;V} + (0.2(1-V^2)I - V) {&part;f}/{&part;I} = 1$ <br><br>
+		
+		The 1-D modal function $f$ can be calculated numerically by taking the limit cycle solution and 
+		expanding the solution curve slightly in the I, V space (i.e. scaling each point by 1.01). Solutions 
+		for each point on the expanded curve are then solved backwards in time (i.e. by taking negative time steps
+		in the ODE solver). Similarly, to calculate modal contours inside the limit cycle, the limit cycle
+		was contracted a few percent and the solution was calculated backwards for each point on the contracted
+		limit cycle.<br><br>
+		
+		The limit cycle solution is plotted in black. The 'Show&nbsp;Time&nbsp;Evolution' button starts a 
+		forward time animation of the modal contours, or a sample of the ODE solutions
+		used to calculate the modal contours, or both. Modal contours outside the limit cycle are drawn at equal timesteps
+		$t=i&middot;1.8$ where i has integer values from 0 to 9, while contours on the inside of the limit cycle drawn
+		at equal timestep that are slightly larger 1.8.
 		
 		<br><br></td><td class="c3"></td></tr>
 		<tr><td class="c1"></td><td class="c2" align="center">
 		<table class="a">
 		<tr class="a"><td class="a">
 		<form name="#canvas1">
-			<input type="checkbox" name="showSoln" onchange="updatePlot(this.form)">Show ODE Solutions</input>
-			<input type="checkbox" name="showMode" onchange="updatePlot(this.form)" checked="checked">Show Modal Contours</input>
+			<input type="checkbox" name="showModeOut" onchange="updatePlot(this.form)" checked="checked">Show Modal contours outside the limit cycle</input><br>
+			<input type="checkbox" name="showOuter" onchange="updatePlot(this.form)" checked="checked">Show ODE solutions outside limit cycle</input><br>
+			<input type="checkbox" name="showModeIn" onchange="updatePlot(this.form)">Show Modal contours inside the limit cycle</input><br>
+			<input type="checkbox" name="showInner" onchange="updatePlot(this.form)">Show ODE solutions inside limit cycle</input><br>
 			<input type="button" value="Show Time Evolution" onclick="animate(this.form)"></button>
 		</form>
 		</td></tr>
-		<tr class="a"><td class="a"><div id="canvas1" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></td></tr>
+		<tr class="a"><td class="a">
+		<table class="nb">
+			<tr><td class="nb"><font size=+3>I &nbsp;</font></td>
+			<td class="nb"><div id="canvas1" style="width:500px;height:500px;Border:1px solid #aaa;"> </div></div></td></tr>
+			<tr><td class="nb"></td><td class="nb"><center><font size=+3>V</font></center></td></tr></table>
+		</td></tr>
 		</table>
 		</td><td class="c3"></td></tr></table>
 
 		<script type="text/javascript">
-			VanDerPol.plot("#canvas1", true, false);
+			//VanDerPol.plot("#canvas1", true, false);
+			updatePlot(document.forms[0],false);
 		</script>
 	</body>
 </html>

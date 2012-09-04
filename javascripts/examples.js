@@ -12,7 +12,7 @@
 PROPERTY: colors
  A set of colors used for plotting curves.
 */
-var colors = ["#9440ed", "#4da74d", "#cb4b4b", "#edc240", "#afd8f8"];
+var colors = ["#9440ed", "#4da74d", "#cb4b4b", "#edc240"];
 /*
 PROPERTY: colorSets
  Different color sets. This is used to switch the solution plots between a set of colors (when no
@@ -107,6 +107,7 @@ PARAMETERS:
  canvas - The canvas the the solution is plotted onto.
  showMode - Flag to indicate whether the modal contours should be plotted.
  showSolns - Flag to indicate whether the ODE solutions should be plotted.
+ animate - Flag to show whether the plot should be animated.
 */
 function DuffingPlot(canvas, showMode, showSolns, animate) {
 	if (canvas in canvases) canvases[canvas].kill();
@@ -164,17 +165,7 @@ function VanDerPolSolver() {
 	var ctrFactory = AnimatedGMAPlotFactory(colors);
 	var solnFactory = AnimatedGMAPlotFactory(colorSets);
 
-	// ---- Inner Solution ----
-	// Start with an inner ellipse as the set of initial points
-	var initialring = Ellipse(0.1, 1.2, Math.PI/4.5);
-	var cirpts = linspace(0.0,2*Math.PI,60,initialring);
-	var isteps = 400;
-	var gmainner = new GMAmode({V:vdp, steps:isteps, dt:0.05, t:0.0, pts:cirpts, contourFactory:ctrFactory, solutionFactory:solnFactory});
-
-	// ---- Outer Solution ----
-	// Use a ring just wider than the limit cycle for the outer 
-	// initial points. Use the ODE sovler to calculate the limit cycle.
-	// Start with a point on the limit cycle.
+	// Calculate the limit cycle and define a scaling function
 	var x = [2.0113107,0.0509031224];
 	// take the number of steps that closes the loop.
 	var v = new ODE(vdp).solve(113, 0.0673, 1.0, x);
@@ -188,7 +179,20 @@ function VanDerPolSolver() {
 		}
 		return pts;
 	}
-	var pts = v.scale(1.01);
+
+	// ---- Inner Solution ----
+	// Start with an inner ellipse as the set of initial points
+	//var initialring = Ellipse(0.1, 1.2, Math.PI/4.5);
+	//var innerpts = linspace(0.0,2*Math.PI,60,initialring);
+	var innerpts = v.scale(0.965);
+	var isteps = 400;
+	var gmainner = new GMAmode({V:vdp, steps:isteps, dt:-0.05, t:0.0, pts:innerpts, contourFactory:ctrFactory, solutionFactory:solnFactory});
+
+	// ---- Outer Solution ----
+	// Use a ring just wider than the limit cycle for the outer 
+	// initial points. Use the ODE sovler to calculate the limit cycle.
+	// Start with a point on the limit cycle.
+	var outerpts = v.scale(1.01);
 
 	var steps = 400;
 	// Don't let the solution points exceed a bound of 50.
@@ -200,7 +204,7 @@ function VanDerPolSolver() {
 	}
 	ctrFactory = AnimatedGMAPlotFactory(colors);
 	solnFactory = AnimatedGMAPlotFactory(colorSets);
-	var gmaouter = new GMAmode({V:vdp, steps:steps, dt:-0.05, t:0.0, pts:pts, limit:limit, contourFactory:ctrFactory, solutionFactory:solnFactory});
+	var gmaouter = new GMAmode({V:vdp, steps:steps, dt:-0.05, t:0.0, pts:outerpts, limit:limit, contourFactory:ctrFactory, solutionFactory:solnFactory});
 
 	var gma = 
 	{ inner: gmainner,
@@ -218,10 +222,13 @@ FUNCTION: VanDerPolPlot
 
 PARAMETERS:
  canvas - The canvas the the solution is plotted onto.
- showMode - Flag to indicate whether the modal contours should be plotted.
- showSolns - Flag to indicate whether the ODE solutions should be plotted.
+ showModeIn - Flag to indicate whether the modal contours inside the limit cycle should be plotted.
+ showModeOut - Flag to indicate whether the modal contours outside the limit cycle should be plotted.
+ showSolnIn - Flag to indicate whether the ODE solutions inside the limit cycle should be plotted.
+ showSolnOut - Flag to indicate whether the ODE solutions outside the limit cycle should be plotted.
+ animate - Flag to indicate whether the plot should be animated.
 */
-function VanDerPolPlot(canvas, showMode, showSolns, animate) {
+function VanDerPolPlot(canvas, showModeIn, showModeOut, showSolnIn, showSolnOut, animate) {
 	// Structure to store the plots.
 	if (canvas in canvases) canvases[canvas].kill();
 	canvases[canvas] = new Animator($(canvas));
@@ -229,21 +236,18 @@ function VanDerPolPlot(canvas, showMode, showSolns, animate) {
 	var vdp_plots = canvases[canvas];
 
 	// Rings inside the limit cycle
-	var contours = 6;
-	/*
-	if (showMode) this.inner.getContours(vdp_plots, {nCurves:contours});
-	if (showSolns) {
-		colorSets.setColorSet((showMode) ? 'gray' : 'colors');
+	var contours = 10;
+	if (showModeIn) this.inner.getContours(vdp_plots, {nCurves:contours});
+	if (showSolnIn) {
+		colorSets.setColorSet((showModeIn) ? 'gray' : 'colors');
 		this.inner.getSolutions(vdp_plots, {nCurves:2});
 	}
-	*/
 
 	// Rings outside the limit cycle
 	var offset = 35;
-	contours = 10;
-	if (showMode) this.outer.getContours(vdp_plots,{nCurves:contours,offset:offset});
-	if (showSolns) {
-		colorSets.setColorSet((showMode) ? 'gray' : 'colors');
+	if (showModeOut) this.outer.getContours(vdp_plots,{nCurves:contours,offset:offset});
+	if (showSolnOut) {
+		colorSets.setColorSet((showModeOut) ? 'gray' : 'colors');
 		this.outer.getSolutions(vdp_plots,{nCurves:8});
 	}
 
@@ -251,7 +255,6 @@ function VanDerPolPlot(canvas, showMode, showSolns, animate) {
 	vdp_plots.push({data: this.limitcycle, lines: {lineWidth: 3.0}, color:"#000000"});
 
 	// Plot the results
-	//var plot = $.plot($(canvas), vdp_plots);
 	if (animate) vdp_plots.animate(this.outer.tmin, this.outer.tmax, 8);
 	else vdp_plots.plot(this.outer.tmax);
 }

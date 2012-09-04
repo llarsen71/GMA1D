@@ -43,7 +43,7 @@
 		
 		${d^2 x}/{dt^2} + 2 c {dx}/{dt} + x + &epsilon; x^3 = 0$ <br><br>
 		
-		This can be converted to first order form by defining a coordinate $v = {dx}/{dt}$. The system of 
+		This can be converted to first order form by defining a velocity coordinate $v = {dx}/{dt}$. The system of 
 		ordinary differential equations (ODEs) is then represented as: <br><br>
 		
 		${dx}/{dt} = v$<br>
@@ -51,7 +51,7 @@
 		
 		The vector field form of the unforced Duffing oscillator is:<br><br>
 		
-		$V(x,y) = {dx}/{dt} {&part;}/{&part; x} + {dv}/{dt} {&part;}/{&part; v} = v {&part;}/{&part; x} - (2 c &middot; v + x + &epsilon; x^3) {&part;}/{&part; v}$ <br><br>
+		$V(x,v) = {dx}/{dt} {&part;}/{&part; x} + {dv}/{dt} {&part;}/{&part; v} = v {&part;}/{&part; x} - (2 c &middot; v + x + &epsilon; x^3) {&part;}/{&part; v}$ <br><br>
 		
 		The 1-D generalized modal equation $V(f) = {dx}/{dt} {&part; f}/{&part; x} + {dv}/{dt} {&part; f}/{&part; v} = v {&part; f}/{&part; x} - (2 c &middot; v + x + &epsilon; x^3) {&part; f}/{&part; v} = 1$
 		can be solved to find a modal solution. A modal solution of this equation, with parameters $c=0.2$ and $&epsilon;=0.05$, is shown
@@ -66,8 +66,8 @@
 		<table class="a">
 		<tr class="a"><td class="a">
 		<form name="#canvas1">
-			<input type="checkbox" name="showSoln" onchange="updatePlot(this.form);">Show ODE Solutions</input>
-			<input type="checkbox" name="showMode" onchange="updatePlot(this.form);" checked="checked">Show Modal Contours</input>
+			<input type="checkbox" name="showSoln" onchange="updatePlot(this.form);">Show ODE Solutions</input><br>
+			<input type="checkbox" name="showMode" onchange="updatePlot(this.form);" checked="checked">Show Modal Contours</input><br>
 			<input type="button" value="Show Time Evolution" onclick="animate(this.form)"></button>
 		</form>
 		</td></tr>
