@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<script src="javascripts/flot/jquery.js"></script>
+		<script src="javascripts/jqmath/jqmath-etc-0.2.0.min.js"></script>
+		<link rel="stylesheet" href="javascripts/jqmath/jqmath-0.2.0.css">
 		<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 		<title>GMA-1D</title>
 	</head>
@@ -8,14 +11,30 @@
 	<body>
 			<table border="0" style="width:100%">
 		<tr><td class="c1"></td><td class="c2a"><a href="https://github.com/llarsen71/GMA1D"> Git Repository </a></td><td class="c3">&nbsp;</td></tr>
-		<tr><td class="c1">&nbsp;</td><th>Generalized Modal Analysis</th><td class="c3"></td></tr>
+		<tr><td class="c1">&nbsp;</td><th>Generalized Modal Analysis<br><font size="-1">Lance Larsen</font></th><td class="c3"></td></tr>
 		<tr><td class="c1"></td><td class="c2">
-		Modal analysis is a powerful tool for analysis of linear systems. The reason that modal analysis is so effective
-		for analyzing linear systems is that it is able to transform a system from a form where the systems variables are
-		coupled, and changes in one variable can impact other is complex ways, to a simple modal form where system variables
-		are independent. When the system is in modal form the solutions, the differential equations are decoupled and can 
-		be solved and analyzed independently. In essence, the equation of motion for each mode reduces to the form of a
-		simple mass-spring-damper system which is fairly easy to understand.<br><br>
+		Modal analysis is a powerful tool for analysis of linear ordinary differential equations (ODEs). Modal analysis is 
+		a change of coordinates that converts a multidimensional coupled system of linear ODEs to a set of decoupled ODEs 
+		(or modes). In other words, it converts a system that is very complex - where changes in one variable affect others
+		in complicated ways, to a system that is simple because the modes do not interact and the modal solutions can be 
+		calculated relatively easily. Eigenvectors of the linear system are used to define the coordinate
+		transformation that decouples the system. Modal analysis provides a good foundation for understanding the global behavior
+		of a linear systems. Unfortunate the standard approach to modal analysis does not work for nonlinear systems 
+		because the eigenvector transformation fails to decouple a nonlinear system of equations. <br><br>
+		
+		So, can modal analysis be extended to nonlinear systems? The purpose of this website is to present a natural method
+		of extending modal analysis to nonlinear systems. It is worth noting that there are other approaches to extending 
+		modal analysis to nonlinear systems that have significant merrit. One good example is the invariant manifold method 
+		of Steven Shaw and Christophe Pierre which focuses on characterizing an important portion of the solution space 
+		for a nonlinear system, but does not characterize the whole solution space in the way classical modal analysis does,
+		and doesn't reduce directly to classical modal analysis. The method discussed on this site applies to linear and 
+		nonlinear systems and does reduce directly to classical modal analysis. I refer to this approach as generalized 
+		modal analysis or GMA.<br><br>
+		
+		The idea behind GMA is simple - GMA is a transformation of coordinates that converts a coupled system of differential
+		equations into a set of lower dimensional decoupled (or simply coupled) ODEs. While matrix transformations are adequate
+		for linear systems, the general law of transformation for differential equations is the chain rule. In fact, the
+		matrix transformation used in modal analysis is an application of the chain rule (although this is not obvious).
 		
 		
 		<br><br></td><td class="c3"></td></tr>
