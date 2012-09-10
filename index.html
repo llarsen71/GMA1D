@@ -13,29 +13,88 @@
 		<tr><td class="c1"></td><td class="c2a"><a href="https://github.com/llarsen71/GMA1D"> Git Repository </a></td><td class="c3">&nbsp;</td></tr>
 		<tr><td class="c1">&nbsp;</td><th>Generalized Modal Analysis<br><font size="-1">Lance Larsen</font></th><td class="c3"></td></tr>
 		<tr><td class="c1"></td><td class="c2">
-		Modal analysis is a powerful tool for analysis of linear ordinary differential equations (ODEs). Modal analysis is 
-		a change of coordinates that converts a multidimensional coupled system of linear ODEs to a set of decoupled ODEs 
-		(or modes). In other words, it converts a system that is very complex - where changes in one variable affect others
-		in complicated ways, to a system that is simple because the modes do not interact and the modal solutions can be 
-		calculated relatively easily. Eigenvectors of the linear system are used to define the coordinate
-		transformation that decouples the system. Modal analysis provides a good foundation for understanding the global behavior
-		of a linear systems. Unfortunate the standard approach to modal analysis does not work for nonlinear systems 
-		because the eigenvector transformation fails to decouple a nonlinear system of equations. <br><br>
+		Modal analysis is a powerful tool for analysis of linear ordinary differential equations (ODEs). Modal analysis involves
+		finding a set of modal coordinate which decouples a system of ODEs. A useful definition for a modal coordinate is the following:<br><br>
 		
-		So, can modal analysis be extended to nonlinear systems? The purpose of this website is to present a natural method
-		of extending modal analysis to nonlinear systems. It is worth noting that there are other approaches to extending 
-		modal analysis to nonlinear systems that have significant merrit. One good example is the invariant manifold method 
-		of Steven Shaw and Christophe Pierre which focuses on characterizing an important portion of the solution space 
-		for a nonlinear system, but does not characterize the whole solution space in the way classical modal analysis does,
-		and doesn't reduce directly to classical modal analysis. The method discussed on this site applies to linear and 
-		nonlinear systems and does reduce directly to classical modal analysis. I refer to this approach as generalized 
-		modal analysis or GMA.<br><br>
+		<b>A modal coordinate is a linear function that when used as a coordinate results in a decoupled ODE which can be solved 
+		independent of any other coordinates.</b><br><br>
 		
-		The idea behind GMA is simple - GMA is a transformation of coordinates that converts a coupled system of differential
-		equations into a set of lower dimensional decoupled (or simply coupled) ODEs. While matrix transformations are adequate
-		for linear systems, the general law of transformation for differential equations is the chain rule. In fact, the
-		matrix transformation used in modal analysis is an application of the chain rule (although this is not obvious).
+		In essence, modal analysis converts a system that is complex to understand, because changes in one variable affect the response
+		of other variables, to a system that is simple to understand, because the modal ODEs do not interact with one another and 
+		the solutions to each of the modal equations can be calculated relatively easily. <br><br>
 		
+		Suppose we have a linear system of ODEs expressed in the first order matrix form: <br><br>
+		
+		(1) ${dx_i}/{dt} = A_{ij} x_j$<br><br>
+		
+		A modal coordinate is a linear function, which means it can be expressed as:<br><br>
+		
+		(2) $q = c_i x_i$ <br><br>
+		
+		where $c_i$ is a vector of constants. Lets choose the coefficients $c_i$ such that $c_i$ is an eigenvector, which satisfies
+		the equation:<br><br>
+		
+		(3) $c_i A_{ij} = &lambda; c_j$<br><br>
+		
+		This is sometimes called a left eigenvector because it is an eigenvector calculated by multiplying the matrix by a row vector on 
+		the left. Now we left multiply the system of ODEs in (1) by the eigenvector $c_i$ and apply equation (3):<br><br>
+		
+		(4) $c_i {dx_i}/{dt} = c_i A_{ij} x_j = &lambda; c_i x_i$ <br><br>
+		
+		Since $c_i$ is a vector of constants, we can insert it inside the differential on the left hand side of the equation.<br><br>
+		
+		(5) ${d(c_i x_i)}/{dt} = &lambda; c_i x_i$ <br><br>
+		
+		Applying equation (2) we get the decoupled modal ODE:<br><br>
+		
+		(6) ${dq}/{dt} = &lambda; q$<br><br>
+		
+		The solution of the modal equation is:<br><br>
+		
+		$q = C e^{&lambda; t}$<br><br>
+		
+		<h3>Extending Modal Analysis to Nonlinear Systems</h3>
+		
+		Unfortunately the approach to decoupling ODEs using eigenvectors does not work for nonlinear systems. The problem occurs in
+		step (5) because the eigenvectors of nonlinear system are not constant and cannot be brought inside the derivative, so the
+		result is not a decoupled ODE.<br><br>
+		
+		So, is the a way to extend modal analysis to nonlinear systems? There is, and addressing that question is the purpose of this 
+		website. The method discussed on this site applies to linear and nonlinear systems and reduces directly to classical modal
+		analysis for linear systems. I refer to this approach as generalized modal analysis or GMA.<br><br>
+		
+		To generalize modal analysis, we are still interested in a choice of coordinate that decouples the system of ODEs. The following
+		are some of the differences from the classical approach.<br><br>
+		
+		<ol>
+		<li>The general rule for change of coordinates in ODEs is the chain rule. Modal analysis will be expressed in terms of the chain rule</li>
+		<li>In classical modal analysis, modal equations have the decoupled form ${dq}/{dt} = &lambda; q$. In generalized modal analysis, the
+		general form ${dq}/{dt} = h(q)$ will be used, where $h(q)$ is any function of $q$.</li>
+		</ol>
+		
+		<h4>The Chain Rule</h4>
+		
+		In order to apply the chain rule to a system of ODEs, it is useful to write the system in first order form, where the term on the
+		left hand side of the equation is a lone single derivative, and the term on the right contains only state variables:<br><br>
+		
+		${dx_1}/{dt} = f_1(x_1, x_2, ..., x_n)$<br>
+		${dx_2}/{dt} = f_2(x_1, x_2, ..., x_n)$<br>
+		...<br>
+		${dx_n}/{dt} = f_n(x_1, x_2, ..., x_n)$<br><br>
+		
+		A closely related form that is useful for expressing the chain rule is vector field form, where $&part;/{&part; x_i}$ is used to
+		represent a coordinate vector for coordinate $x_i$. The system of ODEs represented in vector field form is:<br><br>
+		
+		$V &nbsp;=&nbsp; {dx_1}/{dt} &part;/{&part; x_1} + {dx_2}/{dt} &part;/{&part; x_2} + ... + {dx_n}/{dt} &part;/{&part; x_n} &nbsp;=&nbsp; f_1 &part;/{&part; x_1} + f_2 &part;/{&part; x_2} + ... + f_n &part;/{&part; x_n}$<br><br> 
+		
+		If we define a new coordinate function $q(x_1, x_2, ..., x_n)$, we can apply the chain rule to this coordinate:<br><br>
+		
+		${dq}/{dt} = V(q) = {dx_1}/{dt} {&part; q}/{&part; x_1} + {dx_2}/{dt} {&part; q}/{&part; x_2} + ... + {dx_n}/{dt} {&part; q}/{&part; x_n} &nbsp;=&nbsp; f_1 {&part; q}/{&part; x_1} + f_2 {&part; q}/{&part; x_2} + ... + f_n {&part; q}/{&part; x_n}$<br><br>
+		
+		For modal analysis we combine this with the decoupling condition ${dq}/{dt} = h(q)$.<br><br>
+		
+		${dq}/{dt} = V(q) = f_1 {&part; q}/{&part; x_1} + f_2 {&part; q}/{&part; x_2} + ... + f_n {&part; q}/{&part; x_n} = h(q)$<br>
+		$f_1 {&part; q}/{&part; x_1} + f_2 {&part; q}/{&part; x_2} + ... + f_n {&part; q}/{&part; x_n} = h(q)$<br><br>
 		
 		<br><br></td><td class="c3"></td></tr>
 		</table>
