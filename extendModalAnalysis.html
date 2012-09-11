@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="javascripts/flot/jquery.js"></script>
+		<script src="javascripts/jqmath/jqmath-etc-0.2.0.min.js"></script>
+		<link rel="stylesheet" href="javascripts/jqmath/jqmath-0.2.0.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+		<title>GMA-1D</title>
+	</head>
+
+	<body>
+		<table border="0" style="width:100%">
+		<tr><td class="c1"></td><td class="c2a"><a href="https://github.com/llarsen71/GMA1D"> Git Repository </a></td><td class="c3">&nbsp;</td></tr>
+		<tr><td class="c1">&nbsp;</td><th>Extending Modal Analysis to Nonlinear Systems</th><td class="c3"></td></tr>
+		<tr><td class="c1"></td><td class="c2">
+		<h3></h3>
+		
+		As noted on <a href="index.html">this page</a> modal analysis is a choice of coordinates that de
+		While the standard approach to modal analysis (using the eigenvectors as a t nonlinear systems. The problem occurs in
+		step (5) because the eigenvectors of nonlinear system are not constant and cannot be brought inside the derivative, so the
+		result is not a decoupled ODE.<br><br>
+		
+		So, is the a way to extend modal analysis to nonlinear systems? There is, and addressing that question is the purpose of this 
+		website. The method discussed on this site applies to linear and nonlinear systems and reduces directly to classical modal
+		analysis for linear systems. I refer to this approach as generalized modal analysis or GMA.<br><br>
+		
+		To generalize modal analysis, we are still interested in a choice of coordinate that decouples the system of ODEs. The following
+		are some of the differences from the classical approach.<br><br>
+		
+		<ol>
+		<li>The general rule for change of coordinates in ODEs is the chain rule. Modal analysis will be expressed in terms of the chain rule</li>
+		<li>In classical modal analysis, modal equations have the decoupled form ${dq}/{dt} = &lambda; q$. In generalized modal analysis, the
+		general form ${dq}/{dt} = h(q)$ will be used, where $h(q)$ is any function of $q$.</li>
+		</ol>
+		
+		<h4>The Chain Rule</h4>
+		
+		In order to apply the chain rule to a system of ODEs, it is useful to write the system in first order form, where the term on the
+		left hand side of the equation is a lone single derivative, and the term on the right contains only state variables:<br><br>
+		
+		${dx_1}/{dt} = f_1(x_1, x_2, ..., x_n)$<br>
+		${dx_2}/{dt} = f_2(x_1, x_2, ..., x_n)$<br>
+		...<br>
+		${dx_n}/{dt} = f_n(x_1, x_2, ..., x_n)$<br><br>
+		
+		A closely related form that is useful for expressing the chain rule is vector field form, where $&part;/{&part; x_i}$ is used to
+		represent a coordinate vector for coordinate $x_i$. The system of ODEs represented in vector field form is:<br><br>
+		
+		$V &nbsp;=&nbsp; {dx_1}/{dt} &part;/{&part; x_1} + {dx_2}/{dt} &part;/{&part; x_2} + ... + {dx_n}/{dt} &part;/{&part; x_n} &nbsp;=&nbsp; f_1 &part;/{&part; x_1} + f_2 &part;/{&part; x_2} + ... + f_n &part;/{&part; x_n}$<br><br> 
+		
+		If we define a new coordinate function $q(x_1, x_2, ..., x_n)$, we can apply the chain rule to this coordinate:<br><br>
+		
+		${dq}/{dt} = V(q) = {dx_1}/{dt} {&part; q}/{&part; x_1} + {dx_2}/{dt} {&part; q}/{&part; x_2} + ... + {dx_n}/{dt} {&part; q}/{&part; x_n} &nbsp;=&nbsp; f_1 {&part; q}/{&part; x_1} + f_2 {&part; q}/{&part; x_2} + ... + f_n {&part; q}/{&part; x_n}$<br><br>
+		
+		For modal analysis we combine this with the decoupling condition ${dq}/{dt} = h(q)$.<br><br>
+		
+		${dq}/{dt} = V(q) = f_1 {&part; q}/{&part; x_1} + f_2 {&part; q}/{&part; x_2} + ... + f_n {&part; q}/{&part; x_n} = h(q)$<br>
+		$f_1 {&part; q}/{&part; x_1} + f_2 {&part; q}/{&part; x_2} + ... + f_n {&part; q}/{&part; x_n} = h(q)$
+		</td><td class="c3"></td></tr>
+		</table>
+	</body>
+</html>
