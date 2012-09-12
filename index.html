@@ -4,64 +4,136 @@
 		<script src="javascripts/flot/jquery.js"></script>
 		<script src="javascripts/jqmath/jqmath-etc-0.2.0.min.js"></script>
 		<link rel="stylesheet" href="javascripts/jqmath/jqmath-0.2.0.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/style.css">
 		<title>GMA-1D</title>
 	</head>
 
 	<body>
-			<table border="0" style="width:100%">
-		<tr><td class="c1"></td><td class="c2a"><a href="https://github.com/llarsen71/GMA1D"> Git Repository </a></td><td class="c3">&nbsp;</td></tr>
-		<tr><td class="c1">&nbsp;</td><th>Generalizing Modal Analysis - Introduction<br><font size="-1">Lance Larsen</font></th><td class="c3"></td></tr>
-		<tr><td class="c1"></td><td class="c2">
-		Modal analysis is a powerful tool for analysis of linear ordinary differential equations (ODEs). Modal analysis involves
-		finding a set of modal coordinate which decouples a system of ODEs. A useful definition for a modal coordinate is the following:<br><br>
+		<div id="main">
+
+		<div id="menu">
+		<a href="https://github.com/llarsen71/GMA1D"> Git Repository </a>
+		</div><!--menu-->
+
+		<div id="title">
+		<h1>Generalizing Modal Analysis<h1>
+		<font size="-1">Lance Larsen</font>
+		</div><!--title-->
+
+		<h2> Linear Modal Analysis</h2>
+
+		<p>Modal analysis is a powerful tool for analysis of linear ordinary differential equations (ODEs). Modal analysis involves
+		finding a set of modal coordinates which decouple a system of ODEs.<p>
 		
-		<font size="+1"><b>Modal Coordinate definition:</b></font><br>
-		<b>A modal coordinate is a linear function that when used as a coordinate results in a decoupled ODE which can be solved 
-		independent of any other coordinates.</b><br><br>
+		<div class="box-right" style="margin-top: 0em;">
+		<h1>Definition</h1>
+		<b>Modal Coordinate</b> - A linear function that when used as a coordinate for a system of ODEs results in a 
+		decoupled ODE. The decoupled modal ODE can be solved independent of any other coordinates.
+		</div><!--box-right-->
 		
+		<p>
 		In essence, modal analysis converts a system that is complex to understand, because changes in one variable affect the response
-		of other variables, to a system that is simple to understand, because the modal ODEs do not interact with one another and 
-		the modal equations are easy to solve. The modal ODE solutions can be added to get a total system response. The power of modal
-		analysis comes from the fact that you can understand the total behavior of the system in terms individual behavior of the modes.<br><br>
+		of other variables, to a system that is simple to understand, because the modal ODEs are decoupled and can be solved independently.
+		The modal ODE solutions can be added to get a total system response. The power of modal analysis comes from the fact that you can
+		understand the total behavior of the system in terms individual behavior of the modes.<p>
 		
-		<h4>Calculating Modal Coordinates</h4>
-		Suppose we have a linear system of ODEs expressed in matrix first order form: <br><br>
+		<h2>Calculating Modal Coordinates</h2>
 		
-		(1) ${dx_i}/{dt} = A_{ij} x_j$<br><br>
+		<p>Before generalizing modal analysis to nonlinear systems, lets talk about how to calculate the modal coordinates which
+		decouple a system of ODEs. We will start with a linear system of ODEs expressed in matrix first order form: </p>
 		
-		In order for modal analysis to work, the value of the coefficients in $A_{ij}$ must not change with time. In other works, the
-		coeffients can be constant values, or constant parameters such as a mass or stiffness quantity. A modal coordinate is a linear
-		function, which means it can be expressed as:<br><br>
+		<p>(1)  ${dx_i}/{dt} = A_{ij} x_j$</p>
 		
-		(2) $q = c_i x_i$ <br><br>
+		<p>Note that in order for modal analysis to work, the value of the coefficients in $A_{ij}$ must not change with time. 
+		In other works, the coeffients can be constant values, or constant parameters such as a mass or stiffness quantity. 
+		We will explain why this is in the discussion below. A modal coordinate $q$ is a linear function, and a linear
+		function can be written in the form:</p>
 		
-		where $c_i$ is a vector with values that do not change with time. Lets choose the coefficients $c_i$ such that $c_i$ 
-		is an eigenvector, which satisfies the equation:<br><br>
+		<p>(2) $q = c_i x_i$ </p>
+
+		<p>where $c_i$ is a vector with values that do not change with time.</p>
+
+		<h4>Example System</h4>
 		
-		(3) $c_i A_{ij} = &lambda; c_j$<br><br>
+		<p>As an example consider the following system:</p>
 		
-		This is sometimes called a left eigenvector because it is an eigenvector calculated by multiplying the matrix by a row vector on 
-		the left. Now we left multiply the system of ODEs in (1) by the eigenvector $c_i$ and apply equation (3):<br><br>
+		<p>$(\table {dx_1}/{dt}; {dx_2}/{dt}) = (\table -2, 1; 1, -2) (\table x_1; x_2)$</p>
 		
-		(4) $c_i {dx_i}/{dt} = c_i A_{ij} x_j = &lambda; c_i x_i$ <br><br>
+		<p>To calculate a modal coordinate of a system of ODEs, we do the following:
+		 
+		<h3>Step 1 - Calculate an Eigenvector</h3>
 		
-		Since $c_i$ is a vector of constants, we can insert it inside the differential on the left hand side of the equation.<br><br>
+		<p>The first step for determining a modal coordinate is to calculate a left eigenvector $c_i$. A left eigenvector 
+		a vector that solves the equation:</p>
 		
-		(5) ${d(c_i x_i)}/{dt} = &lambda; c_i x_i$ <br><br>
+		<p>(3) $c_i A_{ij} = &lambda; c_j$</p>
 		
-		Applying equation (2) we get the decoupled modal ODE:<br><br>
+		<p>This is called a left eigenvector because it is an eigenvector calculated by multiplying the matrix $A_{ij}$ by a
+		row vector $c_i$ on the left side.</p>
+
+		<h4>Step 1 Example</h4>
+
+		<p>For the example system above the left eigenvector equation is:</p>
+
+		<p>$(\table c_1, c_2) (\table -2, 1; 1, -2) = &lambda; (\table c_1, c_2)$</p>
+
+		<p>The associated algebraic equations are:</p>
+
+		<p><table style="margin-left: 1em"><tr><td align="right">$-2 c_1 + c_2 =$</td><td> $&lambda; c_1$</td></tr>
+		   <tr><td align="right">$c_1 - 2 c_2 =$</td><td>$&lambda; c_2$</td></tr></table></p>
+
+		<p>The system has two solutions which can be found with a little algebra:</p>
 		
-		(6) ${dq}/{dt} = &lambda; q$<br><br>
+		<p><ol>
+		<li>$&lambda; = -1$ and $(\table c_1, c_2) = (\table 1, 1) s$</li>
+		<li>$&lambda; = -3$ and $(\table c_1, c_2) = (\table 1, -1) s$</li>
+		</ol></p>
+
+		<h3>Step 2 - Left Multiply the System of ODEs by the Eigenvector</h3>
+
+		<p>Left multiplying the system of ODEs from equation (1) by the eigenvector $c_i$ and applying the eigenvector
+		equation from (3) gives:</p>
 		
-		The solution of the modal equation is:<br><br>
+		<p>(4) $c_i {dx_i}/{dt} = c_i A_{ij} x_j = &lambda; c_i x_i$ </p>
+
+		<h4>Step 2 Example</h4>
+
+		<h3>Step 3 - Bring the Left Hand Side Eigenvector inside the Derivative</h3>
+
+		<p>Since the coefficient in $c_i$ are contant relative to $t$, we can insert $c_i$ into the differential on the 
+		left hand side of the equation. This is important because it results in the produce $c_i x_i$ inside the differential,
+		which equals $q$ [see equation (2)].</p>
+
+		<p>(5) ${d(c_i x_i)}/{dt} = &lambda; c_i x_i$ </p>
+
+		<h4>Step 3 Example</h4>
+
+		<h3>Step 4 - Substitute in the Modal Coordinate</h3>
 		
-		$q = C e^{&lambda; t}$<br><br>
+		<p>Both the left and right hand side of equation (5) now contain the product $c_i x_i$. From equation (2) this can
+		be replaced by $q$ to get the decoupled modal ODE:</p>
 		
-		Although it is not obvious, the the chain rule is hidden in the step above. 
+		<p>(6) ${dq}/{dt} = &lambda; q$</p>
 		
-		Next Topic - <a href="extendModalAnalysis.html">Extending Modal Analysis to Nonlinear Systems</a>
-		</td><td class="c3"></td></tr>
-		</table>
+		<p>The solution of the modal equation is $q = C e^{&lambda; t}$ where $C$ is an arbitrary constant determined by
+		initial conditions.</p>
+		
+		<h2>Nonlinear Systems</h2>
+		
+		<p>The steps outlined above do not result in a decoupled ODE for nonlinear systems. The problem is that $A_{ij}$ 
+		will have dependence on $x_1, x_2, ..., x_n$, which means the eigenvectors will also depend on these variables. This
+		means that the eigenvectors have a dependence on $t$, and the process fails at step (3) - since $c_i$ has dependence
+		on $t$, the eigenvector can't be brought inside the derivative term. This means that we can't replace $c_i$ and $x_i$
+		of the left hand side of the equation with $q$. The decoupling process has failed.</p>
+		
+		<p>So how do we fix this issue for nonlinear systems? Well, it turns out that for linear systems, the steps above
+		are the same as applying the chain rule along with a decoupling condition, although this is not obvious. For 
+		nonlinear systems, the eigenvector process above is not the same as the chain rule. In order to generalize modal
+		analysis to nonlinear systems, the modal analysis change of coordinates needs to be expressed in terms of the chain
+		rule.</p>
+		
+		<p>Next Topic - <a href="extendModalAnalysis.html">Extending Modal Analysis to Nonlinear Systems</a>
+		</p>
+		</div><!--main-->
 	</body>
 </html>
