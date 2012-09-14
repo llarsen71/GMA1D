@@ -100,14 +100,17 @@
 		coordinate examples chosen below are NOT modal coordinates.</p>
 
 		<hr>
-		<div class="box-left" style="width:auto"><b>Example 1</b></div><div>$q=x_1^2 + x_2^3$<br>
-		$V(q) = (-2 x_1 + x_2) {&part; (x_1^2 + x_2^3)}/{&part; x_1} + (x_1 - 2 x_2) {&part;(x_1^2 + x_2^3)}/{&part; x_2} = (-2 x_1 + x_2) 2 x_1^2 + (x_1 - 2 x_2) 3 x_2^2$
-		</div>
+		<table>
+		<tr><td><div class="box"><b>Example&nbsp;1</b></div></td><td>$q_1=x_1^2 + x_2^3$<br>
+		${dq_1}/{dt} = V(q_1) = (-2 x_1 + x_2) {&part; (x_1^2 + x_2^3)}/{&part; x_1} + (x_1 - 2 x_2) {&part;(x_1^2 + x_2^3)}/{&part; x_2}$<br>
+		${dq_1}/{dt} = (-2 x_1 + x_2) 2 x_1 + (x_1 - 2 x_2) 3 x_2^2$</td></tr>
+		</table>
+		
 		<hr>
-		<div class="box-left" style="width:auto"><b>Example 2</b></div><div>$q=x_1 x_2$<br>
-		$V(q) = (-2 x_1 + x_2) {&part; (x_1 x_2)}/{&part; x_1} + (x_1 - 2 x_2) {&part;(x_1 x_2)}/{&part; x_2} = (-2 x_1 + x_2) x_2 + (x_1 - 2 x_2) x_1$
-		</div>
-		</p>
+		<table>
+		<tr><td><div class="box"><b>Example&nbsp;2</b></div></td><td>$q_2=x_1 x_2$<br>
+		${dq_2}/{dt} = V(q_2) = (-2 x_1 + x_2) {&part; (x_1 x_2)}/{&part; x_1} + (x_1 - 2 x_2) {&part;(x_1 x_2)}/{&part; x_2} = (-2 x_1 + x_2) x_2 + (x_1 - 2 x_2) x_1$</td></tr>
+		</table>
 		<hr>
 
 		<h3>Generalized Modal Analysis</h3>
@@ -121,7 +124,31 @@
 		</p>
 
 		<h4>Verify the Linear Modes</h4>
-		<p>On the <a href="index.html#modes">Linear Modal Analysis</a> page, the linear modes of the example system were calculated</p> 
+
+		<p>On the <a href="index.html#modes">Linear Modal Analysis</a> page, the linear modes of the example system were calculated.
+		Applying the chain rule gives:</p>
+
+		<hr>
+		<table>
+		<tr><td><div class="box"><b>Mode&nbsp;1</b></div> <div class="pad"></td><td>$q_1 = s x_1 + s x_2$<br>
+		${dq_1}/{dt} = V(q_1) = (-2 x_1 + x_2) {&part; (s x_1 + s x_2)}/{&part; x_1} + (x_1 - 2 x_2) {&part;(s x_1 + s x_2)}/{&part; x_2}$<br>
+		${dq_1}/{dt} = (-2 x_1 + x_2) s + (x_1 - 2 x_2) s = - s x_1 - s x_2$<br>
+		${dq_1}/{dt} = -q_1$<br><br>
+
+		This matches the <a href="index.html#eqn">modal equation</a> for mode 1 calculated using the standard method.</td></tr>
+		</table>
+		<hr>
+		<table>
+		<tr><td><div class="box"><b>Mode&nbsp;2</b></div> <div class="pad"></td><td>$q_2 = s x_1 - s x_2$<br>
+		${dq_2}/{dt} = V(q_2) = (-2 x_1 + x_2) {&part; (s x_1 - s x_2)}/{&part; x_1} + (x_1 - 2 x_2) {&part;(s x_1 - s x_2)}/{&part; x_2}$<br>
+		${dq_2}/{dt} = (-2 x_1 + x_2) s - (x_1 - 2 x_2) s = - 3 (s x_1 - s x_2)$<br>
+		${dq_2}/{dt} = - 3 q_2$<br><br>
+
+		This matches the <a href="index.html#eqn">modal equation</a> for mode 2 calculated using the standard method.</td></tr>
+		</table>
+		<hr>
+
+		<p>
 		</div><!--main-->
 	</body>
 </html>

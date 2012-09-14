@@ -59,6 +59,11 @@ body
   margin-bottom: 0.1em;
 }
 
+#main tr
+{
+  vertical-align: middle
+}
+
 #menu {
   width:auto;
   height:auto;
@@ -164,7 +169,16 @@ body
 
 .box
 {
-  -webkit-border-radius: 10px;
-  -moz-border-radius: 10px;
-  border-radius: 10px;
+  width: auto;
+  height: auto;
+  float: left;
+  padding: 7px;
+  color: #ffffff;
+  background-color:#416271;
+  font-family:Arial, Helvetica, sans-serif;
+  margin-left: 1.0em;
+  margin-right: 1.0em;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
 }

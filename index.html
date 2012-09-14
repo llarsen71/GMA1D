@@ -94,9 +94,13 @@
 		<p>The above algebraic equations have two (modal coordinate) solutions which can be found with a little algebra:</p>
 		
 		<hr>
-		<div class="box-left" style="width:auto"><b>Mode 1</b></div> <div class="pad">$&lambda; = -1$ and $(\table c_1, c_2) = (\table s, s)$ where $s$ is a real number. From this we get $q_1 = s x_1 + s x_2$</div>
+		<table>
+		<tr><td><div class="box"><b>Mode&nbsp;1</b></div> <div class="pad"></td><td>$&lambda; = -1$ and $(\table c_1, c_2) = (\table s, s)$ where $s$ is a real number. From this we get $q_1 = s x_1 + s x_2$</td></tr>
+		</table>
 		<hr>
-		<div class="box-left" style="width:auto"><b>Mode 2</b></div> <div class="pad">$&lambda; = -3$ and $(\table c_1, c_2) = (\table s, -s)$  where $s$ is a real number. From this we get we get $q_1 = s x_1 - s x_2$</div>
+		<table>
+		<tr><td><div class="box"><b>Mode&nbsp;2</b></div> <div class="pad"></td><td>$&lambda; = -3$ and $(\table c_1, c_2) = (\table s, -s)$  where $s$ is a real number. From this we get we get $q_2 = s x_1 - s x_2$</td></tr>
+		</table>
 		<hr>
 		</p>
 		<p>For modal analysis, the arbitrary constant $s$ is typically set of some specific value.</p>
@@ -110,8 +114,15 @@
 
 		<h4>Step 2 Example</h4>
 
-		<div class="box-left" style="width:auto;margin-top:1.5em;"><b>Mode 1</b></div> $(\table s, s) (\table {dx_1}/{dt}; {dx_2}/{dt}) = -1 (\table s, s) (\table x_1; x_2)$<br>
-		<div class="box-left" style="width:auto;margin-top:1.5em;"><b>Mode 2</b></div> $(\table s, -s) (\table {dx_1}/{dt}; {dx_2}/{dt}) = -3 (\table s, -s) (\table x_1; x_2)$<br>
+		<hr>
+		<table>
+		<tr><td><div class="box"><b>Mode&nbsp;1</b></div> </td><td>$(\table s, s) (\table {dx_1}/{dt}; {dx_2}/{dt}) = -1 (\table s, s) (\table x_1; x_2)$</td></tr>
+		</table>
+		<hr>
+		<table>
+		<tr><td><div class="box"><b>Mode&nbsp;2</b></div> </td><td>$(\table s, -s) (\table {dx_1}/{dt}; {dx_2}/{dt}) = -3 (\table s, -s) (\table x_1; x_2)$</td></tr>
+		</table>
+		<hr>
 
 		<h3>Step 3 - Bring the Left Hand Side Eigenvector inside the Derivative</h3>
 
@@ -123,10 +134,15 @@
 
 		<h4>Step 3 Example</h4>
 
-		<p>
-		Mode 1:&nbsp;&nbsp;&nbsp; ${d}/{dt} ((\table s, s) (\table x_1; x_2)) = -1 (\table s, s) (\table x_1; x_2)$ &nbsp;&nbsp; &rArr; &nbsp;&nbsp;  ${d}/{dt} (s x_1 + s x_2) = -1 (s x_1 + s x_2)$ <br>
-		Mode 2:&nbsp;&nbsp;&nbsp; ${d}/{dt} ((\table s, -s) (\table x_1; x_2)) = -3 (\table s, -s) (\table x_1; x_2)$ &nbsp;&nbsp; &rArr; &nbsp;&nbsp;  ${d}/{dt} (s x_1 - s x_2) = -3 (s x_1 - s x_2)$
-		</p>
+		<hr>
+		<table>
+		<tr><td><div class="box"><b>Mode&nbsp;1</b></div></td><td> ${d}/{dt} ((\table s, s) (\table x_1; x_2)) = -1 (\table s, s) (\table x_1; x_2)$ &nbsp;&nbsp; &rArr; &nbsp;&nbsp;  ${d}/{dt} (s x_1 + s x_2) = -1 (s x_1 + s x_2)$</td></tr>
+		</table>
+		<hr>
+		<table>
+		<tr><td><div class="box"><b>Mode&nbsp;2</b></div></td><td> ${d}/{dt} ((\table s, -s) (\table x_1; x_2)) = -3 (\table s, -s) (\table x_1; x_2)$ &nbsp;&nbsp; &rArr; &nbsp;&nbsp;  ${d}/{dt} (s x_1 - s x_2) = -3 (s x_1 - s x_2)$</td></tr>
+		</table>
+		<hr>
 
 		<h3>Step 4 - Substitute in the Modal Coordinate</h3>
 		
@@ -135,22 +151,33 @@
 		
 		<p>(7)&nbsp;&nbsp;&nbsp; ${dq}/{dt} = &lambda; q$</p>
 		
-		<h4>Step 4 Example</h4>
+		<h4><a name="eqn">Step 4 Example - Modal Equations</a></h4>
 
-		<p>
-		Mode 1:&nbsp;&nbsp;&nbsp; ${dq_1}/{dt} = -q_1$ <br>
-		Mode 2:&nbsp;&nbsp;&nbsp; ${dq_2}/{dt} = -3 q$
-		</p>
+		<hr>
+		<table>
+		<tr><td><div class="box"><b>Mode&nbsp;1</b></div></td><td>${dq_1}/{dt} = -q_1$</td></tr>
+		</table>
+		<hr>
+		<table>
+		<tr><td><div class="box"><b>Mode&nbsp;2</b></div></td><td> ${dq_2}/{dt} = -3 q$</td></tr>
+		</table>
+		<hr>
 
 		<p>The solution of the modal equation is $q = C e^{&lambda; t}$ where $C$ is an arbitrary constant determined by
 		initial conditions.</p>
 		
-		<h4>Example Solution</h4>
-		<p>
-		Mode 1:&nbsp;&nbsp;&nbsp; ${dq_1}/{dt} = C_1 e^{-t}$<br>
-		Mode 2:&nbsp;&nbsp;&nbsp; ${dq_2}/{dt} = C_2 e^{-3t}$
-		</p>
-		
+		<h4>Solution for the Example Problem</h4>
+
+		<hr>
+		<table>
+		<tr><td><div class="box"><b>Mode&nbsp;1</b></div></td><td> $q_1 = C_1 e^{-t}$</td></tr>
+		</table>
+		<hr>
+		<table>
+		<tr><td><div class="box"><b>Mode&nbsp;2</b></div></td><td> $q_2 = C_2 e^{-3t}$</td></tr>
+		</table>
+		<hr>
+
 		<h2>Nonlinear Systems</h2>
 		
 		<p>The steps outlined above do not result in a decoupled ODE for nonlinear systems. The problem is that $A_{ij}$ 
