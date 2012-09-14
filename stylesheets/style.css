@@ -156,3 +156,15 @@ body
   margin-top: 0.0em;
   margin-bottom: 0.7em;
 }
+
+.pad
+{
+  padding: 20px;
+}
+
+.box
+{
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
