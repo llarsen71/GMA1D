@@ -108,3 +108,41 @@ ColorSwitcher.prototype.next = function() {
 	this.idx = (this.idx+1)%this.colors.length;
 	return this.colors[this.idx];
 }
+
+//----------------------------------------------------------------------------
+/*
+ CLASS: ContourMorph
+  This class animates a single contour
+ 
+ CONSTRUCTOR: ContourMorph
+  Creates a new ContourMorph object.
+
+ PARAMETERS:
+  gmaobj   - A GMA object to get the contour from
+	plotinfo - 'flot' plot params to add to the plot
+*/
+//----------------------------------------------------------------------------
+function ContourMorph(gmaobj, plotinfo) {
+	this.gmaobj = gmaobj;
+	for (key in plotinfo) {
+		this[key] = plotinfo[key];
+	}
+	this.data = {};
+	this.type = "Animated";
+}
+
+/*
+FUNCTION: setParam
+ Sets the contour plot based on the value of the parameter.
+ 
+PARAMETERS:
+ param - The value of the parameter (t).
+*/
+ContourMorph.prototype.setParam = function(param) {
+	var idx = this.gmaobj.getStep4t(param);
+	if (idx < 0) {
+		this.data = {};
+	} else {
+		this.data = this.gmaobj.getContour(idx,true).pts;
+	}
+}

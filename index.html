@@ -182,15 +182,16 @@
 
 		<h2>Nonlinear Systems</h2>
 		
-		<p>The steps outlined above do not result in a decoupled ODE for nonlinear systems. The problem is that $A_{ij}$ 
-		will have dependence on $x_1, x_2, ..., x_n$, which means the eigenvectors will also depend on these variables. Since
-		$x_1, x_2, ..., x_n$ change with $t$, the eigenvectors have a dependence on $t$, and the process fails at step 3 
-		because a time dependent value can't be brought inside the derivative term. Since we don't have the product $c_i x_i$ 
-		on the left hand side of the equation, we can't replace it with $q$, and the process for getting a decoupled ODE fails.</p>
+		<p>The steps outlined above do not result in a decoupled ODE for nonlinear systems. The problem is that some of the
+		coefficients in the matrix $A_{ij}$ will be functions of $x_1, x_2, ..., x_n$. This means the eigenvectors will also
+		depend on these variables. Since $x_1, x_2, ..., x_n$ change with $t$, the eigenvectors $c_i$ have a dependence on $t$, 
+		and the process fails at step 3 because a terms that changes with $t$ can't be brought inside the derivative term. 
+		Since we can bring $c_i$ inside the derivative, we don't have the product $c_i x_i$ on the left hand side of the 
+		equation, so we can't replace the $c_i$ and $x_i$ with $q$, and the process for decoupling the ODE fails.</p>
 		
-		<p>So how do we fix this issue for nonlinear systems? Well, it turns out that for linear systems, the step above are
-		step to apply the <b>chain rule</b> along with a decoupling condition, although this isn't obvious. The chain rule is
-		the correct method for applying a change of coordinates to any system of ODEs - linear or nonlinear. The problem is that
+		<p>So how do we fix this issue for nonlinear systems? Well, it turns out that for linear systems, the step shown above
+		are a combination of the <b>chain rule</b> along with a decoupling condition, although this isn't obvious. The chain rule is
+		the general rule for applying a change of coordinates to any system of ODEs - linear or nonlinear. The problem is that
 		the steps above are not consistent with the chain rule when we are dealing with a nonlinear system. In order to generalize
 		modal analysis to nonlinear systems, the change of coordinates and the decoupling condition should be expressed in a form 
 		that is consistent with the chain rule.</p>

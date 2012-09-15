@@ -115,7 +115,10 @@ function DuffingPlot(canvas, showMode, showSolns, animate) {
 	var duff_plots = canvases[canvas];
 
 	var contours = 12;
-	if (showMode) this.getContours(duff_plots,{nCurves:contours});
+	if (showMode) {
+		this.getContours(duff_plots,{nCurves:contours});
+		duff_plots.addAnimated(new ContourMorph(this,{color:"#000000"}));
+	}
 	if (showSolns) {
 		colorSets.setColorSet((showMode) ? 'gray':'colors');
 		this.getSolutions(duff_plots,{nCurves:4});
@@ -237,7 +240,10 @@ function VanDerPolPlot(canvas, showModeIn, showModeOut, showSolnIn, showSolnOut,
 
 	// Rings inside the limit cycle
 	var contours = 10;
-	if (showModeIn) this.inner.getContours(vdp_plots, {nCurves:contours});
+	if (showModeIn) {
+		this.inner.getContours(vdp_plots, {nCurves:contours});
+		vdp_plots.addAnimated(new ContourMorph(this.inner,{color:"#000000"}));
+	}
 	if (showSolnIn) {
 		colorSets.setColorSet((showModeIn) ? 'gray' : 'colors');
 		this.inner.getSolutions(vdp_plots, {nCurves:2});
@@ -245,7 +251,10 @@ function VanDerPolPlot(canvas, showModeIn, showModeOut, showSolnIn, showSolnOut,
 
 	// Rings outside the limit cycle
 	var offset = 35;
-	if (showModeOut) this.outer.getContours(vdp_plots,{nCurves:contours,offset:offset});
+	if (showModeOut) {
+		this.outer.getContours(vdp_plots,{nCurves:contours,offset:offset});
+		vdp_plots.addAnimated(new ContourMorph(this.outer,{color:"#000000"}));
+	}
 	if (showSolnOut) {
 		colorSets.setColorSet((showModeOut) ? 'gray' : 'colors');
 		this.outer.getSolutions(vdp_plots,{nCurves:8});

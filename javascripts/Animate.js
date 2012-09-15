@@ -30,7 +30,10 @@ function Animator(canvas) {
 //-----------------------------------------------------------------------------
 /*
  FUNCTION: addAnimated
-  Add an <Animated> object to the list of animations.
+  Add an <Animated> object to the list of animations. The <Animated> object
+  doesn't need to be derived from the Animated class, but need to have a 
+  function 'setParam(param)' and needs to be a 'flot' plotable object (i.e.
+  it should contain a 'data' parameter at least).
  
  PARAMETERS:
   anim - An <Animated> object to add to the list
