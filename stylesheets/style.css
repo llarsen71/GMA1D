@@ -182,3 +182,9 @@ body
   -moz-border-radius: 5px;
   border-radius: 5px;
 }
+
+.emphasis
+{
+  font-family:Arial, Helvetica, sans-serif;
+  font-size: +2;
+}
