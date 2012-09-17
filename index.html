@@ -20,25 +20,55 @@
 		<div style="padding: 0 0 20px 0; text-align: center;">Lance Larsen</div>
 		</div><!--title-->
 
-		<h2> Linear Modal Analysis</h2>
+		<h2>Understanding Physical Systems</h2>
 
-		<p>Modal analysis is a powerful tool for analysis of linear ordinary differential equations (ODEs). Modal analysis involves
-		finding a set of modal coordinates which decouple a system of ODEs.<p>
-		
+		<p>Many of the laws of physics, such as Newton's laws of motion, are expressed as differential equations. A physical system
+		can often be modelled as a system of coupled ordinary differtial equations (ODEs). A good mathematical model is an important
+		tool for a scientist or engineer because it help them explore and understand the behavior of a systems better. A good 
+		mathematical model can help you tell if a design change results in a system that works better. If you want to improve something,
+		it sure helps if you understand it first.</p>
+
+		<p>Developing a good model is an important first step, but in order to understand the model, you need to understand the solutions.
+		The solutions to the model depend on the starting state of the system (or initial conditions) and its interaction with its 
+		surroundings (bondary conditions). Two different solutions to the system may look very different, and gaining a good understanding
+		of how a system behaves under many different conditions can be a difficult challenge.</p>
+
+		<p>Techniques for exploring the behavior of a mathematical model can be divided into <b>quantitative techniques</b> and
+		<b>qualitative techniques</b>. The goal of a quantitative technique is to calculate an accurate solution. This can be helpful
+		for understanding the behavior of a system better, but doesn't address one important question - will the
+		behavior of the system change significantly if I change the boundary or initial conditions? The goal of a qualitative technique
+		is to understand the behavioral trends of a system under a range of conditions. Many qualitative techniques require a system to
+		be simplified in one way or another in order to identify behavioral trends, or in other words, accuracy is sacrificed in order
+		to gain a broader understanding of how the system behaves.</p>
+
+		<h2> Modal Analysis</h2>
+
+		<p>For linear systems, modal analysis is an elegant blend of quantitative and qualitative techniques. It accurately predicts 
+		linear system response, but also characterizes the general behavior of the linear system. Modal analysis is the process of
+		finding a new coordinate system where the ODEs of the system are decoupled from one another. The new coordinates are called 
+		modal coordinates.</p>
+
 		<div class="box-right" style="margin-top: 0em;">
 		<h1>Definition</h1>
 		<b>Modal Coordinate</b> - A linear function $q(x_1,x_2,...,x_n)$ that when used as a coordinate for a system of ODEs results in a 
 		decoupled ODE of the form ${dq}/{dt} = &lambda; q$.
 		</div><!--box-right-->
-		
-		<p>
-		In essence, modal analysis converts a system that is complex to understand, because changes in one variable affect the response
-		of other variables, to a system that is simple to understand, because the modal ODEs are decoupled and can be solved independently.
-		The modal ODE solutions can be added to get a total system response. The power of modal analysis comes from the fact that you can
-		understand the total behavior of the system in terms individual behavior of the modes.<p>
-		
+
+		<p>The quantitative accuracy comes from the fact that the new modal system is the same as the original system - the only difference
+		is the coordinate system that is used. The qualitative understanding comes from the fact that modal analysis converts a system 
+		where the ODEs are coupled are typically too complex to understand as a whole, to a system that is simple to understand, because 
+		the modal ODEs are decoupled and can be solved and explored independently. The modal ODE solutions can be added to get the total system
+		response. The power of modal analysis comes from the fact that you can understand the total behavior of the system in terms 
+		individual behavior of the modes.<p>
+
+		<p>For nonlinear systems, there is often a region around an equilibrium or steady state solution were a linear system provides a
+		good approximation and modal analysis gives good results. However, a linear approximation misses important trends, and cases where
+		the response grows to the point where nonlinear terms are important, and modal analysis gives poor results. So while modal analysis
+		will remain an important tool for the study of linear and nonlinear systems, there is a need to generalize the approach so that the
+		elegant blend of quantitative and qualitative merrits are preserved.</p>
+
 		<h2>Calculating the Modal Equation</h2>
-		
+
 		<p>Before generalizing modal analysis to nonlinear systems, lets talk about how to calculate the modal coordinates which
 		decouple a system of ODEs. We will start with a linear system of ODEs expressed in matrix first order form: </p>
 		
