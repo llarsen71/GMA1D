@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="javascripts/flot/jquery.js"></script>
+		<script src="javascripts/jqmath/jqmath-etc-0.2.0.min.js"></script>
+		<link rel="stylesheet" href="javascripts/jqmath/jqmath-0.2.0.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="stylesheets/style.css">
+		<title>First Order Form</title>
+	</head>
+
+	<body>
+		<div id="main">
+
+		<div id="menu">
+		<a href="https://github.com/llarsen71/GMA1D"> Git Repository </a>
+		</div><!--menu-->
+
+		<div id="title">
+		<h1>First Order Form</h1>
+		</div><!--title-->
+
+		<h2>Converting a System to First Order Form</h2>
+
+		<p>So what do we mean by first order form for a systems of ODEs? A system of ODEs can be written in a few different
+		ways that are equivalent. First order form is a way of representing the system of ODEs in which there are no
+		derivatives higher than a first derivative. An example of an ODE that is NOT is first order form is:</p>
+
+		<p>(1) ${d^4x_1}/{dt^4} + a{d^3x_1}/{dt^3} + b {d^2x_1}/{dt^2} + c {dx_1}/{dt} + d x_1 = 0$</p>
+
+		<p>Converting this to first order form is easy. First you identify the dependent variables. These are the variables
+		that appear in the numerator of the derivates terms. For each dependent variable, you find the highest order
+		derivative. In this case, the only dependent variables is $x_1$ and the highest order derivative is ${d^4x}/{dt^4}$.
+		We define a new variable name for each derivative that is less than the highest order derivative for each dependent
+		variable. However as we do this, we start with the first derivative and work our way up as shown below:</p>
+
+		<p>(2) ${dx_1}/{dt} = x_2$<br>
+		   (3) ${dx_2}/{dt} = x_3$<br>
+		   (4) ${dx_3}/{dt} = x_4$</p>
+ 
+		<p>Note that equation (3) and (4) are the same as ${d^2x}/{dt^2}$ and ${d^3x}/{dt^3}$ respectively, but are written as first
+		order derivatives. We now replace ${d^4x}/{dt^4}$ in (1) with the first order derivative ${dx_4}/{dt}$, and replace the
+		lower order derivatives in (1) with the variables $x_2$, $x_3$, and $x_4$. For first order form, it is common to
+		put the first order derivative term alone on the left hand side of the equation and move all other terms to the right hand
+		side of the equation. Equation (1), in first order form, is equations (2), (3), and (4) combined with equation (1) with the
+		substitutions mentioned above:</p>
+
+		<p>${dx_1}/{dt} = x_2$<br>
+		   ${dx_2}/{dt} = x_3$<br>
+		   ${dx_3}/{dt} = x_4$<br>
+		   ${dx_4}/{dt} = -a x_4 - b x_3 - c x_2 - d x_1$</p>
+
+		<h2>First Order Form for Matrix Equations</h2> 
+
+		<p>A matrix equation with higher order derivatives can also be converted to first order form fairly easily. As an example, 
+		lets consider a matrix equation like the following:</p>
+
+		<p>(5) ${d^3x_i}/{dt^3} + B_{ij} {d^2x_i}/{dt^2} + C_{ij} {dx_i}/{dt}  + D_{ij} x_i = 0$</p>
+
+		<p>where $x_i$ is the vector:</p>
+		
+		<p>$x_i = |\table x_1;x_2;...;x_n|$</p>
+
+		<p>In this case, the highest order derivative is third order. There are $n$ variables, and for each variable, we 
+		define a new variables for each of the first order derivative:</p>
+
+		<p>${dx_1}/{dt} = x_{n+1}$<br>
+		   ${dx_2}/{dt} = x_{n+2}$<br>
+		   ...<br>
+		   ${dx_n}/{dt} = x_{2n}$</p>
+
+		<p>We also define a new variable for each of the second order derivatives:</p>
+			 
+		<p>${dx_{n+1}}/{dt} = x_{2n+1} = {d^2x_1}/{dt^2}$<br>
+		   ${dx_{n+2}}/{dt} = x_{2n+2} = {d^2x_2}/{dt^2}$<br>
+		   ...<br>
+		   ${dx_{2n}}/{dt} = x_{3n}    = {d^2x_n}/{dt^2}$</p>
+
+		<p>Now we append these new variables to the vector $x$:</p>
+
+		<p>$x = |\table x_1;x_2;...;x_{3n}|$</p>
+
+		<p>If $0$ is an n&nbsp;x&nbsp;n matrix of 0s, and $I$ is an n&nbsp;x&nbsp;n identity matrix, then matrix equation (5) can then be written as:</p>
+
+		<p>${dx}/{dt} = (\table 0, I, 0; 0, 0, I; -D, -C, -B) x$</p>
+
+		<h2>Why use First Order Form?</h2>
+
+		</body>
+</html>
