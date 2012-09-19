@@ -27,38 +27,75 @@
 
 		<p>(1) ${d^4x_1}/{dt^4} + a{d^3x_1}/{dt^3} + b {d^2x_1}/{dt^2} + c {dx_1}/{dt} + d x_1 = 0$</p>
 
-		<p>Converting this to first order form is easy. First you identify the dependent variables. These are the variables
-		that appear in the numerator of the derivates terms. For each dependent variable, you find the highest order
-		derivative. In this case, the only dependent variables is $x_1$ and the highest order derivative is ${d^4x}/{dt^4}$.
-		We define a new variable name for each derivative that is less than the highest order derivative for each dependent
-		variable. However as we do this, we start with the first derivative and work our way up as shown below:</p>
+		<p>There is a simple process that you follow to convert a system to first order form.<p>
 
-		<p>(2) ${dx_1}/{dt} = x_2$<br>
-		   (3) ${dx_2}/{dt} = x_3$<br>
-		   (4) ${dx_3}/{dt} = x_4$</p>
+		<h3>Step 1 - Identify the Dependent Variables and the Highest Order Derivative for Each</h3>
+
+		<p>First you identify the dependent variables. These are the variables
+		that appear in the numerator of the derivate terms. In this case, the only dependent variables is $x_1$. For each 
+		dependent variable, you find the highest order derivative. The highest order derivative is ${d^4x}/{dt^4}.$</p>
+
+		<h3>Step 2 - Define a Variable Name for each Derivative less than the Highest Order Derivative</h3>
+
+		<p>You then define a new variable name for each derivative that is less than the highest order derivative for each 
+		dependent variable even if the lower order derivatives don't appear in the equation. First assign a variable name to
+		the first derivative - in this case ${dx_1}/{dt}$:</p>
+
+		<p>(2) ${dx_1}/{dt} = x_2$</p>
+
+		<p>The second derivative ${d^2x_1}/{dt^2}$ can now be expressed as a first order derivative ${dx_2}/{dt}$. Now define
+		new variable name for ${dx_2}/{dt}$.</p>
+
+		<p>(3) ${dx_2}/{dt} = x_3$</p>
+
+		<p>The third order derivate ${d^3x_1}/{dt^3}$ can now be written as the first order derivative ${dx_3}/{dt}$. We
+		continue the process of assigning new variable names to derivatives until we have assigned variable names to all 
+		derivative less than the highest derivative:</p>
+
+		<p>(4) ${dx_3}/{dt} = x_4$</p>
  
-		<p>Note that equation (3) and (4) are the same as ${d^2x}/{dt^2}$ and ${d^3x}/{dt^3}$ respectively, but are written as first
-		order derivatives. We now replace ${d^4x}/{dt^4}$ in (1) with the first order derivative ${dx_4}/{dt}$, and replace the
-		lower order derivatives in (1) with the variables $x_2$, $x_3$, and $x_4$. For first order form, it is common to
-		put the first order derivative term alone on the left hand side of the equation and move all other terms to the right hand
-		side of the equation. Equation (1), in first order form, is equations (2), (3), and (4) combined with equation (1) with the
-		substitutions mentioned above:</p>
+		<h3>Step 3 - Define the Highest Order Derivative as a 1<sup>st</sup> Order Derivative</h3>
+
+		<p>Using the variable associated with the next to last order derivative, the highest order derivative can be written
+		as a first order derivative. For the example system:<\p>
+		
+		<p>(5) ${d^4x_1}/{dt^4} = {dx_4}/{dt}$</p>
+		
+		<h3>Step 4 - Make Variable Substitutions from Steps 2 and 3</h3>
+ 
+		<p>In the original differential equation (1), the highest order derivative is now replaced with the 1<sup>st</sup> 
+		order derivative from (5), the lower order derivatives are replaced with the variables defined in step 2 ($x_2$, 
+		$x_3$, and $x_4$ in the example case). For first order form, it is common to put the first order derivative term 
+		alone on the left hand side of the equation and move all other terms to the right hand side of the equation. 
+
+		<p>${dx_4}/{dt} = -a x_4 - b x_3 - c x_2 - d x_1$</p>
+
+		<h3>Step 5 - Combine the Modified Original Equation with the Derivative Definitions from Step 2</h3>
+
+		<p>A first order system is the original equation as modified in step 4, combined with the derivative definition
+		equations defined in step 2:</p>
 
 		<p>${dx_1}/{dt} = x_2$<br>
 		   ${dx_2}/{dt} = x_3$<br>
 		   ${dx_3}/{dt} = x_4$<br>
 		   ${dx_4}/{dt} = -a x_4 - b x_3 - c x_2 - d x_1$</p>
 
+		<p>This can be written in matrix for as:</p>
+
+		<p>(6) ${d}/{dt} |\table x_1;x_2;x_3;x_4| = [\table 0, 1, 0, 0; 0, 0, 1, 0; 0, 0, 0, 1; -d, -c, -b, -a] |\table x_1;x_2;x_3;x_4|$</p>
+
+		<p>The process outlined above applies to both linear and nonlinear systems of ODEs.</p>
+
 		<h2>First Order Form for Matrix Equations</h2> 
 
 		<p>A matrix equation with higher order derivatives can also be converted to first order form fairly easily. As an example, 
 		lets consider a matrix equation like the following:</p>
 
-		<p>(5) ${d^3x_i}/{dt^3} + B_{ij} {d^2x_i}/{dt^2} + C_{ij} {dx_i}/{dt}  + D_{ij} x_i = 0$</p>
+		<p>(7) ${d^3X}/{dt^3} + \bo B {d^2X}/{dt^2} + \bo C {dX}/{dt}  + \bo D X = 0$</p>
 
-		<p>where $x_i$ is the vector:</p>
+		<p>where $\bo B, \bo C,$ and $\bo D$ are $n&nbsp;&times;&nbsp;n$ matrices and $X$ is the vector:</p>
 		
-		<p>$x_i = |\table x_1;x_2;...;x_n|$</p>
+		<p>$X = |\table x_1;x_2;...;x_n|$</p>
 
 		<p>In this case, the highest order derivative is third order. There are $n$ variables, and for each variable, we 
 		define a new variables for each of the first order derivative:</p>
@@ -75,15 +112,32 @@
 		   ...<br>
 		   ${dx_{2n}}/{dt} = x_{3n}    = {d^2x_n}/{dt^2}$</p>
 
-		<p>Now we append these new variables to the vector $x$:</p>
+		<p>Now we append the first derivative variables $x_{n+1}$ through $x_{2n}$ and the scond derivative variables 
+		$x_{2n+1}$ through $x_{3n}$ to the vector $x$:</p>
 
-		<p>$x = |\table x_1;x_2;...;x_{3n}|$</p>
+		<p>(8) $X = |\table x_1;x_2;...;x_{3n}|$</p>
 
-		<p>If $0$ is an n&nbsp;x&nbsp;n matrix of 0s, and $I$ is an n&nbsp;x&nbsp;n identity matrix, then matrix equation (5) can then be written as:</p>
+		<p>If $\bo 0$ is an $n&nbsp;&times;&nbsp;n$ matrix of 0s, and $\bo I$ is an $n&nbsp;&times;&nbsp;n$ identity matrix, then 
+		matrix equation (7) can then be written as:</p>
 
-		<p>${dx}/{dt} = (\table 0, I, 0; 0, 0, I; -D, -C, -B) x$</p>
+		<p>(9) ${dX}/{dt} = (\table \bo 0, \bo I, \bo 0; \bo 0, \bo 0, \bo I; \bo -D, \bo -C, \bo -B) X$</p>
 
-		<h2>Why use First Order Form?</h2>
+		<h2>What are the advantages of First Order Form?</h2>
 
+		<p>There are a few of advantages to first order form for a system of differential equations. If forcing terms are not
+		included, a linear system in first order form can be written as:</p>
+
+		<p>${dX}/{dt} = \bo A X$</p>
+
+		<p>This is a form that is convenient for applying modal analysis, as discussed on <a href="index.html">this page</a>.
+		First order form for applying general coordinate transformations via the chain rule, since the first order terms are
+		used in the chain rule. Using the chain rule for coordinate transformations is a important element in generalizing 
+		modal analysis to nonlinear systems, as discussed on <a href="extendModalAnalysis.html">this page</a>.</p>
+
+		<p>A third advantage of first order form is geometric. The dependent variable of a system of ODEs in first order form
+		are the solution space for the system. If $t$ is used explicitly in the system, then the solution space includes $t$.
+		Each point in the solution space belongs to a 1-D solution curve or is an equilibrium point. The ODE equations 
+		<a href="extendModalAnalysis.html#vector">can be represented as a vector field</a>, with a vector at each point that
+		is tangent to the solution curve.</p>
 		</body>
 </html>
