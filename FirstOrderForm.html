@@ -61,7 +61,7 @@
 		
 		<p>(5) ${d^4x_1}/{dt^4} = {dx_4}/{dt}$</p>
 		
-		<h3>Step 4 - Make Variable Substitutions from Steps 2 and 3</h3>
+		<h3>Step 4 - Make Variable Substitutions from Steps 2 and 3 into the Original Equation</h3>
  
 		<p>In the original differential equation (1), the highest order derivative is now replaced with the 1<sup>st</sup> 
 		order derivative from (5), the lower order derivatives are replaced with the variables defined in step 2 ($x_2$, 
@@ -88,8 +88,8 @@
 
 		<h2>First Order Form for Matrix Equations</h2> 
 
-		<p>A matrix equation with higher order derivatives can also be converted to first order form fairly easily. As an example, 
-		lets consider a matrix equation like the following:</p>
+		<p>The process for converting a matrix equation with higher order derivatives to first order form is very similar to
+		the process shown above. As an example, lets consider a matrix equation like the following:</p>
 
 		<p>(7) ${d^3X}/{dt^3} + \bo B {d^2X}/{dt^2} + \bo C {dX}/{dt}  + \bo D X = 0$</p>
 
@@ -97,25 +97,35 @@
 		
 		<p>$X = |\table x_1;x_2;...;x_n|$</p>
 
-		<p>In this case, the highest order derivative is third order. There are $n$ variables, and for each variable, we 
-		define a new variables for each of the first order derivative:</p>
+		<h3>Step 1 - Identify the Dependent Variables and the Highest Order Vector Derivative</h3>
+
+		<p>In this case, the dependent variables are the vector coordinates in $X$, and the highest order 
+		vector derivative is ${d^3X}/{dt^3}$. 
+
+		<h3>Step 2 - Define a Variables for each Vector Derivative less than the Highest Order Derivative</h3>
+
+		<p>There are $n$ vector dimensions, and for each dimension, we define a new variable for each of 
+		the first order derivative terms:</p>
 
 		<p>${dx_1}/{dt} = x_{n+1}$<br>
 		   ${dx_2}/{dt} = x_{n+2}$<br>
 		   ...<br>
 		   ${dx_n}/{dt} = x_{2n}$</p>
 
-		<p>We also define a new variable for each of the second order derivatives:</p>
+		<p>We also define a new variable for each of the second order derivative terms:</p>
 			 
 		<p>${dx_{n+1}}/{dt} = x_{2n+1} = {d^2x_1}/{dt^2}$<br>
 		   ${dx_{n+2}}/{dt} = x_{2n+2} = {d^2x_2}/{dt^2}$<br>
 		   ...<br>
 		   ${dx_{2n}}/{dt} = x_{3n}    = {d^2x_n}/{dt^2}$</p>
 
+		<h3>Step 3 - Define a New Extended Vector that Contains the Derivative Variables From Step 2</h3>
 		<p>Now we append the first derivative variables $x_{n+1}$ through $x_{2n}$ and the scond derivative variables 
 		$x_{2n+1}$ through $x_{3n}$ to the vector $x$:</p>
 
 		<p>(8) $X = |\table x_1;x_2;...;x_{3n}|$</p>
+
+		<h3>Step 4 - Arrange the Original Equation into a Matrix From based on the Extended Vector</h3>
 
 		<p>If $\bo 0$ is an $n&nbsp;&times;&nbsp;n$ matrix of 0s, and $\bo I$ is an $n&nbsp;&times;&nbsp;n$ identity matrix, then 
 		matrix equation (7) can then be written as:</p>
