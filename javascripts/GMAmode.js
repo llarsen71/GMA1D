@@ -261,13 +261,14 @@ GMAmode.prototype.getContours = function(arry, opts) {
 
  PARAMETERS:
   idx - The index of the ODE solution to get.
+  raw - Returns the result without passing it through the solutionFactory.
 
  RETURNS:
   A value as returned by the solutionFactory. The solution factory is called as
   solutionFactory(gmaobj, stepn, contour) as defined in 
 */
 //-----------------------------------------------------------------------------
-GMAmode.prototype.getSolution = function(idx) {
+GMAmode.prototype.getSolution = function(idx, raw) {
 	var t = [], pts = [];
 	var index1 = Math.max(0, this.first_index - this.odes[idx].offset);
 	var index2 = Math.max(0, this.last_index+1 - this.odes[idx].offset);
@@ -275,6 +276,7 @@ GMAmode.prototype.getSolution = function(idx) {
 
 	t = this.odes[idx].t.slice(index1, this.last_index+1);
 	pts = this.odes[idx].pts.slice(index1, this.last_index+1);
+	if (arguments.length > 1) { if (raw) return {t: t, pts: pts}; }
 	return this.solnFactory(this, idx, {t: t, pts: pts});
 }
 
