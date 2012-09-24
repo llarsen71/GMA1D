@@ -22,68 +22,89 @@
 
 		<h2>Understanding Physical Systems</h2>
 
-		<p>Many of the laws of physics, such as Newton's laws of motion, are expressed as differential equations. A physical system
-		can often be modelled as a system of coupled ordinary differtial equations (ODEs). A good mathematical model is an important
-		tool for a scientist or engineer because it help them explore and understand the behavior of the system better. A good 
-		mathematical model can help you tell if a design change results in a system that works better, or if the change makes the 
-		system perform worse. If you want to improve something, it sure helps if you understand it first and a good mathematical
-		model gives you a way to explore how the system behaves.</p>
+		<p>Many of the laws of physics, such as Newton's laws of motion $F={d(mv)}/{dt}$, are expressed as differential 
+		equations. A physical system can often be modelled as, or reduced to, a system of coupled ordinary differtial 
+		equations (ODEs). A good mathematical model is an important tool for a scientist or engineer because it help them 
+		explore and understand the behavior of the system better. A good mathematical model can help you tell if a design 
+		change results in a system that works better, or if the change makes the system perform worse. If you want to 
+		improve something, it sure helps if you understand it first and a good mathematical model gives you a way to explore
+		how the system behaves.</p>
 
-		<p>Developing a good model is an important first step, but in order to understand the model, you need to understand the solutions
-		of the mathematical model. The solutions to the model depend on the starting state of the system (or initial conditions) and its 
-		interaction with its surroundings (bondary conditions). A different set of initial or boundary conditions can lead to
-		solutions to the system may look very different, and gaining a good understanding of how a system behaves under many 
-		different conditions can be a difficult challenge. Techniques for exploring the behavior of a mathematical model can 
-		be divided into <b class="emphasis">quantitative techniques</b> and <b class="emphasis">qualitative techniques</b>:</p>
+		<p>Developing a good mathematical model is an important first step, but in order to understand the model, you need 
+		to understand the model solutions. The solutions to the model depend on the starting state of the system (or initial
+		conditions) and its interaction with its surroundings (bondary conditions). A different set of initial or boundary 
+		conditions can lead to solutions to the system may look very different, and gaining a good understanding of how a 
+		system behaves under many different conditions can be a difficult challenge. Techniques for exploring the behavior 
+		of a mathematical model can be divided into <b class="emphasis">quantitative techniques</b> and 
+		<b class="emphasis">qualitative techniques</b>.</p>
 
+		<hr>
 		<div class="box"><b>Quantitative Techniques</b></div>
 		<p>The goal of a quantitative technique is to calculate an accurate solution. This can be helpful for understanding 
-		the behavior of a system better, but doesn't address one important question - <i>will the behavior of the system 
-		change significantly if I change the initial or boundary conditions?</i></p>
+		the behavior of a system better. The accuracy of the solution may be very important when designing or improving a
+		system since the solution is used to answer specific question about the system, or about the effect a change would
+		have on the system. But an accurate solution doesn't address one important question - <i>How does the behavior of the 
+		system change as I change the initial or boundary conditions and can I characterize the behavioral trends?</i></p>
 
+		<hr>
 		<div class="box"><b>Qualitative Techniques</b>&nbsp;&nbsp;</div>
 		<p>The goal of a qualitative technique is to understand the behavioral trends of a system under a range of conditions. 
 		Many qualitative techniques require a system to be simplified in one way or another in order to identify behavioral 
 		trends. In other words, accuracy may be sacrificed in order to gain a broader understanding of how the system behaves.</p>
+		<hr>
 
+		<p>Both accuracy and an understanding of behavioral trends can be valuable information in practice and a tools that 
+		combines both quantitative accuracy and qualitative understanding of trends can be very powerful.</p>
+		
 		<h2> Modal Analysis</h2>
 
 		<p>For linear systems, modal analysis is an elegant blend of quantitative and qualitative techniques. It accurately predicts 
-		linear system response, but also characterizes the general behavior of the linear system. Modal analysis is the process of
-		finding a new linear coordinate system where the ODEs of the system are decoupled from one another. The new coordinates are called 
-		modal coordinates.</p>
+		linear system response, but also characterizes the general behavior of the linear system. Modal analysis is built on
+		simple idea - find a new coordinate system where the original system has a simpler form that is easier to understand.
+		It turns out that for linear systems, where the linear coefficients are constant, there is always a coordinate system
+		where the system of ODEs has a simple form called the Jordan cannonical form. In many cases, when coordinates are 
+		selected such that the system is in Jordan cannonical form, all of the ODEs in the system are decoupled, which means
+		they can be solved and studied independently. In some cases, referred to as degenerate cases, there is a simple
+		coupling between some of the ODEs in the system. Only the more common nondegenerate cases are discussed below.</p>
+
+		<p>Modal Analysis the process of finding a new linear coordinate system where the ODEs of the system are decoupled 
+		from one another. The new coordinates are called modal coordinates.</p>
 
 		<div class="box-right" style="margin-top: 0em;">
 		<h1>Definition</h1>
-		<b>Modal Coordinate</b> - A linear function $q(x_1,x_2,...,x_n)$ that when used as a coordinate for a system of ODEs results in a 
-		decoupled ODE. The ODE will have the linear form ${dq}/{dt} = &lambda; q$.
+		<b>Modal Coordinate</b> - A linear function $q(x_1,x_2,...,x_n)$ that when used as a coordinate for a system of ODEs
+		results in a decoupled ODE. The ODE will have the linear form ${dq}/{dt} = &lambda; q$.
 		</div><!--box-right-->
 
-		<p>The quantitative accuracy comes from the fact that the new modal system is the same as the original system - the only difference
-		is the coordinate system that is used. The qualitative understanding comes from the fact that modal analysis converts coupled ODEs 
-		that are typically too complex to understand as a whole because the solutions are intertwined, to a decoupled set of ODEs which are
-		simple to understand because the modal ODEs can be solved and explored independently. The modal solutions can be added
-		(or superimposed) to get the total system response. The power of modal analysis comes from the fact that you can understand the 
-		total behavior of the system in terms individual behavior of the modes.<p>
+		<p>For linear systems, the quantitative accuracy of modal analysis comes from the fact that the new modal system is 
+		the same as the original system, or in other words no approximation is required. The only difference is the 
+		coordinate system that is used. The qualitative understanding comes from the fact that modal analysis converts 
+		coupled ODEs that are typically too complex to understand as a whole, because the solutions are intertwined, to a 
+		decoupled set of ODEs which are simple to understand because the modal ODEs can be solved and explored independently.
+		The modal solutions can be added (or superimposed) to get the total system response. The power of modal analysis 
+		comes from the fact that you can understand the total behavior of the system in terms individual behavior of the modes.<p>
 
-		<p>For nonlinear systems, there is often a region around an equilibrium or steady state solution were a linear system of ODEs provides a
-		good approximation and modal analysis gives reasonably accurate results. However, there are many cases where a linear 
-		approximation misses important trends, and cases where the response grows to the point where nonlinear terms are important, 
-		and modal analysis gives poor results. So while modal analysis will remain an important tool for the study of linear and
-		nonlinear systems, there is a need to generalize the approach so that the elegant blend of quantitative and qualitative analysis
-		are preserved.</p>
+		<p>For nonlinear systems, there is often a region around an equilibrium or steady state solution were a linear system
+		of ODEs provides a good approximation and modal analysis gives reasonably accurate results. However, there are many 
+		cases where a linear approximation misses important trends, and cases where the response grows to the point where 
+		nonlinear terms are important, and modal analysis gives poor results. So while modal analysis will remain an 
+		important tool for the study of linear and nonlinear systems, there is a need to generalize the approach so that the
+		elegant blend of quantitative and qualitative analysis are preserved.</p>
 
-		<h2>Calculating the Modal Equation</h2>
+		<h2>Calculating the Modal Equations</h2>
 
 		<h3>First Order Form</h3>
 
-		<p>Before generalizing modal analysis to nonlinear systems, lets talk about how to calculate the modal coordinates which
-		decouple a linear system of ODEs. We will start with a system of ODEs expressed as a matrix in first order form.
-		Click <a href="FirstOrderForm.html">here</a> for a discussion of how to convert a system to first order form:</p>
+		<p>Before generalizing modal analysis to nonlinear systems, lets take a look at how modal coordinates, which
+		decouple a linear system of ODEs, are calculated for linear systems. We will start with a system of ODEs expressed 
+		as a matrix in first order form. This is a way of representing the system of ODEs where only first order derivatives
+		are part of the system of ODEs. <a href="FirstOrderForm.html">Click here</a> for a discussion of how to convert a 
+		system with higher order derivates to first order form. A linear system in first order form, with no forcing terms
+		can be written like:</p>
 		
 		<p>(1)&nbsp;&nbsp;&nbsp; ${dx_i}/{dt} = A_{ij} x_j$</p>
 		
-		<p>Note that in order for modal analysis to work, the value of the coefficients in $A_{ij}$ must not change with $t$. 
+		<p>As noted above, in order for modal analysis to work, the value of the coefficients in $A_{ij}$ must not change with $t$. 
 		In other words, the coeffients can be constant values, or constant parameters such as a mass or stiffness quantity, but can't
 		depend on $t$ (or $x_1, x_2, ..., x_n$, since these values change with $t$). We will explain why the coefficients
 		can't be dependent on $t$ in the discussion below. The linear modal coordinate function $q$ can be written in the form:</p>
