@@ -31,7 +31,8 @@ PARAMETERS:
  opt.dt    - The timestep for each step
  opt.t     - The initial time value
  opt.pts   - The initial mode curve
- opt.limit - A limit function used to indicate when to bound the solution.
+ opt.ncontours - The number of GMA contours that are anticipated. Defualt is 6.
+ opt.limit - (Optional) A limit function used to indicate when to bound the solution.
              The function should take a point and indicate true if the
              point is within the bounds, or false if it is not.
  opt.contourFactory - (Optional) factory used to process contour objects.
@@ -39,13 +40,17 @@ PARAMETERS:
              where gmaobj is this object, stepn is the stepn is index
              used to get the points, and contour is a object with 'data'
              holding the contour data. 
+ opt.solutionFactory - (Optional) factory used to process solutions that are
+             returned from getSolution. The function form is 
+             'solutionFactory(gmaobj, stepn, contour)'
 */
 //-----------------------------------------------------------------------------
 function GMAmode (opt) {
 	this.V = opt.V;
 	this.steps = opt.steps;
-	this.ctrFactory = (opt.contourFactory) ? opt.contourFactory : defaultFactory;
-	this.solnFactory = (opt.solutionFactory) ? opt.solutionFactory : defaultFactory;
+	this.ctrFactory = opt.contourFactory || defaultFactory;
+	this.solnFactory = opt.solutionFactory || defaultFactory;
+	this.ncontours = opt.ncontours || 6;
 
 	this.odes  = [];
 	this.first_index = 0;
@@ -54,6 +59,19 @@ function GMAmode (opt) {
 
 	this.solve(this.steps, opt.dt, opt.t, opt.pts, opt.limit);
 	// this.tmin and this.tmax set later
+}
+
+//-----------------------------------------------------------------------------
+/*
+FUNCTION: setnContours
+ Set the number of contours to retrieve from getContours.
+*/
+//-----------------------------------------------------------------------------
+GMAmode.prototype.setnContours = function(ncontours) {
+	if (arguments.length < 1) {
+		ncontours = 6;
+	}
+	this.ncontours = ncontours; 
 }
 
 //-----------------------------------------------------------------------------
@@ -181,9 +199,7 @@ PARAMETERS:
 GMAmode.prototype.getStepIterator = function (opts) {
 	opts = opts || {};
 	opts.nCurves = opts.nCurves || 6;
-	opts.offset = opts.offset || 0;
-	opts.totalSteps = opts.totalSteps || this.steps;
-	opts.stepsz = Math.floor((opts.totalSteps-opts.offset)/opts.nCurves);
+	opts.stepsz = Math.floor(opts.totalSteps/opts.nCurves);
 	var nCurves = opts.nCurves;
 	var offset = opts.offset;
 	var stepsz = opts.stepsz;
@@ -241,6 +257,8 @@ PARAMETERS:
 */
 //-----------------------------------------------------------------------------
 GMAmode.prototype.getContours = function(arry, opts) {
+	opts.offset = opts.offset || 0;
+	opts.totalSteps = opts.totalSteps || this.steps - opts.offset;
 	var this_ = this;
 	var addplot = function (i, idx, opts) {
 		arry.push(this_.getContour(idx));
@@ -293,7 +311,8 @@ PARAMETERS:
 //-----------------------------------------------------------------------------
 GMAmode.prototype.getSolutions = function(arry, opts) {
 	opts = opts || {};
-	opts.totalSteps = this.odes.length;
+	opts.offset = opts.offset || 0;
+	opts.totalSteps = this.odes.length - opts.offset;
 	var this_ = this;
 	var addplot = function(i, idx, opts) {
 		var soln = this_.getSolution(idx); 
