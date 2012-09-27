@@ -16,29 +16,29 @@
 
 //-----------------------------------------------------------------------------
 /*
- CLASS: GMAmode 
-  Creates a new GMA model object. Solve is called automatically to calculate
-  the modal solution.
+CLASS: GMAmode 
+ Creates a new GMA model object. Solve is called automatically to calculate
+ the modal solution.
 
- CONSTRUCTOR: GMAmode
-   Creates a new GMAmode object.
+CONSTRUCTOR: GMAmode
+ Creates a new GMAmode object.
 
- PARAMETERS:
-   opt       - An object with the following properites
-   opt.V     - The vector field or ODE
-   opt.steps - The number of steps to solve for each point on initial modal
-               curve
-   opt.dt    - The timestep for each step
-   opt.t     - The initial time value
-   opt.pts   - The initial mode curve
-   opt.limit - A limit function used to indicate when to bound the solution.
-               The function should take a point and indicate true if the
-               point is within the bounds, or false if it is not.
-   opt.contourFactory - (Optional) factory used to process contour objects.
-               The function form is 'contourFactory(gmaobj, stepn, contour)'
-               where gmaobj is this object, stepn is the stepn is index
-               used to get the points, and contour is a object with 'data'
-               holding the contour data. 
+PARAMETERS:
+ opt       - An object with the following properites
+ opt.V     - The vector field or ODE
+ opt.steps - The number of steps to solve for each point on initial modal
+             curve
+ opt.dt    - The timestep for each step
+ opt.t     - The initial time value
+ opt.pts   - The initial mode curve
+ opt.limit - A limit function used to indicate when to bound the solution.
+             The function should take a point and indicate true if the
+             point is within the bounds, or false if it is not.
+ opt.contourFactory - (Optional) factory used to process contour objects.
+             The function form is 'contourFactory(gmaobj, stepn, contour)'
+             where gmaobj is this object, stepn is the stepn is index
+             used to get the points, and contour is a object with 'data'
+             holding the contour data. 
 */
 //-----------------------------------------------------------------------------
 function GMAmode (opt) {
@@ -58,19 +58,19 @@ function GMAmode (opt) {
 
 //-----------------------------------------------------------------------------
 /*
- FUNCTION: solve
-  Calculate the evolution of the modal curve. The optional parameters are not
-  needed if solve is called more than once. Calling solve without the
-  optional parameters extends the solution.
+FUNCTION: solve
+ Calculate the evolution of the modal curve. The optional parameters are not
+ needed if solve is called more than once. Calling solve without the
+ optional parameters extends the solution.
 
- PARAMETERS:
-  steps - The number of steps to solve for each point on initial mode curve
-  dt    - The timestep for each step
-  t     - (Optional) The initial time value
-  pts   - (Optional)The initial mode curve
-  limit - (Optional)A limit function used to indicate when to bound the solution.
-          The function should take a point and indicate true if the point is
-          within the bounds, or false if it is not.
+PARAMETERS:
+ steps - The number of steps to solve for each point on initial mode curve
+ dt    - The timestep for each step
+ t     - (Optional) The initial time value
+ pts   - (Optional)The initial mode curve
+ limit - (Optional)A limit function used to indicate when to bound the solution.
+         The function should take a point and indicate true if the point is
+         within the bounds, or false if it is not.
 */
 //-----------------------------------------------------------------------------
 GMAmode.prototype.solve = function(steps, dt, t, pts, limit) {
@@ -120,9 +120,9 @@ GMAmode.prototype.solve = function(steps, dt, t, pts, limit) {
 
 //-----------------------------------------------------------------------------
 /*
- FUNCTION: tinit
-  This is called after the odes are solved to set up the t array, which is a
-  complete array of timestep values.
+FUNCTION: tinit
+ This is called after the odes are solved to set up the t array, which is a
+ complete array of timestep values.
 */
 //-----------------------------------------------------------------------------
 GMAmode.prototype.tinit = function() {
@@ -151,11 +151,11 @@ GMAmode.prototype.tinit = function() {
 
 //-----------------------------------------------------------------------------
 /*
- FUNCTION: getStep4t
-  Get the step count associated with the time t.
+FUNCTION: getStep4t
+ Get the step count associated with the time t.
 
- PARAMETERS:
-  t - The time we want the timestep for.
+PARAMETERS:
+ t - The time we want the timestep for.
 */
 //-----------------------------------------------------------------------------
 GMAmode.prototype.getStep4t = function (t) {
@@ -167,14 +167,14 @@ GMAmode.prototype.getStep4t = function (t) {
 
 //-----------------------------------------------------------------------------
 /*
- FUNCTION: getStepIterator
-   Iterates through the solution points skipping values as indicated in 'opts'.
+FUNCTION: getStepIterator
+  Iterates through the solution points skipping values as indicated in 'opts'.
 
- PARAMETERS:
-  opts - (Optional) Object with the following input fields
-  opts.nCurves - The number of modal or solution curves to extract. Default is 6.
-  opts.offset  - The offset to the first index to use.
-  opts.totalSteps - The last step to use as a modal curve. The default is the
+PARAMETERS:
+ opts - (Optional) Object with the following input fields
+ opts.nCurves - The number of modal or solution curves to extract. Default is 6.
+ opts.offset  - The offset to the first index to use.
+ opts.totalSteps - The last step to use as a modal curve. The default is the
    number of solve steps.
 */
 //-----------------------------------------------------------------------------
@@ -197,19 +197,19 @@ GMAmode.prototype.getStepIterator = function (opts) {
 
 //-----------------------------------------------------------------------------
 /*
- FUNCTION: getContour
-  Get the generalized mode contour.
+FUNCTION: getContour
+ Get the generalized mode contour.
 
- PARAMETERS:
-  stepn - The ODE step that is associated with the the contour.
-  raw   - Returns the result without passing it through the contourFactory.
+PARAMETERS:
+ stepn - The ODE step that is associated with the the contour.
+ raw   - Returns the result without passing it through the contourFactory.
  
- RETURNS:
-  A contour generated by the contourFactory function that was passed to the
-  constructor. The contourFactory function is called as 
-  'contourFactory(gmaobj, stepn, contour)', where contour contain the fields
-  't' and 'pts' where 't' is a parameter array, and 'pts' are the contour
-  points.
+RETURNS:
+ A contour generated by the contourFactory function that was passed to the
+ constructor. The contourFactory function is called as 
+ 'contourFactory(gmaobj, stepn, contour)', where contour contain the fields
+ 't' and 'pts' where 't' is a parameter array, and 'pts' are the contour
+ points.
 */
 //-----------------------------------------------------------------------------
 GMAmode.prototype.getContour = function(stepn, raw) {
@@ -232,12 +232,12 @@ GMAmode.prototype.getContour = function(stepn, raw) {
 
 //-----------------------------------------------------------------------------
 /*
- FUNCTION: getContours
-  Push GMA contours onto an array.
+FUNCTION: getContours
+ Push GMA contours onto an array.
 
- PARAMETERS:
-  arry - An array to push contour values onto using 'arry.push(value)'
-  opts - Options used by <GMAmode.getStepIterator>.
+PARAMETERS:
+ arry - An array to push contour values onto using 'arry.push(value)'
+ opts - Options used by <GMAmode.getStepIterator>.
 */
 //-----------------------------------------------------------------------------
 GMAmode.prototype.getContours = function(arry, opts) {
@@ -256,16 +256,16 @@ GMAmode.prototype.getContours = function(arry, opts) {
 
 //-----------------------------------------------------------------------------
 /*
- FUNCTION: getSolution
-  Gets one of the ODE solutions used to calculate the generalized mode evolution.
+FUNCTION: getSolution
+ Gets one of the ODE solutions used to calculate the generalized mode evolution.
 
- PARAMETERS:
-  idx - The index of the ODE solution to get.
-  raw - Returns the result without passing it through the solutionFactory.
+PARAMETERS:
+ idx - The index of the ODE solution to get.
+ raw - Returns the result without passing it through the solutionFactory.
 
- RETURNS:
-  A value as returned by the solutionFactory. The solution factory is called as
-  solutionFactory(gmaobj, stepn, contour) as defined in 
+RETURNS:
+ A value as returned by the solutionFactory. The solution factory is called as
+ solutionFactory(gmaobj, stepn, contour) as defined in 
 */
 //-----------------------------------------------------------------------------
 GMAmode.prototype.getSolution = function(idx, raw) {
@@ -282,13 +282,13 @@ GMAmode.prototype.getSolution = function(idx, raw) {
 
 //-----------------------------------------------------------------------------
 /*
- FUNCTION: getSolutions
-  Push a set of ODE solutions onto an array.
+FUNCTION: getSolutions
+ Push a set of ODE solutions onto an array.
 
- PARAMETERS:
-  arry - The array to add solutions to using 'arry.push(soln)'
-  opts - Options used by <GMAmode.getStepIterator> for selecting the set of
-         solutions.
+PARAMETERS:
+ arry - The array to add solutions to using 'arry.push(soln)'
+ opts - Options used by <GMAmode.getStepIterator> for selecting the set of
+        solutions.
 */
 //-----------------------------------------------------------------------------
 GMAmode.prototype.getSolutions = function(arry, opts) {
@@ -307,14 +307,14 @@ GMAmode.prototype.getSolutions = function(arry, opts) {
 
 //-----------------------------------------------------------------------------
 /*
- FUNCTION: setLimit
-  Add a limit function that is used to bound the ODE solution points that are
-  retained.
+FUNCTION: setLimit
+ Add a limit function that is used to bound the ODE solution points that are
+ retained.
 
- PARAMETERS:
-  limit_func: The limit function to use. This is called as 'limit_func(pt)'
-    and should return true if the point is retained, or false if the point
-    is discarded.
+PARAMETERS:
+ limit_func: The limit function to use. This is called as 'limit_func(pt)'
+   and should return true if the point is retained, or false if the point
+  is discarded.
 */
 //-----------------------------------------------------------------------------
 GMAmode.prototype.setLimit = function(limit_func) {
@@ -325,21 +325,21 @@ GMAmode.prototype.setLimit = function(limit_func) {
 
 //-----------------------------------------------------------------------------
 /*
- SECTION: Global
-   Globally scoped functions
+SECTION: Global
+  Globally scoped functions
 
- FUNCTION: defaultFactory
-  The default contour or solution factory just returns the object passed in.
+FUNCTION: defaultFactory
+ The default contour or solution factory just returns the object passed in.
 
- PARAMETERS:
-  gmaobj  - The GMAmode object that the contour is associated with.
-  stepn   - The index used when getting the modal contour.
-  contour - An object with field 't' and 'pts'. Both are arrays of the same size, 
-    with 't' being the parameter value, and 'pts' the associated ODE solution points.
+PARAMETERS:
+ gmaobj  - The GMAmode object that the contour is associated with.
+ stepn   - The index used when getting the modal contour.
+ contour - An object with field 't' and 'pts'. Both are arrays of the same size, 
+   with 't' being the parameter value, and 'pts' the associated ODE solution points.
 
- RETURNS:
-  This simply returns the contour (or solution) value that is passed in without 
-  modification.
+RETURNS:
+ This simply returns the contour (or solution) value that is passed in without 
+ modification.
 */
 //-----------------------------------------------------------------------------
 function defaultFactory(gmaobj, stepn, contour) {
