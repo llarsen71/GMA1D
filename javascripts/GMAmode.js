@@ -71,23 +71,33 @@ FUNCTION: setnContours
 PARAMETERS:
  opt               - Object to hold the parameters. All are optional.
  opt.ncontours     - Number of contours to return from getContours. Initializes
-                     this.ncontours.
+                     this.ncontours and this.last_index.
  opt.contourOffset - The ode index offset to the first contour. Initializes
-                     this.ctrOffset.
+                     this.ctrOffset and this.last_index.
  opt.contourTotalSteps - The total number of ode steps over the contour range.
-                     Initializes this.ctrStepSz.
+                     Initializes this.contourTotalSteps.
 */
 //-----------------------------------------------------------------------------
 GMAmode.prototype.setContourParams = function(opt) {
+	var update_last_index = false;
 	if (arguments.length == 0) { return; }
-	if (opt.ncontours != undefined) { this.ncontours = opt.ncontours; }
+	if (opt.ncontours != undefined) { 
+		this.ncontours = opt.ncontours;
+		update_last_index = true;
+	}
 	if (opt.contourOffset != undefined) { 
 		this.ctrOffset = opt.contourOffset; 
+		update_last_index = true;
 	}
 	if (opt.contourTotalSteps != undefined) {
 		this.contourTotalSteps = Math.min(opt.contourTotalSteps, (this.steps - this.ctrOffset));
-		var stepsz = Math.floor(this.contourTotalSteps / this.ncontours);
-		this.last_index = this.ctrOffset + stepsz*this.ncontours;
+		update_last_index = true;
+	}
+	if (update_last_index) {
+		if (this.ncontours > 0) {
+			var stepsz = Math.floor(this.contourTotalSteps / this.ncontours);
+			this.last_index = this.ctrOffset + stepsz*this.ncontours;
+		}
 	}
 }
 
