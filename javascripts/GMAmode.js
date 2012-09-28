@@ -45,19 +45,21 @@ PARAMETERS:
              'solutionFactory(gmaobj, stepn, contour)'
 */
 //-----------------------------------------------------------------------------
-function GMAmode (opt) {
+function GMAmode(opt) {
 	this.V = opt.V;
 	this.steps = opt.steps;
 	this.ctrFactory = opt.contourFactory || defaultFactory;
 	this.solnFactory = opt.solutionFactory || defaultFactory;
-	this.ncontours = opt.ncontours || 6;
 
 	this.odes  = [];
-	this.first_index = 0;
 	this.offset_avg = 0;
 	this.t = [];
 
 	this.solve(this.steps, opt.dt, opt.t, opt.pts, opt.limit);
+	opt.ncontours = opt.ncontours || 6;
+	opt.contourOffset = opt.contourOffset || 0;
+	opt.contourTotalSteps = opt.contourTotalSteps || (this.steps - opt.contourOffset);
+	this.setContourParams(opt);
 	// this.tmin and this.tmax set later
 }
 
@@ -65,13 +67,28 @@ function GMAmode (opt) {
 /*
 FUNCTION: setnContours
  Set the number of contours to retrieve from getContours.
+
+PARAMETERS:
+ opt               - Object to hold the parameters. All are optional.
+ opt.ncontours     - Number of contours to return from getContours. Initializes
+                     this.ncontours.
+ opt.contourOffset - The ode index offset to the first contour. Initializes
+                     this.ctrOffset.
+ opt.contourTotalSteps - The total number of ode steps over the contour range.
+                     Initializes this.ctrStepSz.
 */
 //-----------------------------------------------------------------------------
-GMAmode.prototype.setnContours = function(ncontours) {
-	if (arguments.length < 1) {
-		ncontours = 6;
+GMAmode.prototype.setContourParams = function(opt) {
+	if (arguments.length == 0) { return; }
+	if (opt.ncontours != undefined) { this.ncontours = opt.ncontours; }
+	if (opt.contourOffset != undefined) { 
+		this.ctrOffset = opt.contourOffset; 
 	}
-	this.ncontours = ncontours; 
+	if (opt.contourTotalSteps != undefined) {
+		this.contourTotalSteps = Math.min(opt.contourTotalSteps, (this.steps - this.ctrOffset));
+		var stepsz = Math.floor(this.contourTotalSteps / this.ncontours);
+		this.last_index = this.ctrOffset + stepsz*this.ncontours;
+	}
 }
 
 //-----------------------------------------------------------------------------
@@ -186,26 +203,26 @@ GMAmode.prototype.getStep4t = function (t) {
 //-----------------------------------------------------------------------------
 /*
 FUNCTION: getStepIterator
-  Iterates through the solution points skipping values as indicated in 'opts'.
+  Iterates through the solution points skipping values as indicated in 'opt'.
 
 PARAMETERS:
- opts - (Optional) Object with the following input fields
- opts.nCurves - The number of modal or solution curves to extract. Default is 6.
- opts.offset  - The offset to the first index to use.
- opts.totalSteps - The last step to use as a modal curve. The default is the
+ opt - (Optional) Object with the following input fields
+ opt.nCurves - The number of modal or solution curves to extract. Default is 6.
+ opt.offset  - The offset to the first index to use.
+ opt.totalSteps - The last step to use as a modal curve. The default is the
    number of solve steps.
 */
 //-----------------------------------------------------------------------------
-GMAmode.prototype.getStepIterator = function (opts) {
-	opts = opts || {};
-	opts.nCurves = opts.nCurves || 6;
-	opts.stepsz = Math.floor(opts.totalSteps/opts.nCurves);
-	var nCurves = opts.nCurves;
-	var offset = opts.offset;
-	var stepsz = opts.stepsz;
+GMAmode.prototype.getStepIterator = function (opt) {
+	opt = opt || {};
+	opt.nCurves = opt.nCurves || 6;
+	opt.stepsz = Math.floor(opt.totalSteps/opt.nCurves);
+	var nCurves = opt.nCurves;
+	var offset = opt.offset;
+	var stepsz = opt.stepsz;
 	var iter = function(callback) {
 		for (var i = 0; i<nCurves; i++) {
-			callback(i, offset + i*stepsz, opts);
+			callback(i, offset + i*stepsz, opt);
 		}
 	}
 	return iter;
@@ -252,24 +269,23 @@ FUNCTION: getContours
  Push GMA contours onto an array.
 
 PARAMETERS:
- arry - An array to push contour values onto using 'arry.push(value)'
- opts - Options used by <GMAmode.getStepIterator>.
+ arry - An array to push contours onto using 'arry.push(value)'
+ opt - Options used by <GMAmode.getStepIterator>.
 */
 //-----------------------------------------------------------------------------
-GMAmode.prototype.getContours = function(arry, opts) {
-	opts.offset = opts.offset || 0;
-	opts.totalSteps = opts.totalSteps || this.steps - opts.offset;
+GMAmode.prototype.getContours = function(arry, opt) {
+	if (arguments.length < 2) { opt = {}; }
+	this.setContourParams(opt);
+	opt.offset = this.ctrOffset;
+	opt.nCurves = this.ncontours;
+	opt.totalSteps = this.contourTotalSteps;
 	var this_ = this;
-	var addplot = function (i, idx, opts) {
+	var addplot = function (i, idx, opt) {
 		arry.push(this_.getContour(idx));
-		opts.idx = idx;
+		opt.idx = idx;
 	}
-	var iter = this.getStepIterator(opts);
+	var iter = this.getStepIterator(opt);
 	iter(addplot);
-	this.first_index = opts.offset;
-	this.nCurves = opts.nContours;
-	this.last_index = opts.idx;
-	this.contourOpts = opts;
 }
 
 //-----------------------------------------------------------------------------
@@ -288,7 +304,7 @@ RETURNS:
 //-----------------------------------------------------------------------------
 GMAmode.prototype.getSolution = function(idx, raw) {
 	var t = [], pts = [];
-	var index1 = Math.max(0, this.first_index - this.odes[idx].offset);
+	var index1 = Math.max(0, this.ctrOffset - this.odes[idx].offset);
 	var index2 = Math.max(0, this.last_index+1 - this.odes[idx].offset);
 	if (index2 < 1) return;
 
@@ -305,23 +321,23 @@ FUNCTION: getSolutions
 
 PARAMETERS:
  arry - The array to add solutions to using 'arry.push(soln)'
- opts - Options used by <GMAmode.getStepIterator> for selecting the set of
+ opt  - Options used by <GMAmode.getStepIterator> for selecting the set of
         solutions.
 */
 //-----------------------------------------------------------------------------
-GMAmode.prototype.getSolutions = function(arry, opts) {
-	opts = opts || {};
-	opts.offset = opts.offset || 0;
-	opts.totalSteps = this.odes.length - opts.offset;
+GMAmode.prototype.getSolutions = function(arry, opt) {
+	opt = opt || {};
+	opt.offset = opt.offset || 0;
+	opt.totalSteps = this.odes.length - opt.offset;
 	var this_ = this;
-	var addplot = function(i, idx, opts) {
+	var addplot = function(i, idx, opt) {
 		var soln = this_.getSolution(idx); 
 		if (soln) arry.unshift(soln);
 	}
-	var iter = this.getStepIterator(opts);
+	var iter = this.getStepIterator(opt);
 	iter(addplot);
 	// Remove total steps, so that it doesn't affect other plot calls.
-	delete opts["totalSteps"];
+	delete opt["totalSteps"];
 }
 
 //-----------------------------------------------------------------------------

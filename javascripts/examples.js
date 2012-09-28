@@ -92,7 +92,7 @@ function DuffingSolver() {
 
 	var f = DuffingEqn(0.05, 0.2);
 	var steps = 360;
-	var gma = new GMAmode({V:f, steps:steps, dt:-0.05, t:0.0, pts:pts, contourFactory:ctrFactory, solutionFactory:solnFactory});
+	var gma = new GMAmode({V:f, steps:steps, dt:-0.05, t:0.0, pts:pts, contourFactory:ctrFactory, solutionFactory:solnFactory, ncontours:12});
 
 	gma.plot = DuffingPlot;
 	return gma;
@@ -114,9 +114,8 @@ function DuffingPlot(canvas, showMode, showSolns, animate) {
 	canvases[canvas] = new Animator($(canvas));
 	var duff_plots = canvases[canvas];
 
-	var contours = 12;
 	if (showMode) {
-		this.getContours(duff_plots,{nCurves:contours});
+		this.getContours(duff_plots);
 		duff_plots.addAnimated(new ContourMorph(this,{color:"#000000"}));
 	}
 	if (showSolns) {
@@ -189,7 +188,7 @@ function VanDerPolSolver() {
 	//var innerpts = linspace(0.0,2*Math.PI,60,initialring);
 	var innerpts = v.scale(0.965);
 	var isteps = 400;
-	var gmainner = new GMAmode({V:vdp, steps:isteps, dt:-0.05, t:0.0, pts:innerpts, contourFactory:ctrFactory, solutionFactory:solnFactory});
+	var gmainner = new GMAmode({V:vdp, steps:isteps, dt:-0.05, t:0.0, pts:innerpts, ncontours:10, contourFactory:ctrFactory, solutionFactory:solnFactory});
 
 	// ---- Outer Solution ----
 	// Use a ring just wider than the limit cycle for the outer 
@@ -207,7 +206,7 @@ function VanDerPolSolver() {
 	}
 	ctrFactory = AnimatedGMAPlotFactory(colors);
 	solnFactory = AnimatedGMAPlotFactory(colorSets);
-	var gmaouter = new GMAmode({V:vdp, steps:steps, dt:-0.05, t:0.0, pts:outerpts, limit:limit, contourFactory:ctrFactory, solutionFactory:solnFactory});
+	var gmaouter = new GMAmode({V:vdp, steps:steps, dt:-0.05, t:0.0, pts:outerpts, ncontours:10, limit:limit, contourFactory:ctrFactory, solutionFactory:solnFactory});
 
 	var gma = 
 	{ inner: gmainner,
@@ -239,9 +238,8 @@ function VanDerPolPlot(canvas, showModeIn, showModeOut, showSolnIn, showSolnOut,
 	var vdp_plots = canvases[canvas];
 
 	// Rings inside the limit cycle
-	var contours = 10;
 	if (showModeIn) {
-		this.inner.getContours(vdp_plots, {nCurves:contours});
+		this.inner.getContours(vdp_plots);
 		vdp_plots.addAnimated(new ContourMorph(this.inner,{color:"#000000"}));
 	}
 	if (showSolnIn) {
@@ -252,7 +250,7 @@ function VanDerPolPlot(canvas, showModeIn, showModeOut, showSolnIn, showSolnOut,
 	// Rings outside the limit cycle
 	var offset = 35;
 	if (showModeOut) {
-		this.outer.getContours(vdp_plots,{nCurves:contours,offset:offset});
+		this.outer.getContours(vdp_plots,{contourOffset:offset});
 		vdp_plots.addAnimated(new ContourMorph(this.outer,{color:"#000000"}));
 	}
 	if (showSolnOut) {
