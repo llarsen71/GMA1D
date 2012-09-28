@@ -310,22 +310,48 @@ FUNCTION: getSolution
 PARAMETERS:
  idx - The index of the ODE solution to get.
  raw - Returns the result without passing it through the solutionFactory.
+ ary - (Optional) Array to add solutions to.
 
 RETURNS:
  A value as returned by the solutionFactory. The solution factory is called as
  solutionFactory(gmaobj, stepn, contour) as defined in 
 */
 //-----------------------------------------------------------------------------
-GMAmode.prototype.getSolution = function(idx, raw) {
-	var t = [], pts = [];
+GMAmode.prototype.getSolution = function(idx, raw, ary) {
+	var t = [], pts = [], t2=[], ticks = [];
 	var index1 = Math.max(0, this.ctrOffset - this.odes[idx].offset);
 	var index2 = Math.max(0, this.last_index+1 - this.odes[idx].offset);
 	if (index2 < 1) return;
 
 	t = this.odes[idx].t.slice(index1, this.last_index+1);
 	pts = this.odes[idx].pts.slice(index1, this.last_index+1);
-	if (arguments.length > 1) { if (raw) return {t: t, pts: pts}; }
-	return this.solnFactory(this, idx, {t: t, pts: pts});
+
+	var opt = {};
+	opt.offset = index1;
+	opt.nCurves = this.ncontours;
+	opt.totalSteps = index2 - index1;
+	var this_ = this;
+	var addTick = function(i, idx2, opt) {
+		t2.push(this_.odes[idx].t[idx2]);
+		ticks.push(this_.odes[idx].pts[idx2]);
+	}
+	var iter = this.getStepIterator(opt);
+	iter(addTick);
+
+	var soln = {t: t, pts: pts};
+
+	var useFactory = true;
+	if (arguments.length > 2) { if (raw) useFactory = false; }
+	if (useFactory) soln = this.solnFactory(this, idx, soln);
+
+	if (arguments.length > 2) {
+		var ticks = {t:t2, pts: ticks, points: true};
+		if (useFactory) ticks = this.solnFactory(this, idx, ticks);
+		ary.push(ticks);
+		ary.unshift(soln);
+	}
+
+	return soln;
 }
 
 //-----------------------------------------------------------------------------
@@ -345,8 +371,7 @@ GMAmode.prototype.getSolutions = function(arry, opt) {
 	opt.totalSteps = this.odes.length - opt.offset;
 	var this_ = this;
 	var addplot = function(i, idx, opt) {
-		var soln = this_.getSolution(idx); 
-		if (soln) arry.unshift(soln);
+		var soln = this_.getSolution(idx, false, arry); 
 	}
 	var iter = this.getStepIterator(opt);
 	iter(addplot);
@@ -367,7 +392,7 @@ PARAMETERS:
 */
 //-----------------------------------------------------------------------------
 GMAmode.prototype.setLimit = function(limit_func) {
-	for (ode in this.odes) {
+	for (var ode in this.odes) {
 		ode.setLimit(limit_func);
 	}
 }

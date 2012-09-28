@@ -129,7 +129,7 @@ Animator.prototype.animate = function(from, to, time) {
 */
 //-----------------------------------------------------------------------------
 Animator.prototype.plot = function(param) {
-	for (i=0; i<this.animations.length; i++) this.animations[i].setParam(param);
+	for (var i=0; i<this.animations.length; i++) this.animations[i].setParam(param);
 	$.plot(this.canvas, this.animations);
 }
 
@@ -152,7 +152,7 @@ Animator.prototype.plot = function(param) {
 //-----------------------------------------------------------------------------
 function Animated(plotinfo) {
 	this.masterdata = plotinfo.data;
-	for (key in plotinfo) {
+	for (var key in plotinfo) {
 		// Should have 'param' and 'data' in plotinfo keys.
 		this[key] = plotinfo[key];
 	}
@@ -182,7 +182,9 @@ Animated.prototype.setParam = function(paramval) {
 			this.paramidx = pidx = idx;
 		}
 	}
-	this.data = this.masterdata.slice(0, pidx+1);
+	var addon = 1;
+	if (this.points != undefined) addon = 0;
+	this.data = this.masterdata.slice(0, pidx+addon);
 }
 
 //-----------------------------------------------------------------------------

@@ -33,8 +33,12 @@ function AnimatedGMAPlotFactory(colors) {
 	var i = -1;
 	var clrs = wrapColorsArray(colors);
 	function factory(gmaobj, paramval, contour) {
-		var contourPlot = new Animated({param: contour.t, data: contour.pts, color: clrs.next()});
-		return contourPlot;
+		if (contour.points) {
+			var plot = new Animated({param: contour.t, data: contour.pts, color: "#000000", lines: {show: false}, points: {show: true}});
+		} else {
+			var plot = new Animated({param: contour.t, data: contour.pts, color: clrs.next()});
+		}
+		return plot;
 	}
 	return factory;
 }
@@ -124,7 +128,7 @@ ColorSwitcher.prototype.next = function() {
 //----------------------------------------------------------------------------
 function ContourMorph(gmaobj, plotinfo) {
 	this.gmaobj = gmaobj;
-	for (key in plotinfo) {
+	for (var key in plotinfo) {
 		this[key] = plotinfo[key];
 	}
 	this.data = {};
