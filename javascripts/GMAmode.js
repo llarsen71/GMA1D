@@ -31,7 +31,11 @@ PARAMETERS:
  opt.dt    - The timestep for each step
  opt.t     - The initial time value
  opt.pts   - The initial mode curve
- opt.ncontours - The number of GMA contours that are anticipated. Defualt is 6.
+ opt.ncontours - Number of contours to return from getContours. Initializes
+             this.ncontours and this.last_index. (Default: 6)
+ opt.contourOffset - The ode index offset to the first contour. Initializes
+             this.ctrOffset and this.last_index. (Default: 0)
+ opt.contourTotalSteps - The total number of ode steps over the contour range. Initializes this.contourTotalSteps. (Default: this.steps - opt.contourOffset)
  opt.limit - (Optional) A limit function used to indicate when to bound the solution.
              The function should take a point and indicate true if the
              point is within the bounds, or false if it is not.
