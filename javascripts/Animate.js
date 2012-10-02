@@ -173,17 +173,28 @@ function Animated(plotinfo) {
 Animated.prototype.setParam = function(paramval) {
 	if (!this["param"]) return;
 	var pidx = this.paramidx;
-	if (this.param[pidx] != paramval) {
-		var step = (this.param[pidx] < paramval) ? 1 : -1;
-		paramval = paramval*step;
-		while(step * this.param[pidx] < paramval) {
-			var idx = pidx + step;
-			if (idx < 1 || idx >= this.param.length) break;
+	if (this.points != undefined) {
+		var test = 1;
+	}
+	if (this.param[pidx] == paramval) {
+	} else if (this.param[pidx] > paramval) {
+		while(this.param[pidx] > paramval) {
+			var idx = pidx - 1;
+			if (idx < 1) break;
+			this.paramidx = pidx = idx;
+		}
+		if (this.param[pidx] < paramval) this.paramidx = pidx = pidx + 1;
+	} else {
+		while(this.param[pidx] < paramval) {
+			var idx = pidx + 1;
+			if (idx >= this.param.length) break;
 			this.paramidx = pidx = idx;
 		}
 	}
 	var addon = 1;
-	if (this.points != undefined) addon = 0;
+	if (this.points != undefined) {
+		addon = 0;
+	}
 	this.data = this.masterdata.slice(0, pidx+addon);
 }
 
