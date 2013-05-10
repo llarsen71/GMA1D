@@ -29,10 +29,31 @@
 		It turns out that for linear systems, where the linear coefficients are constant, there is always a coordinate system
 		where the system of ODEs has a simple form called the Jordan cannonical form. In many cases, when coordinates are 
 		selected such that the system is in Jordan cannonical form, all of the ODEs in the system are decoupled, which means
-		they can be solved and studied independently. In some cases, referred to as degenerate cases, there is a simple
-		coupling between some of the ODEs in the system. Only the more common nondegenerate cases are discussed below.</p>
+		they can be solved independently. In some cases, referred to as degenerate cases, there is a simple coupling between 
+		some of the ODEs in the system. Only the more common nondegenerate cases are discussed below.</p>
+		
+		<h4>Example System</h4>
 
-		<p>Modal Analysis the process of finding a new linear coordinate system where the ODEs of the system are decoupled 
+		<p>Below is an example of a coupled system of differential equations:</p>
+
+		<p>${dx_1}/{dt} = -2 x_1 + x_2$<br>
+		   ${dx_2}/{dt} = x_1 - 2 x_2$</p>
+
+		<p> For the system, both $x_1$ and $x_2$ change with $t$ (which might represent time). This is a coupled system 
+		because the change in $x_1$ with respect to $t$ depends on the value of both $x_1$ and $x_2$. Similarly, the change in
+		$x_2$ with respect to $t$ depends on both $x_1$ and $x_2$. Therefore, you must solve for both variables simultaneously.</p>
+
+		<p>With the right choice of coordinates, the system above can be represented in the uncoupled form:</p>
+		
+		<p>${dq_1}/{dt} = -q_1$<br>
+		   ${dq_2}/{dt} = -3 q$</p>
+
+		<p>In this form, the change in $q_1$ with respect to $t$ only depends on $q_1$ so this can be solved independent of $q_2$.
+		Similarly, the change in $q_2$ with respect to $t$ only depend on $q_2$ so this can be solved independent of $q_1$.</p>
+
+		<h2>What is Model Analysis</h2>
+		
+		<p>Modal Analysis the process of finding the linear choice of coordinates where the ODEs of the system are decoupled 
 		from one another. The new coordinates are called modal coordinates.</p>
 
 		<div class="box-right" style="margin-top: 0em;">
@@ -80,12 +101,12 @@
 
 		<h4>Example System</h4>
 
-		<p>As an example consider the following system:</p>
+		<p>Consider the example system shown above:</p>
 
 		<p>${dx_1}/{dt} = -2 x_1 + x_2$<br>
 		   ${dx_2}/{dt} = x_1 - 2 x_2$</p>
 
-		<p>Or in Matrix Form:</p>
+		<p>In Matrix Form this is represented as:</p>
 
 		<p>$(\table {dx_1}/{dt}; {dx_2}/{dt}) = (\table -2, 1; 1, -2) (\table x_1; x_2)$</p>
 
