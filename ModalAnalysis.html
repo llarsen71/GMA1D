@@ -34,19 +34,37 @@
 		
 		<h4>Example System</h4>
 
-		<p>Below is an example of a coupled system of differential equations:</p>
+		<div class="box-right" style="margin-top: 0em;">
+		<img src="images/Mass-Spring-Damper-2-body.png" width="440 px">
+		</div><!--box-right-->
+
+		<p>As an example consider a linear two mass system with springs connecting the masses to each other an to the walls, and a
+		damper between each mass and the wall. To model the system, Newtons law ($F=ma$) can be applied to a free body diagram of 
+		each of the masses. The equations for the masses are: </p>
+		
+		<p>$m{d^2x_1}/{dt^2} = -c{dx_1}/{dt} - k x_1 + k(x_2-x_1)$<br>
+		   $m{d^2x_2}/{dt^2} = -c{dx_2}/{dt} - k x_2 + k(x_1-x_2)$</p>
+		
+		<p>If this is simplified by assuming that the spring constant (k) and the damper constant (c) each have a value of 1, and that
+		the mass (m) is small enough to be ignored, then the following system of equations predicts the motion of the two masses:</p>
 
 		<p>${dx_1}/{dt} = -2 x_1 + x_2$<br>
 		   ${dx_2}/{dt} = x_1 - 2 x_2$</p>
 
-		<p> For the system, both $x_1$ and $x_2$ change with $t$ (which might represent time). This is a coupled system 
+		<p> For the system, both $x_1$ and $x_2$ change with $t$ (which in this system represents time). This is a coupled system 
 		because the change in $x_1$ with respect to $t$ depends on the value of both $x_1$ and $x_2$. Similarly, the change in
-		$x_2$ with respect to $t$ depends on both $x_1$ and $x_2$. Therefore, you must solve for both variables simultaneously.</p>
+		$x_2$ with respect to $t$ depends on both $x_1$ and $x_2$. Since the equations depend on one another, both must be solved 
+		simultaneously.</p>
 
+		<p>If the terms $a_{ij}$ are constants, a linear change of coordinates has the form:</p>
+		
+		<p>$q_1 = a_{11} x_1 + a_{12} x_2$<br>
+		   $q_2 = a_{21} x_1 + a_{22} x_2$</p>
+		
 		<p>With the right choice of coordinates, the system above can be represented in the uncoupled form:</p>
 		
 		<p>${dq_1}/{dt} = -q_1$<br>
-		   ${dq_2}/{dt} = -3 q$</p>
+		   ${dq_2}/{dt} = -3 q_2$</p>
 
 		<p>In this form, the change in $q_1$ with respect to $t$ only depends on $q_1$ so this can be solved independent of $q_2$.
 		Similarly, the change in $q_2$ with respect to $t$ only depend on $q_2$ so this can be solved independent of $q_1$.</p>
@@ -95,7 +113,7 @@
 		depend on $t$ (or $x_1, x_2, ..., x_n$, since these values change with $t$). We will explain why the coefficients
 		can't be dependent on $t$ in the discussion below. The linear modal coordinate function $q$ can be written in the form:</p>
 		
-		<p>(2)&nbsp;&nbsp;&nbsp; $q = c_i x_i$ </p>
+		<p>(2)&nbsp;&nbsp;&nbsp; $q = c_i x_i = c_1 x_1 + c_2 x_2 + ... + c_n x_n$ </p>
 
 		<p>where $c_i$ is a vector with values that do not depend on $t$.</p>
 
